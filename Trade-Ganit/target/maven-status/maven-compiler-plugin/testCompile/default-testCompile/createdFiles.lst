@@ -17,5 +17,6 @@ com\trade\test\gaint\tasks\ui\dm\UserOperations.class
 com\trade\test\gaint\questions\ui\ApplicationEnquiryResult.class
 com\trade\test\gaint\page_objects\HomePage.class
 com\trade\test\gaint\steps\ui\TradeUserSteps.class
+com\trade\test\gaint\page_objects\UserPage.class
 com\trade\test\gaint\exceptions\ui\CannotAuthenticateException.class
 com\trade\test\gaint\tasks\ui\common\SaveAndContinue.class

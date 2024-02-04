@@ -2,12 +2,18 @@ package com.trade.test.gaint.tasks.ui.dm;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import com.trade.test.gaint.page_objects.UserPage;
+import com.trade.test.gaint.utils.CommonUtil;
 import com.trade.test.gaint.utils.ConvertCucumberDataTable;
 
 import io.cucumber.datatable.DataTable;
 import net.serenitybdd.core.steps.UIInteractions;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.Wait;
 
 public class UserOperations extends UIInteractions implements Task{
 
@@ -38,13 +44,39 @@ public class UserOperations extends UIInteractions implements Task{
 		emailid = userinfodata.get("EmailId");
 		phonenumber = userinfodata.get("PhoneNumber");
 		username = userinfodata.get("UserName");
-		password = userinfodata.get("password");
+		password = userinfodata.get("Password");
 
 		return new UserOperations(usertype, firstname, lastname, emailid, phonenumber, username, password);
 	}
 	@Override
 	public <T extends Actor> void performAs(T actor) {
-	
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(usertype).from(UserPage.USER_TYPE));
+		
+		actor.attemptsTo(Enter.keyValues(firstname).into(UserPage.FIRST_NAME));
+		
+		actor.attemptsTo(Enter.keyValues(lastname).into(UserPage.LAST_NAME));
+		
+		emailid = "usermail"+CommonUtil.generateRandomNumber()+"@gmail.com";
+		waitABit(999);
+		
+		actor.attemptsTo(Enter.keyValues(emailid).into(UserPage.EMAIL_ID));
+		
+		phonenumber = CommonUtil.generateNineDigitNumber()+"2";
+		waitABit(999);
+		
+		actor.attemptsTo(Enter.keyValues(phonenumber).into(UserPage.PHONE_NUMBER));
+		
+		username = "username"+CommonUtil.generateRandomNumber();
+		waitABit(999);
+		
+		actor.attemptsTo(Enter.keyValues(username).into(UserPage.USER_NAME));
+		
+		actor.attemptsTo(Enter.keyValues(password).into(UserPage.PASSWORD));
+		waitABit(999);
+		
+		actor.attemptsTo(Click.on(UserPage.SUBMIT_BUTTON));
+		
 	}
 
 }

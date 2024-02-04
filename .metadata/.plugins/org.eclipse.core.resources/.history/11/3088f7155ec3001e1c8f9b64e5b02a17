@@ -1,0 +1,33 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.AdditionalStatePage;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import java.util.logging.Logger;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class SelectAsaContract extends UIInteractions implements Task {
+	
+	private static Logger logger = Logger.getLogger(SelectAsaContract.class.getName());
+		
+	public static SelectAsaContract selectIndiviAsaContract() {
+		
+		return new SelectAsaContract();
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+				
+			actor.attemptsTo(Click.on(AdditionalStatePage.CONTRACT_UNCHECK));
+			waitABit(1500);
+			actor.attemptsTo(Click.on(AdditionalStatePage.CONTRACT_SAVE_CONTINUE));
+		}
+}

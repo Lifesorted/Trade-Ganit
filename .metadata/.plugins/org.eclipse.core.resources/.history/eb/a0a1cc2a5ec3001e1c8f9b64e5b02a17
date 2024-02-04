@@ -1,0 +1,77 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+import java.util.Map;
+import com.majesco.test.dm.page_objects.BookOfBusinessPage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class FillBoBInfo extends UIInteractions implements Task {
+
+	private static String lineOfBusiness;
+	private static String MGAInsurer;
+	private static String Admitted;
+	private static String TotalInforcePremium;
+	private static String IndustrySegment;
+	private static String Commission;
+	private static String ContingencyProgram;
+
+	public FillBoBInfo(String lineOfBusiness, String MGAInsurer, String Admitted, String TotalInforcePremium,
+			String IndustrySegment, String Commission, String ContingencyProgram) {
+		this.lineOfBusiness = lineOfBusiness;
+		this.MGAInsurer = MGAInsurer;
+		this.Admitted = Admitted;
+		this.TotalInforcePremium = TotalInforcePremium;
+		this.IndustrySegment = IndustrySegment;
+		this.Commission = Commission;
+		this.ContingencyProgram = ContingencyProgram;
+	}
+
+	public static FillBoBInfo fromUnderlineDetails(DataTable bobinformation) {
+		Map<String, String> agencyAffiliation = ConvertCucumberDataTable.toMap(bobinformation);
+		lineOfBusiness = agencyAffiliation.get("LineOfBusiness");
+		MGAInsurer = agencyAffiliation.get("MGAInsurer");
+		Admitted = agencyAffiliation.get("Admitted");
+		TotalInforcePremium = agencyAffiliation.get("TotalInforcePremium");
+		IndustrySegment = agencyAffiliation.get("IndustrySegment");
+		Commission = agencyAffiliation.get("Commission");
+		ContingencyProgram = agencyAffiliation.get("ContingencyProgram");
+		return new FillBoBInfo(lineOfBusiness, MGAInsurer, Admitted, TotalInforcePremium, IndustrySegment, Commission,
+				ContingencyProgram);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(WaitUntil.the(BookOfBusinessPage.COMMERCIAL_LINE_PERCENTAGE, isClickable())
+				.then(Enter.theValue("11").into(BookOfBusinessPage.COMMERCIAL_LINE_PERCENTAGE)));
+
+		actor.attemptsTo(WaitUntil.the(BookOfBusinessPage.PERSONAL_LINE_PERCENTAGE, isClickable())
+				.then(Enter.theValue("89").into(BookOfBusinessPage.PERSONAL_LINE_PERCENTAGE)));
+
+		for (int i = 0; i < 4; i++) {
+				waitABit(1500);
+				actor.attemptsTo(WaitUntil.the(BookOfBusinessPage.BOB_ADD, isClickable()).then(Click.on(BookOfBusinessPage.BOB_ADD)));
+				waitABit(999);
+				if(i <= 1) {
+					actor.attemptsTo(SelectFromOptions.byVisibleText("Commercial General Liability").from(BookOfBusinessPage.selectOption("dgBookOfBusiness_" + i +"_1")));
+				}else {
+					actor.attemptsTo(SelectFromOptions.byVisibleText("Workers Compensation").from(BookOfBusinessPage.selectOption("dgBookOfBusiness_" + i +"_1")));
+				}
+				
+				actor.attemptsTo(SelectFromOptions.byVisibleText(MGAInsurer).from(BookOfBusinessPage.selectOption("dgBookOfBusiness_" + i +"_2")));
+				actor.attemptsTo(SelectFromOptions.byVisibleText(Admitted).from(BookOfBusinessPage.selectOption("dgBookOfBusiness_" + i +"_4")));
+				actor.attemptsTo(Enter.theValue(TotalInforcePremium).into(BookOfBusinessPage.inputValue("dgBookOfBusiness_" + i +"_5")));
+				actor.attemptsTo(SelectFromOptions.byVisibleText(IndustrySegment).from(BookOfBusinessPage.selectOption("dgBookOfBusiness_" + i +"_6")));
+				actor.attemptsTo(Enter.theValue(Commission).into(BookOfBusinessPage.inputValue("dgBookOfBusiness_" + i +"_8")));
+				actor.attemptsTo(SelectFromOptions.byVisibleText(ContingencyProgram).from(BookOfBusinessPage.selectOption("dgBookOfBusiness_" + i +"_9")));
+			}
+	}
+}

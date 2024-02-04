@@ -1,0 +1,30 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 06/09/2022
+ **/
+
+public class SearchNonLicensedProducerPage extends PageObject {
+
+    public static Target APPLICATION_DATE = Target.the("Application Date").locatedBy("//input[@name='dtApplicationDate']");
+    
+    public static Target getContractType(String value) {
+        if (value.equalsIgnoreCase("Intermediary")) {
+            return Target.the("Intermediary").locatedBy("//input[@value='INT']");
+        } else {
+            return Target.the("Direct").locatedBy("//input[@value='DIR']");
+        }
+    }
+
+    public static Target ENTITY_TYPE = Target.the("Entity Type").locatedBy("//select[@name='cmbEntityType']");
+    public static Target ENTITY_SUBTYPE = Target.the("Entity SubType").locatedBy("//select[@name='cmbEntitySubType']");
+    public static Target ROLE = Target.the("Role").locatedBy("//select[@name='cmbRole']");
+    public static Target CONTINUE_BTN = Target.the("Continue Button").locatedBy("//button[@name='btnContinue']");
+    public static Target ENTITY_CODE = Target.the("Entity Code").locatedBy("//select[@name='drdSearchKey']");
+    public static Target ENTITY_VALUE = Target.the("Entity Value").locatedBy("//input[@name='quickSearchValue']");
+    public static Target ENTITY_SEARCH_ICON = Target.the("Enity search icon").locatedBy("//a[@id='quickSearchValue_lnk']");
+}

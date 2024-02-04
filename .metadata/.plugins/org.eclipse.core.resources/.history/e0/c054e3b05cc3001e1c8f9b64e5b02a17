@@ -1,0 +1,40 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 23/08/2022
+ **/
+
+public class ProducerContactInfoPage extends PageObject {
+
+    public static Target PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'Contact Information >>')]");
+    public static Target APPLICATION_NO = Target.the("Application No").locatedBy("//label[contains(text(),'Contact Information >>')]//preceding::div[@id='dtApplnID_Date'][1]//span/span/span");
+    public static Target RES_ISMAILING = Target.the("Is Mailing").locatedBy("//input[@name='addr1Ismailing']");
+    public static Target RES_ADDRESS_TYPE = Target.the("Residence Address Type").locatedBy("//select[@name='cmdAddressType']");
+    public static Target RES_LINE1 = Target.the("Line1").locatedBy("//input[@name='txtAddLine1']");
+    public static Target RES_CITY = Target.the("City").locatedBy("//input[@name='txtCity']");
+    public static Target RES_STATE = Target.the("State").locatedBy("//select[@name='cmbState']");
+    public static Target RES_ZIP = Target.the("Zip").locatedBy("//input[@name='txtxZipCode']");
+
+    public static Target ISMAILING = Target.the("Is Mailing").locatedBy("//input[@name='addr2Ismailing']");
+    public static Target ADDRESS_TYPE = Target.the("Business/Shipping Address Type").locatedBy("//select[@name='cmboAddr2AddressType']");
+    public static Target LINE1 = Target.the("Line1").locatedBy("//input[@name='txtInputAddr2Line1']");
+    public static Target CITY = Target.the("City").locatedBy("//input[@name='txtInputAddr2City']");
+    public static Target STATE = Target.the("State").locatedBy("//select[@name='cmboAddr2State']");
+    public static Target ZIP = Target.the("Zip").locatedBy("//input[@name='txtAddr2Zip']");
+    public static Target EMAIL = Target.the("Zip").locatedBy("//input[@name='txtEmail']");
+    public static Target BUSINESS_CONTACT_1_DPDN = Target.the("Business Contact 1 Option").locatedBy("//select[@name='cmbContactType']");
+    public static Target BUSINESS_CONTACT_1 = Target.the("Business Contact 1").locatedBy("//input[@name='txtBusinessPhone']");
+
+    public static Target ADD_ADDRESS = Target.the("Add Address button").locatedBy("//button[@name='btnAddAddress']");
+    public static Target SAVE_ADDRESS = Target.the("Save address").locatedBy("//button[@name='btnSave']");
+    public static Target IS_PREFERRED = Target.the("is preferred").locatedBy("//input[@name='chkIsPreferred']");
+    public static Target CANCEL_BTN = Target.the("CANCEL Button").locatedBy("//button[@name='Cancel']");
+    public static Target OK_BTN = Target.the("OK Button").locatedBy("//button[@name='Ok']");
+    public static Target BTN_EXIT = Target.the("btnexit").locatedBy("//button[@name='btnExit']");
+    public static Target PENDING_LINK = Target.the("pending link").locatedBy("//span[contains(text(),'Pending NPC Application')]");
+    public static Target CI_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveContinue']");
+}

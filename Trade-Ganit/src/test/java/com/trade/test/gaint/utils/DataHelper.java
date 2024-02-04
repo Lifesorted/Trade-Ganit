@@ -1,0 +1,508 @@
+/**
+ * 
+ */
+package com.trade.test.gaint.utils;
+
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
+
+import org.apache.commons.csv.CSVFormat;
+import org.apache.commons.csv.CSVPrinter;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.sl.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
+import org.apache.poi.ss.usermodel.DataFormatter;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.extractor.XSSFExcelExtractor;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+
+public class DataHelper {
+
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+
+	static XSSFWorkbook workbook;
+	static XSSFSheet sheet;
+	static FileInputStream fileInputStream;
+	static FileOutputStream fileOutputStream;
+	static File srcFile;
+	static File destFile;
+
+	static {
+		srcFile = new File(System.getProperty("user.dir") + "/src/test/resources/sources/ProducerTestData.xlsx");
+		try {
+			fileInputStream = new FileInputStream(srcFile);
+			try {
+				workbook = new XSSFWorkbook(fileInputStream);
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+				logger.info("Issue with file");
+			}
+		} catch (FileNotFoundException e) {
+			System.out.println(e.getMessage());
+		}
+	}
+
+	// get test data from excel file
+	public static Object[][] getFiledata() {
+		sheet = workbook.getSheet("Report_Details");
+		int totalRows = sheet.getPhysicalNumberOfRows();
+		Row rowcells = sheet.getRow(0);
+		int totalCols = rowcells.getLastCellNum();
+		DataFormatter formatter = new DataFormatter();
+		String[][] data = new String[totalRows][totalCols];
+		for (int i = 0; i < totalRows; i++) {
+			for (int j = 0; j < totalCols; j++) {
+				data[i][j] = formatter.formatCellValue(sheet.getRow(i).getCell(j));
+			}
+		}
+		return data;
+	}
+
+	// Copy test data to Target folder
+	public static void copyDataFile() {
+		destFile = new File(System.getProperty("user.dir") + "/target/site/serenity/ProducerData.xlsx");
+		XSSFWorkbook workbook1 = new XSSFWorkbook();
+		XSSFSheet sheet1 = workbook1.createSheet("Producer_Data");
+		FileOutputStream fileOutputStream1 = null;
+		Object celldata[][] = getFiledata();
+		for (int r = 0; r < 6; r++) {
+			XSSFRow row = sheet1.createRow(r);
+			for (int c = 0; c < 6; c++) {
+				XSSFCell cell = row.createCell(c);
+				Object val = celldata[r][c];
+				System.out.println(val);
+				if (val instanceof String)
+					cell.setCellValue((String) val);
+				if (val instanceof Integer)
+					cell.setCellValue((Integer) val);
+			}
+		}
+		try {
+			fileOutputStream1 = new FileOutputStream(destFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			workbook1.write(fileOutputStream1);
+			fileOutputStream1.close();
+			System.out.println("Data written");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public static void writePersonalInfo(String type, String firstname, String lastname, String gender, String dob,
+			String defaultSSNNo, String npnNo, String applicationfor, String entityType, String contractType) {
+		sheet = workbook.getSheet("NPersonal_Details");
+		if (applicationfor.equalsIgnoreCase("Non-Licensed Producer") && entityType.equalsIgnoreCase("Individual")
+				&& contractType.equalsIgnoreCase("Direct")) {
+			XSSFRow row = sheet.createRow((short) 1);
+			row.createCell(0).setCellValue(type);
+			row.createCell(1).setCellValue(firstname);
+			row.createCell(2).setCellValue(lastname);
+			row.createCell(3).setCellValue(dob);
+			row.createCell(4).setCellValue(gender);
+			row.createCell(9).setCellValue(defaultSSNNo);
+			row.createCell(10).setCellValue(applicationfor);
+			row.createCell(11).setCellValue(entityType);
+			row.createCell(12).setCellValue(contractType);
+		} else if (applicationfor.equalsIgnoreCase("Non-Licensed Producer") && entityType.equalsIgnoreCase("Individual")
+				&& contractType.equalsIgnoreCase("Intermediary")) {
+			XSSFRow row = sheet.createRow((short) 2);
+			row.createCell(0).setCellValue(type);
+			row.createCell(1).setCellValue(firstname);
+			row.createCell(2).setCellValue(lastname);
+			row.createCell(3).setCellValue(dob);
+			row.createCell(4).setCellValue(gender);
+			row.createCell(9).setCellValue(defaultSSNNo);
+			row.createCell(10).setCellValue(applicationfor);
+			row.createCell(11).setCellValue(entityType);
+			row.createCell(12).setCellValue(contractType);
+		} else if (applicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+				&& entityType.equalsIgnoreCase("Individual") && contractType.equalsIgnoreCase("Direct")) {
+			XSSFRow row = sheet.createRow((short) 3);
+			row.createCell(0).setCellValue(type);
+			row.createCell(1).setCellValue(firstname);
+			row.createCell(2).setCellValue(lastname);
+			row.createCell(3).setCellValue(dob);
+			row.createCell(4).setCellValue(gender);
+			row.createCell(9).setCellValue(npnNo);
+			row.createCell(10).setCellValue(applicationfor);
+			row.createCell(11).setCellValue(entityType);
+			row.createCell(12).setCellValue(contractType);
+		} else if (applicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+				&& entityType.equalsIgnoreCase("Individual") && contractType.equalsIgnoreCase("Intermediary")) {
+			XSSFRow row = sheet.createRow((short) 4);
+			row.createCell(0).setCellValue(type);
+			row.createCell(1).setCellValue(firstname);
+			row.createCell(2).setCellValue(lastname);
+			row.createCell(3).setCellValue(dob);
+			row.createCell(4).setCellValue(gender);
+			row.createCell(9).setCellValue(npnNo);
+			row.createCell(10).setCellValue(applicationfor);
+			row.createCell(11).setCellValue(entityType);
+			row.createCell(12).setCellValue(contractType);
+		}
+
+		try {
+			fileOutputStream = new FileOutputStream(srcFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			workbook.write(fileOutputStream);
+			fileOutputStream.flush();
+			fileOutputStream.close();
+			// workbook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.info("Excel file has been generated successfully");
+	}
+
+	// Add report data in excel file
+	public static void writeReportInfo(String npnNo, String applicationfor,
+			String entityType, String contractType, String residentState) {
+		sheet = workbook.getSheet("Report_Details");
+
+		if (applicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+				&& entityType.equalsIgnoreCase("Business") && contractType.equalsIgnoreCase("Direct")) {
+			XSSFRow row = sheet.createRow((short) 1);
+			row.createCell(0).setCellValue(npnNo);
+			row.createCell(1).setCellValue(applicationfor);
+			row.createCell(2).setCellValue(entityType);
+			row.createCell(3).setCellValue(contractType);
+		} else if (applicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+				&& entityType.equalsIgnoreCase("Business") && contractType.equalsIgnoreCase("Intermediary")) {
+			XSSFRow row = sheet.createRow((short) 2);
+			row.createCell(0).setCellValue(npnNo);
+			row.createCell(1).setCellValue(applicationfor);
+			row.createCell(2).setCellValue(entityType);
+			row.createCell(3).setCellValue(contractType);
+		}
+		try {
+			fileOutputStream = new FileOutputStream(srcFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			workbook.write(fileOutputStream);
+			fileOutputStream.flush();
+			fileOutputStream.close();
+			copyDataFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.info("Excel file has been generated successfully");
+	}
+
+	// Add application number in report test data
+	public static void writeApplicationNo(String npn, String applicationfor, String entityType, String contractType,
+			String state, String applicationNo) {
+		sheet = workbook.getSheet("Report_Details");
+
+		 if (applicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+					&& entityType.equalsIgnoreCase("Business") && contractType.equalsIgnoreCase("Direct")) {
+				XSSFRow row = sheet.getRow(1);
+				row.createCell(4).setCellValue(state);
+				row.createCell(5).setCellValue(applicationNo);
+			} else if (applicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+					&& entityType.equalsIgnoreCase("Business") && contractType.equalsIgnoreCase("Intermediary")) {
+				XSSFRow row = sheet.getRow(2);
+				row.createCell(4).setCellValue(state);
+				row.createCell(5).setCellValue(applicationNo);
+			}
+
+		try {
+			fileOutputStream = new FileOutputStream(srcFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			workbook.write(fileOutputStream);
+			fileOutputStream.flush();
+			fileOutputStream.close();
+			copyDataFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.info("Data has been generated successfully");
+	}
+
+	public static void writeProfileInfo(String name, String type, String effectivefrom, String npnNo,
+			String legaltype, String applicationfor, String entityType, String contractType) {
+		sheet = workbook.getSheet("NPersonal_Details");
+		if (applicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+				&& entityType.equalsIgnoreCase("Business") && contractType.equalsIgnoreCase("Direct")) {
+			XSSFRow row = sheet.createRow((short) 1);
+			row.createCell(5).setCellValue(name);
+			row.createCell(6).setCellValue(type);
+			row.createCell(7).setCellValue(effectivefrom);
+			row.createCell(8).setCellValue(legaltype);
+			row.createCell(9).setCellValue(npnNo);
+			row.createCell(10).setCellValue(applicationfor);
+			row.createCell(11).setCellValue(entityType);
+			row.createCell(12).setCellValue(contractType);
+		} else if (applicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+				&& entityType.equalsIgnoreCase("Business") && contractType.equalsIgnoreCase("Intermediary")) {
+			XSSFRow row = sheet.createRow((short) 2);
+			row.createCell(5).setCellValue(name);
+			row.createCell(6).setCellValue(type);
+			row.createCell(7).setCellValue(effectivefrom);
+			row.createCell(8).setCellValue(legaltype);
+			row.createCell(9).setCellValue(npnNo);
+			row.createCell(10).setCellValue(applicationfor);
+			row.createCell(11).setCellValue(entityType);
+			row.createCell(12).setCellValue(contractType);
+		}
+		try {
+			fileOutputStream = new FileOutputStream(srcFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			workbook.write(fileOutputStream);
+			fileOutputStream.flush();
+			fileOutputStream.close();
+			// workbook.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.info("Excel file has been generated successfully");
+	}
+
+	public static void generateMoFileData() {
+		String row1 = "20230713,Shaile908568,Shaile908568@majesco.com,,IBD,1";
+		String row21 = CommonUtil.generateNineDigitNumber() + ",";
+		String row22 = CommonUtil.generateNineDigitNumber() + ",";
+		String row23 = "EO" + CommonUtil.generateNineDigitNumber() + ",";
+		String row24 = "ALDM" + CommonUtil.generateNineDigitNumber() + ",";
+		String row2 = row21 + row22
+				+ "Josh,,Taylor,19890119,19890119,01,L12,,,,LEGAL,AL,,M,US,801 Tom Martin Dr,,Alabaster,AL,8896,,Shaile908568@majesco.com,20200101,NA,Josh Taylor,12020333,SAV,322270796,CHUBB,"
+				+ row23 + "20210330,20250330,5000,AL," + row24
+				+ "3,16,20200101,20251011,,,,,,,,,,,,,Q1,YES,Q2,YES,Q3,NO,Q4,NO,Q5,NO,Q6,YES,Q7,YES,Q8,YES,Q9,YES,PAID,INSTL,,COMMSCH001,SELF,EFT,MPSLD,LIFE,IBD,N3423477,200,20230713";
+		System.out.println(row1);
+		System.out.println(row2);
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new BufferedWriter(
+					new FileWriter(System.getProperty("user.dir") + "/src/test/resources/sources/Mofilecsv001.csv")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		out.println(row1);
+		out.println(row2);
+		out.close();
+	}
+
+	public static void generateInvalidMoData() {
+		String row1 = "20230706,Shaile908568,Shaile908568@majesco.com,,IBD,1";
+		String row21 = CommonUtil.generateNineDigitNumber() + ",";
+		String row22 = CommonUtil.generateNineDigitNumber() + ",";
+		String row23 = "EO" + CommonUtil.generateNineDigitNumber() + ",";
+		String row24 = "ALDM" + CommonUtil.generateNineDigitNumber() + ",";
+		String row2 = row21 + row22
+				+ "Josh,,Taylor,19890119,19890119,01,L12,,,,LEGAL,AL,,M,US,801 Tom Martin Dr,,Alabaster,AL,8896,,Shaile908568@majesco.com,20200101,NA,Josh Taylor,12020333,SAV,322270796,CHUBB,"
+				+ row23 + "20210330,20250330,5000,AL," + row24
+				+ "3,16,20200101,20251011,,,,,,,,,,,,,Q1,YES,Q2,YES,Q3,NO,Q4,NO,Q5,NO,Q6,YES,Q7,YES,Q8,YES,Q9,YES,PAID,INSTL,,COMMSCH001,SELF,EFT,MPSLD,LIFE,IBD,N3423477,201,20230704";
+		System.out.println(row1);
+		System.out.println(row2);
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new BufferedWriter(
+					new FileWriter(System.getProperty("user.dir") + "/src/test/resources/sources/Mofilecsv002.csv")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		out.println(row1);
+		out.println(row2);
+		out.close();
+	}
+
+	public static void generateADCMoData() {
+		String row1 = "20230623,Shaile908568,Shaile908568@majesco.com,,IBD,1";
+		String row21 = "230623499" + ",";
+		String row22 = "230623462" + ",";
+		String row23 = "EO" + CommonUtil.generateNineDigitNumber() + ",";
+		String row24 = "ALDM" + CommonUtil.generateNineDigitNumber() + ",";
+		String row2 = row21 + row22
+				+ "Josh,,Taylor,19890119,19890119,01,L12,,,,LEGAL,AL,,M,US,801 Tom Martin Dr,,Alabaster,AL,8896,,Shaile908568@majesco.com,20200101,NA,Josh Taylor,12020333,SAV,75917872,CHUBB,"
+				+ row23 + "20210330,20250330,5000,AL," + row24
+				+ "3,16,20200101,20251011,,,,,,,,,,,,,Q1,YES,Q2,YES,Q3,NO,Q4,NO,Q5,NO,Q6,YES,Q7,YES,Q8,YES,Q9,YES,PAID,INSTL,,SX,SELF,EFT,MPSLD,LIFE,IBD,N3423477,200,20230623";
+		System.out.println(row1);
+		System.out.println(row2);
+		PrintWriter out = null;
+		try {
+			out = new PrintWriter(new BufferedWriter(
+					new FileWriter(System.getProperty("user.dir") + "/src/test/resources/sources/Mofilecsv003.csv")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		out.println(row1);
+		out.println(row2);
+		out.close();
+	}
+
+	public static String getPersonalRecord(String sheetname, int row, int col) {
+		sheet = workbook.getSheet(sheetname);
+		String SheetData = sheet.getRow(row).getCell(col).getStringCellValue().toString();
+		return SheetData;
+	}
+
+	public static String getRecord(String sheetname, int row, int col) {
+		DataFormatter formatter = new DataFormatter();
+		sheet = workbook.getSheet(sheetname);
+		XSSFCell cell = sheet.getRow(row).getCell(col);
+		String SheetData = formatter.formatCellValue(cell);
+		return SheetData;
+	}
+
+	public static Object getEventRecord(String sheetname, int row, int col, String jsonObject) {
+		DataFormatter formatter = new DataFormatter();
+		sheet = workbook.getSheet(sheetname);
+		XSSFCell cell = sheet.getRow(row).getCell(col);
+		String SheetData = formatter.formatCellValue(cell);
+		JSONParser parser = new JSONParser();
+		JSONObject json = null;
+		Map<String, Object> map = new HashMap<>();
+		try {
+			json = (JSONObject) parser.parse(SheetData);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+
+		return json.get(jsonObject);
+	}
+
+	public static Set<String> getAllKeys(String sheetname, int row, int col, String jsonObject, String nestedObject) {
+		JSONParser parser = new JSONParser();
+		JSONObject eventkeys = null;
+		Map<String, Object> map;
+		try {
+			eventkeys = (JSONObject) parser.parse((String) DataHelper.getEventRecord(sheetname, row, col, jsonObject));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		if (nestedObject == "") {
+			map = eventkeys;
+		} else {
+			map = (Map<String, Object>) eventkeys.get(nestedObject);
+		}
+
+		Set<String> keys = map.keySet();
+		return keys;
+	}
+
+	public static Map<String, Object> getEventJson(String sheetname, int row, int col, String jsonObject,
+			String nestedObject) {
+		JSONParser parser = new JSONParser();
+		JSONObject eventData = null;
+		Map<String, Object> map = new HashMap<>();
+		try {
+			eventData = (JSONObject) parser.parse((String) DataHelper.getEventRecord(sheetname, row, col, jsonObject));
+			if (eventData.containsKey("majescoMasterID")) {
+				eventData.remove("majescoMasterID");
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		if (nestedObject == "") {
+			Iterator<String> keysItr = eventData.keySet().iterator();
+			while (keysItr.hasNext()) {
+				String key = keysItr.next();
+				Object value = eventData.get(key);
+				map.put(key, value);
+			}
+		} else {
+			JSONArray jarr = ((JSONArray) eventData.get(nestedObject));
+			Iterator keysItr = jarr.iterator();
+			while (keysItr.hasNext()) {
+				String key = keysItr.next().toString();
+				Object value = eventData.get(key);
+				map.put(key, value);
+			}
+		}
+
+		return map;
+	}
+
+	public static Object getCarrierOptions() {
+		sheet = workbook.getSheet("Carrier");
+		int totalRows = sheet.getPhysicalNumberOfRows();
+		Row rowcells = sheet.getRow(0);
+		int totalCols = rowcells.getLastCellNum();
+		DataFormatter formatter = new DataFormatter();
+		List<Object> data = new ArrayList<>();
+		for (int i = 0; i < totalRows; i++) {
+			for (int j = 0; j < totalCols; j++) {
+				data.add(formatter.formatCellValue(sheet.getRow(i).getCell(j)));
+
+			}
+		}
+		return data.get(1);
+	}
+
+	public static void writeAgencyAffiliationData(String contracteffectivedate, String rolelevel) {
+		sheet = workbook.getSheet("Appointment_Details");
+		XSSFRow row = sheet.createRow((short) 1);
+		row.createCell(0).setCellValue(contracteffectivedate);
+		row.createCell(1).setCellValue(rolelevel);
+		try {
+			fileOutputStream = new FileOutputStream(srcFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			workbook.write(fileOutputStream);
+			fileOutputStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.info("Excel file has been generated successfully");
+	}
+
+	public static void saveSalesStaffInfo(String officeid, String officename) {
+		sheet = workbook.getSheet("Sales_Staff");
+		XSSFRow row = sheet.createRow((short) 1);
+		row.createCell(0).setCellValue(officeid);
+		row.createCell(1).setCellValue(officename);
+		try {
+			fileOutputStream = new FileOutputStream(srcFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			workbook.write(fileOutputStream);
+			fileOutputStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		logger.info("Excel file has been generated successfully");
+	}
+}

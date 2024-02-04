@@ -1,0 +1,22 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class AppointmentDetailPage extends PageObject {
+
+	public static Target APPOINTMENT_TAB = Target.the("appointment tab").locatedBy("//a[@id='dgAgentName_0_0_lnk']");
+	public static Target ENTITY_CODE_VALUE = Target.the("appointment entity code").locatedBy("//a[@id='dgAgentName_0_0_lnk']");
+	public static Target SCROLL_UP = Target.the("Scroll up").locatedBy("//div[@id='scroll_up']");
+	public static Target APPOINTMENT = Target.the("appointment tab").locatedBy("//a[@data-cid='Tab_10_Appointments']");
+	public static Target NON_ACTIVE = Target.the("non active").locatedBy("//input[@value='NONACT']");
+	public static Target EXPAND_STATE = Target.the("expand state").locatedBy("(//span[@class='fa fa-plus-square'])[1]");
+	public static Target APPOINTMENT_STATUS = Target.the("appointment status").locatedBy("//div[@id='dgMasterAppointmentDetails_1_8']/descendant::span[@data-section='displayvalue']");
+}

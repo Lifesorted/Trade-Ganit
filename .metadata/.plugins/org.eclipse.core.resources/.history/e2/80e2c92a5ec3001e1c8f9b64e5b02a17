@@ -1,0 +1,66 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.HoverOverTarget;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import java.util.Map;
+import static com.majesco.test.dm.page_objects.HomePage.*;
+import static com.majesco.test.dm.page_objects.SearchLicensedProducerPage.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
+/**
+ * @author dhiraj662364
+ * @created 22/09/2022
+ **/
+
+public class CreateNewAdditionalStateAppointment extends UIInteractions implements Task {
+	static EnvironmentVariables environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
+    private String npn;
+    
+    public CreateNewAdditionalStateAppointment(String npn) {
+        this.npn = npn;
+    }
+
+    public static CreateNewAdditionalStateAppointment fromUnderlineDetails(DataTable searchCriteria) {
+        Map<String, String> searchCriteriaDetails = ConvertCucumberDataTable.toMap(searchCriteria);
+        String npn = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.direct.asca");
+        return new CreateNewAdditionalStateAppointment(npn);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        actor.attemptsTo(WaitUntil.the(ONBOARDING_MENU, isClickable())
+                .then(Click.on(ONBOARDING_MENU)));
+        waitABit(999);
+
+        actor.attemptsTo(HoverOverTarget.over(STATE_APPOINTMENTS_SUBMENU));
+        waitABit(500);
+        actor.attemptsTo(Click.on(NEW_STATE_APPOINTMENT_SUBMENU));
+        waitABit(999);
+
+        actor.attemptsTo(WaitUntil.the(NPN, isVisible()),
+                Click.on(NPN_RADIO), Enter.keyValues(npn).into(NPN));
+        waitABit(500);
+
+        actor.attemptsTo(Click.on(SEARCH_BTN).then(WaitUntil.the(APPLICATION_DATE, isVisible())));
+        waitABit(3000);
+
+        actor.attemptsTo(Scroll.to(CONTINUE_BTN).andAlignToTop());
+        
+        actor.attemptsTo(Click.on(CONTINUE_BTN));
+        waitABit(3000);
+        
+    }
+}

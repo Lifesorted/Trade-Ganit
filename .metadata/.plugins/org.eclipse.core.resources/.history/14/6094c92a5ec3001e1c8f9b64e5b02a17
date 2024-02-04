@@ -1,0 +1,88 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.PAGE_LABEL;
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.RES_ADDRESS_TYPE;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import java.util.Map;
+import java.util.logging.Logger;
+
+import org.junit.platform.commons.util.StringUtils;
+
+import com.majesco.test.dm.page_objects.AdditionalEmailPage;
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class AditionalEMail extends UIInteractions implements Task {
+	
+	private static Logger logger = Logger.getLogger(AditionalEMail.class.getName());
+	private String emailType;
+	private String email;
+	private String effectiveFrom;
+	private String effectiveTo;
+	
+	public AditionalEMail(String emailType, String email, String effectiveFrom, String effectiveTo) {
+		this.emailType = emailType;
+		this.email = email;
+		this.effectiveFrom = effectiveFrom;
+		this.effectiveTo = effectiveTo;
+	}
+	
+	public static AditionalEMail fromUnderlineDetails(DataTable address) {
+		Map<String, String> addressDetails = ConvertCucumberDataTable.toMap(address);
+		String emailType = addressDetails.get("EmailType");
+		String email = addressDetails.get("Email");
+		String effectiveFrom = addressDetails.get("EffectiveFrom");
+		String effectiveTo = addressDetails.get("EffectiveTo");
+		
+		return new AditionalEMail(emailType, email, effectiveFrom, effectiveTo);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		waitABit(500);
+		actor.attemptsTo(WaitUntil.the(AdditionalEmailPage.ADD_EMAIL_EXPAND, isVisible()));
+        waitABit(500);
+        
+        actor.attemptsTo(Click.on(AdditionalEmailPage.ADD_EMAIL_EXPAND));
+        waitABit(500);
+        
+        actor.attemptsTo(Click.on(AdditionalEmailPage.ADD_EMAIL));
+        waitABit(500);
+        
+        actor.attemptsTo(SelectFromOptions.byVisibleText(emailType).from(AdditionalEmailPage.EMAIL_TYPE));
+        waitABit(999);
+        
+        email = "test"+CommonUtil.generateNineDigitNumber()+"@gmail.com";
+        actor.attemptsTo(Enter.keyValues(email).into(AdditionalEmailPage.EMAIL));
+        waitABit(999);
+        
+        actor.attemptsTo(Enter.keyValues(effectiveFrom).into(AdditionalEmailPage.EFF_FROM));
+        waitABit(999);
+        
+        actor.attemptsTo(Enter.keyValues(effectiveTo).into(AdditionalEmailPage.EFF_TO));
+        waitABit(999);
+        
+        actor.attemptsTo(Click.on(AdditionalEmailPage.SAVE_EMAIL));
+        waitABit(2000);
+        		
+	}
+
+}

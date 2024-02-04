@@ -1,0 +1,101 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.CompensationPreferencesPage;
+import com.majesco.test.dm.page_objects.EOInsurancePage;
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+
+import io.cucumber.datatable.DataTable;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.ScrollTo;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import java.text.SimpleDateFormat;
+import java.util.Map;
+
+import org.joda.time.DateTime;
+import org.openqa.selenium.Keys;
+
+import static com.majesco.test.dm.page_objects.ProducerDirectDepositDetails.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 26/08/2022
+ **/
+
+public class FillDirectDepositDetails extends UIInteractions implements Task {
+
+    private String financialInstitution;
+    private String accName;
+    private String accNo;
+    private String accType;
+    private String routingNo;
+
+    public FillDirectDepositDetails(String financialInstitution, String accName, String accNo, String accType, String routingNo) {
+        this.financialInstitution = financialInstitution;
+        this.accName = accName;
+        this.accNo = accNo;
+        this.accType = accType;
+        this.routingNo = routingNo;
+    }
+
+    public static FillDirectDepositDetails withUnderlineDetails(DataTable directDepositDetails) {
+        Map<String, String> directDepositInfo = ConvertCucumberDataTable.toMap(directDepositDetails);
+        String financialInstitution = directDepositInfo.get("FinancialInstitute");
+        String accName = directDepositInfo.get("AccName");
+        String accNo = directDepositInfo.get("AccNo");
+        String accType = directDepositInfo.get("AccType");
+        String routingNo = DataHelper.getRecord("Bank_Details", 1, 4);
+
+        return new FillDirectDepositDetails(financialInstitution, accName, accNo, accType, routingNo);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+    	waitABit(6000);
+
+        actor.attemptsTo(SelectFromOptions.byVisibleText(financialInstitution).from(FINANCIAL_INSTITUTION));
+        actor.attemptsTo(Enter.keyValues(accName).into(ACC_NAME));
+        waitABit(999);
+
+        String accNo = CommonUtil.generatetwelveDigitNumber();
+        actor.attemptsTo(Enter.keyValues(accNo).into(ACC_NO));
+        waitABit(800);
+
+        actor.attemptsTo(SelectFromOptions.byVisibleText(accType).from(ACC_TYPE));
+        waitABit(800);
+
+        actor.attemptsTo(Enter.keyValues(routingNo).into(ROUTING_NO));
+        waitABit(800);
+
+        actor.attemptsTo(Enter.keyValues(CommonUtil.generateNineDigitNumber()).into(VENDOR_CODE));
+        waitABit(800);
+        
+        actor.attemptsTo(Click.on(ADD_BTN), WaitUntil.the(V_ACC_NO, isVisible()));
+        waitABit(1500);
+        
+        actor.attemptsTo(Scroll.to(DDD_SAVE_CONTINUE).andAlignToTop());
+        waitABit(1500);
+        
+        actor.attemptsTo(WaitUntil.the(DDD_SAVE_CONTINUE, isClickable())
+        		.then(Click.on(DDD_SAVE_CONTINUE)));
+        
+        if(EOInsurancePage.EO_INSURANCE_TAB.isVisibleFor(actor)) {
+        	//actor.attemptsTo(Click.on(EOInsurancePage.EO_INSURANCE_TAB));
+        	waitABit(5000);
+        }else {
+        	actor.attemptsTo(Click.on(CompensationPreferencesPage.COMPENSATION_PREFERENCES_TAB));
+        	waitABit(3000);
+		}
+    }
+}

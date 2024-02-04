@@ -1,0 +1,123 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.CompensationPreferencesPage;
+import com.majesco.test.dm.page_objects.EOInsurancePage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.ScrollTo;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.ensure.web.ElementLocated;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.joda.time.DateTime;
+import org.junit.platform.commons.util.StringUtils;
+import org.openqa.selenium.Keys;
+
+import java.text.SimpleDateFormat;
+import java.util.Collection;
+import java.util.Map;
+
+import static com.majesco.test.dm.page_objects.EOInsurancePage.*;
+import static com.majesco.test.dm.page_objects.ProducerAgencyAffiliationPage.PRIMARY_LOB;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 26/08/2022
+ **/
+
+public class FillEOInsuranceDetails extends UIInteractions implements Task {
+
+    private String carrier;
+    private String policyNo;
+    private String effectiveFrom;
+    private String expiryDate;
+    private String coverageAmount;
+    private String casCadeEOPolicy;
+    private String eoparentoption="No";
+
+    public FillEOInsuranceDetails(String carrier, String policyNo, String effectiveFrom, String expiryDate,
+                                  String coverageAmount, String casCadeEOPolicy) {
+        this.carrier = carrier;
+        this.policyNo = policyNo;
+        this.effectiveFrom = effectiveFrom;
+        this.expiryDate = expiryDate;
+        this.coverageAmount = coverageAmount;
+        this.casCadeEOPolicy = casCadeEOPolicy;
+    }
+
+    public static FillEOInsuranceDetails fromUnderlineDetails(DataTable eoInsuranceDetails) {
+        Map<String, String> eoInsuranceInfo = ConvertCucumberDataTable.toMap(eoInsuranceDetails);
+        String carrier = eoInsuranceInfo.get("Carrier");
+        String policyNo = eoInsuranceInfo.get("PolicyNo");
+        String effectiveFrom = eoInsuranceInfo.get("EffectiveFrom");
+        String expiryDate = eoInsuranceInfo.get("ExpiryDate");
+        String coverageAmount = eoInsuranceInfo.get("CoverageAmount");
+        String casCadeEOPolicy = eoInsuranceInfo.get("CascadeEOPolicy");
+
+        return new FillEOInsuranceDetails(carrier, policyNo, effectiveFrom, expiryDate, coverageAmount, casCadeEOPolicy);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        actor.attemptsTo(WaitUntil.the(EO_PAGE_LABEL, isVisible()));
+        waitABit(999);
+        if (EO_PARENT.isVisibleFor(actor)) {
+			actor.attemptsTo(SelectFromOptions.byVisibleText(eoparentoption).from(EO_PARENT));
+			waitABit(999);
+			actor.attemptsTo(SelectFromOptions.byVisibleText(carrier).from(CARRIER));
+			waitABit(2000);
+			actor.attemptsTo(Ensure.that(ElementLocated.by(CARRIER_OPTIONS)).textValues().contains("ACE Ltd Group"));
+		}else {
+			actor.attemptsTo(SelectFromOptions.byVisibleText(carrier).from(CARRIER));
+			waitABit(2000);
+			actor.attemptsTo(Ensure.that(ElementLocated.by(CARRIER_OPTIONS)).textValues().contains("ACE Ltd Group"));
+		}
+     
+        if (StringUtils.isBlank(policyNo)) {
+            String defaultPolicyNo = new SimpleDateFormat("yyMMddHHmmss").format(DateTime.now().toDate());
+            actor.attemptsTo(Enter.keyValues(defaultPolicyNo).into(POLICY_NO));
+        } else {
+            actor.attemptsTo(Enter.keyValues(policyNo).into(POLICY_NO));
+        }
+        waitABit(500);
+
+        actor.attemptsTo(Enter.keyValues(effectiveFrom).into(EFFECTIVE_FROM).thenHit(Keys.TAB));
+        waitABit(500);
+
+        actor.attemptsTo(Enter.keyValues(expiryDate).into(EXPIRY_DATE).thenHit(Keys.TAB));
+        waitABit(500);
+
+        if (StringUtils.isBlank(casCadeEOPolicy)) {
+        	if (EOInsurancePage.CASCADE_POLICY.isVisibleFor(actor)) {
+        		actor.attemptsTo(SelectFromOptions.byVisibleText(eoparentoption).from(CASCADE_POLICY));
+                waitABit(999);
+                actor.attemptsTo(Enter.keyValues(coverageAmount).into(COVERAGE_AMOUNT).thenHit(Keys.ENTER));
+                waitABit(3000);
+                //actor.attemptsTo(Click.on(CompensationPreferencesPage.COMPENSATION_PREFERENCES_TAB));
+               // waitABit(500);
+			} else {
+				actor.attemptsTo(Enter.keyValues(coverageAmount).into(COVERAGE_AMOUNT).thenHit(Keys.ENTER));
+				waitABit(3000);
+				//actor.attemptsTo(Click.on(CompensationPreferencesPage.COMPENSATION_PREFERENCES_TAB));
+	           // waitABit(500);
+			}
+        }else {
+        	actor.attemptsTo(SelectFromOptions.byVisibleText(casCadeEOPolicy).from(CASCADE_POLICY));
+            waitABit(3000);
+            actor.attemptsTo(Enter.keyValues(coverageAmount).into(COVERAGE_AMOUNT).thenHit(Keys.ENTER));
+            waitABit(3000);
+           // actor.attemptsTo(Click.on(CompensationPreferencesPage.COMPENSATION_PREFERENCES_TAB));
+           // waitABit(500);
+		}
+    }
+}

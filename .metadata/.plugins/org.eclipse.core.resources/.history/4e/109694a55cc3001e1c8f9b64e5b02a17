@@ -1,0 +1,27 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 01/09/2022
+ **/
+
+public class AgencyProfilePage extends PageObject {
+
+    public static Target APP_PAGE_LABEL = Target.the("Page Label").locatedBy("(//label[contains(text(),'Agency Profile >>')])[2]");
+    public static Target NAME = Target.the("Name").locatedBy("(//input[@name='txtBusinessName'])[2]");
+    public static Target TYPE = Target.the("Type").locatedBy("(//select[@name='cmbAliasType'])[2]");
+    public static Target EFFECTIVE_FROM = Target.the("Effective From").locatedBy("(//input[@name='dtEffectiveFrom'])[2]");
+    public static Target FEIN = Target.the("FEIN").locatedBy("(//input[@name='txtFEIN'])[2]");
+    public static Target LEGAL_TYPE = Target.the("Legal Type").locatedBy("(//select[@name='cmbLegalType'])[2]");
+    public static Target RESIDENT_STATE = Target.the("Resident State").locatedBy("(//select[@name='cmbResidentState'])[2]");
+    public static Target LICENSE_NO = Target.the("License Number").locatedBy("(//input[@name='txtLicense'])[2]");
+    public static Target LICENSE_TYPE = Target.the("License Type").locatedBy("(//select[@name='cmbLicenseType'])[3]");
+    public static Target APP_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("(//button[@name='btnSaveCont'])[2]");
+    public static Target NPN_NO = Target.the("npn").locatedBy("//*[@data-name='dtNPN_label']/following::*[@data-section='displayvalue'][47]");
+    public static Target NPN_NO1 = Target.the("npn").locatedBy("//*[@data-name='dtNPN_label']/following::*[@data-section='displayvalue'][1]");
+    public static Target NPN_NO2 = Target.the("npn").locatedBy("//*[@data-name='dtNPN_label']/following::*[@data-section='displayvalue'][47]");
+    public static Target EYES_ICON = Target.the("eye icon").locatedBy("(//img[@src='assets/images/Unmask.png'])[7]");
+}

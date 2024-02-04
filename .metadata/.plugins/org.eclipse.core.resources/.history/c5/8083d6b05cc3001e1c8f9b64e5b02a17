@@ -1,0 +1,12 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class ReinstatePage extends PageObject {
+	public static Target REINSTATE_REASON = Target.the("reinstate reason").locatedBy("//select[@name='cmbReinstateReason']");
+	public static Target REINSTATE_APPOINTMENT = Target.the("reinstate apointment").locatedBy("//select[@name='cmbReinstAppointments']");
+	public static Target SAVE = Target.the("Save").locatedBy("//button[@name='btnReinstateDataSave']");
+	public static Target OK = Target.the("Ok").locatedBy("//button[@name='Ok']");
+	public static Target FORWARD = Target.the("forward").locatedBy("//button[@name='btnForward']");
+}

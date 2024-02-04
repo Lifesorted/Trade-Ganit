@@ -1,0 +1,42 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 22/08/2022
+ **/
+
+public class ProducerPersonalInfoPage extends PageObject {
+    public static Target PAGE_LABEL = Target.the("Page Label").locatedBy("(//label[contains(text(),'Personal Information >>')])[2]");
+    public static Target NPN_NO = Target.the("NPN No").locatedBy("(//input[@name='txtNPN'])[2]");
+    public static Target FIRST_NAME = Target.the("First Name").locatedBy("(//input[@name='txtFName'])[2]");
+    public static Target LAST_NAME = Target.the("LAST Name").locatedBy("(//input[@name='txtLName'])[2]");
+    public static Target TYPE = Target.the("Type").locatedBy("(//select[@name='cmbType'])[2]");
+    public static Target EFFECTIVE_FROM = Target.the("Effective From").locatedBy("(//input[@name='dtNameEffectiveFrom'])[2]");
+    public static Target SSN_NO = Target.the("SSN No").locatedBy("(//input[@name='txtFEIN'])[2]");
+    public static Target SSN_NO1 = Target.the("SSN No").locatedBy("//input[@name='txtFEIN']");
+    public static Target RESIDENT_STATE = Target.the("Resident State").locatedBy("(//select[@name='cmbResidentState'])[2]");
+    public static Target LICENSE_NO = Target.the("License No").locatedBy("(//input[@name='txtLicense'])[2]");
+    public static Target LICENSE_TYPE = Target.the("License Type").locatedBy("(//select[@name='cmbLicenseType'])[3]");
+    public static Target EYE_ICON = Target.the("eye icon").locatedBy("(//div[@id='lblUnmaskIcon']/descendant::img)[2]");
+    public static Target GENDER(String value) {
+        if(value.equalsIgnoreCase("Male")) {
+            return Target.the("Male").locatedBy("(//input[@value='M'])[3]");
+        } else if (value.equalsIgnoreCase("Female")) {
+            return Target.the("Female").locatedBy("(//input[@value='F'])[3]");
+        } else {
+            return Target.the("Prefer not to say").locatedBy("(//input[@value='P'])[3]");
+        }
+    }
+
+    public static Target DOB = Target.the("DOB").locatedBy("(//input[@name='dtDOB'])[2]");
+    public static Target NATIONALITY = Target.the("Nationality").locatedBy("(//select[@name='cmbNationality'])[2]");
+    public static Target PI_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("(//button[@name='btnSaveCont'])[2]");
+    public static Target APPLICATION_FOR = Target.the("application for").locatedBy("//*[@data-name='dtApplFor_label']/following::*[@data-section='displayvalue'][1]");
+    public static Target ENTITY_TYPE = Target.the("application for").locatedBy("//*[@data-name='dtEntityType_label']/following::*[@data-section='displayvalue'][1]");
+    public static Target CONTRACT_TYPE = Target.the("application for").locatedBy("//*[@data-name='dtContractType_label']/following::*[@data-section='displayvalue'][1]");
+    public static Target APP_NUM = Target.the("application for").locatedBy("//*[@data-name='dtApplnID_Date_label']/following::*[@data-section='displayvalue'][1]");
+    public static Target NPN_NUM = Target.the("application for").locatedBy("//*[@data-name='dtNPN_label']/following::*[@data-section='displayvalue'][1]");
+}

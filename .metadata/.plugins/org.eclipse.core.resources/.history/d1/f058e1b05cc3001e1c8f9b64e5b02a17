@@ -1,0 +1,23 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class PolicyDetailPage extends PageObject {
+	
+	public static Target POLICY_NO = Target.the("Account No").locatedBy("//input[@name='dgEAOPolicies_0_1']");
+	public static Target CARRIER = Target.the("Type").locatedBy("//tr[@name='dgEAOPolicies_r_0']//td[@data-colid='Col_3']");
+	public static Target EFFECTIVE_FROM = Target.the("Type").locatedBy("//tr[@name='dgEAOPolicies_r_0']//td[@data-colid='Col_5']");
+	public static Target EXPIRY_DATE = Target.the("Type").locatedBy("//tr[@name='dgEAOPolicies_r_0']//td[@data-colid='Col_6']");
+	public static Target AMOUNT = Target.the("Type").locatedBy("//tr[@name='dgEAOPolicies_r_0']//td[@data-colid='Col_7']");
+	public static Target POLICY_NUMBER = Target.the("Policy number").locatedBy("//input[@name='txtPolicyNo']");
+	public static Target POLICY_LOOKUP_LINK = Target.the("Policy Look up link").locatedBy("//a[@id='txtPolicyNo_lnk']");
+	
+}

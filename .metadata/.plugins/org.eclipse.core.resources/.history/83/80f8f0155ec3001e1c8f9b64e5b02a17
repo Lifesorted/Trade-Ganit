@@ -1,0 +1,117 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.DesignatedProducerPage;
+import com.majesco.test.dm.tasks.ui.common.SaveAndContinue;
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+
+import io.cucumber.datatable.DataTable;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import org.joda.time.DateTime;
+import org.junit.platform.commons.util.StringUtils;
+import org.openqa.selenium.Dimension;
+import org.openqa.selenium.Keys;
+
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Map;
+
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_NUM;
+import static com.majesco.test.dm.page_objects.DesignatedProducerPage.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+import static org.mockito.ArgumentMatchers.intThat;
+
+/**
+ * @author dhiraj662364
+ * @created 02/09/2022
+ **/
+
+public class FillDesignatedProducerInfo extends UIInteractions implements Task {
+
+	public DesignatedProducerPage designatedProducerPage;
+    private CommonUtil commonUtil;
+    private String firstName;
+    private String lastName;
+    private String npnNo;
+    private String gender;
+    private String residentState;
+    private String licenseNo;
+    private String licenseType;
+    private String role;
+    private String periodFrom;
+    private String periodTo;
+
+    public FillDesignatedProducerInfo(String firstName, String lastName, String npnNo, String gender, String residentState, String licenseNo,
+                                      String licenseType, String role, String periodFrom, String periodTo) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.npnNo = npnNo;
+        this.gender = gender;
+        this.residentState = residentState;
+        this.licenseNo = licenseNo;
+        this.licenseType = licenseType;
+        this.role = role;
+        this.periodFrom = periodFrom;
+        this.periodTo = periodTo;
+    }
+
+    public static FillDesignatedProducerInfo fromUnderlineDetails (DataTable producerDetails) {
+        Map<String, String> producerInfo = ConvertCucumberDataTable.toMap(producerDetails);
+        String firstName = producerInfo.get("FirstName");
+        String lastName = producerInfo.get("LastName");
+        String npnNo = DataHelper.getRecord("Designated_Producer", 1, 0);
+        String gender = producerInfo.get("Gender");
+        String residentState = producerInfo.get("ResidentState");
+        String licenseNo = producerInfo.get("LicenseNo");
+        String licenseType = producerInfo.get("LicenseType");
+        String role = producerInfo.get("Role");
+        String periodFrom = producerInfo.get("PeriodFrom");
+        String periodTo = producerInfo.get("PeriodTo");
+
+        return new FillDesignatedProducerInfo(firstName, lastName, npnNo, gender, residentState, licenseNo, licenseType, role,
+                periodFrom, periodTo);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+    	actor.attemptsTo(WaitUntil.the(DRLP_PAGE_LABEL, isVisible())
+    			 .then(Enter.keyValues(String.valueOf(System.currentTimeMillis() / 100000)).into(NPN).thenHit(Keys.TAB)));
+    	waitABit(2000);
+    	
+    	actor.attemptsTo(Enter.keyValues(firstName).into(FIRST_NAME));
+        waitABit(999);
+        
+        actor.attemptsTo(Enter.keyValues(lastName).into(LAST_NAME));
+        waitABit(999);
+        
+        actor.attemptsTo(SelectFromOptions.byVisibleText(residentState).from(RESIDENT_STATE));
+		waitABit(2000);
+		    	        
+    	actor.attemptsTo(Enter.keyValues(periodFrom).into(PERIOD_FROM).thenHit(Keys.TAB));
+        waitABit(1000);
+        
+        actor.attemptsTo(Enter.keyValues(periodTo).into(PERIOD_TO));
+        waitABit(1000);
+        
+        actor.attemptsTo(SelectFromOptions.byVisibleText(role).from(ROLE));
+        waitABit(999);
+
+	    actor.attemptsTo(Click.on(ADD_BTN), WaitUntil.the(V_NAME, isVisible()));
+	    waitABit(1000);
+	        
+	    SaveAndContinue.onDesignatedProducersScreen();
+		}
+
+}

@@ -1,0 +1,67 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import java.util.Map;
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.page_objects.ReinstatePage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class FillReinstateInfo extends UIInteractions implements Task {
+	
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+	private static String reason;
+	private static String appointments;
+	
+	public FillReinstateInfo(String reason, String appointments) {
+		this.reason = reason;
+		this.appointments = appointments;
+	}
+	
+	public static FillReinstateInfo fromUnderlineDetails(DataTable appointmentsDetails) {
+		Map<String, String> appointmentDetail = ConvertCucumberDataTable.toMap(appointmentsDetails);
+		reason = appointmentDetail.get("Reason");
+		appointments = appointmentDetail.get("Appointments");
+		return new FillReinstateInfo(reason, appointments);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		waitABit(5000);
+
+		actor.attemptsTo(WaitUntil.the(ReinstatePage.REINSTATE_REASON, isVisible())
+				.then(SelectFromOptions.byVisibleText(reason).from(ReinstatePage.REINSTATE_REASON)));
+		waitABit(1000);
+
+		actor.attemptsTo(WaitUntil.the(ReinstatePage.REINSTATE_APPOINTMENT, isVisible())
+				.then(SelectFromOptions.byVisibleText(appointments).from(ReinstatePage.REINSTATE_APPOINTMENT)));
+		waitABit(1000);
+		
+		actor.attemptsTo(Scroll.to(ReinstatePage.SAVE).andAlignToTop());
+		waitABit(1000);
+
+		actor.attemptsTo(WaitUntil.the(ReinstatePage.SAVE, isVisible()).then(Click.on(ReinstatePage.SAVE)));
+		waitABit(4000);
+
+		actor.attemptsTo(WaitUntil.the(ReinstatePage.OK, isVisible()).then(Click.on(ReinstatePage.OK)));
+		waitABit(3000);
+		
+		actor.attemptsTo(WaitUntil.the(ReinstatePage.FORWARD, isVisible()).then(Click.on(ReinstatePage.FORWARD)));
+		waitABit(3000);
+		
+		actor.attemptsTo(WaitUntil.the(ReinstatePage.OK, isVisible()).then(Click.on(ReinstatePage.OK)));
+		waitABit(3000);
+	}
+
+}

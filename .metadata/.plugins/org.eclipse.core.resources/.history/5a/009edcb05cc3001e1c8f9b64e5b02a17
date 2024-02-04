@@ -1,0 +1,30 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class PersonalDetailPage extends PageObject {
+
+	public static Target FIRST_NAME = Target.the("first name").locatedBy("//*[@data-name='txtPersonalFirst_label']/following::*[@data-section='displayvalue'][1]");
+	public static Target LAST_NAME = Target.the("last name").locatedBy("//*[@data-name='txtPersonalLastName_label']/following::*[@data-section='displayvalue'][1]");
+    public static Target TYPE = Target.the("type").locatedBy("//*[@data-name='cmbAliasType_label']/following::*[@data-section='data'][1]/descendant::*[@value='LEGAL']");
+    public static Target DOB = Target.the("dob").locatedBy("//*[@data-name='dtDateOfBirth_label']/following::*[@data-section='data'][1]/child::input");
+    public static Target GENDER = Target.the("gender").locatedBy("//*[@data-name='cmbGenderDetails_label']/following::*[@class='select2-selection__rendered'][1]");
+    public static Target CONTACT = Target.the("contact").locatedBy("//a[@data-labelkey='mm.icd.stgdm.AgencyView.contacts']");
+    public static Target CONTACT1 = Target.the("contact").locatedBy("//a[@data-labelkey='mm.icd.stgdm.AgencyView.contacts']");
+    public static Target CONTACT_MENU = Target.the("contact").locatedBy("//span[contains(text(),' Contact Info')]");
+    public static Target SELECT_OPTION = Target.the("selectoption").locatedBy("//span[@id='select2-cmbAddressType-px-container']");
+    public static Target FIRST_LABEL = Target.the("selectoption").locatedBy("//label[@data-name='txtPersonalFirst_label']");
+    public static Target CONTRACT_EFFECTVE_DATE = Target.the("contract effective date").locatedBy("//tr[@name='dgAgentName_r_0']/td[@data-colid='Col_3']");
+    public static Target ROLE_LEVEL = Target.the("Role level").locatedBy("//tr[@name='dgAgentName_r_0']/td[@data-colid='Col_12']");
+    public static Target AGENT_NO = Target.the("AGENT no").locatedBy("//a[@id='dgAgentName_0_0_lnk']");
+    public static Target COUNTRY_CODE = Target.the("country code").locatedBy("//div[@id='dgAgentName_0_9']/descendant::span[@data-section='displayvalue']");
+    public static Target EXPERIENCE_TAB = Target.the("Experience tab").locatedBy("//li[@class='hidden']/descendant::span[contains(text(),'Experience')]");
+}

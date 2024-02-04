@@ -1,0 +1,34 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class LicenseDetailPage extends PageObject {
+	
+	public static Target BANK_TAB = Target.the("License tab").locatedBy("//a[@data-labelkey='mm.icd.stgdm.viewscreen.Bank.acc']");
+	public static Target LICENSE_NO = Target.the("License tab").locatedBy("//div[@id='dgClientLicenseDetailsAndLob_0_0']/descendant::span[@data-section='displayvalue']");
+	public static Target TYPE = Target.the("License tab").locatedBy("//div[@id='dgClientLicenseDetailsAndLob_0_1']/descendant::span[@data-section='displayvalue']");
+	public static Target STATE = Target.the("License tab").locatedBy("//div[@id='dgClientLicenseDetailsAndLob_0_2']/descendant::span[@data-section='displayvalue']");
+	public static Target RESIDENT = Target.the("License tab").locatedBy("//div[@id='dgClientLicenseDetailsAndLob_0_3']/descendant::span[@data-section='displayvalue']");
+	public static Target LICENSE_STATUS = Target.the("License tab").locatedBy("//div[@id='dgClientLicenseDetailsAndLob_0_7']/descendant::span[@data-section='displayvalue']");
+	public static Target LOA = Target.the("License tab").locatedBy("//div[@id='dgClientLicenseDetailsAndLob_1_8']/descendant::span[@data-section='displayvalue']");
+	public static Target LOA_STATUS = Target.the("License tab").locatedBy("//div[@id='dgClientLicenseDetailsAndLob_1_9']/descendant::span[@data-section='displayvalue']");
+	public static Target BLANK_LICENSE = Target.the("License tab").locatedBy("(//td[@data-colid='Col_1'])[4]");
+	public static Target ADD_LICENSE = Target.the("add License").locatedBy("//button[@name='btnAdd']");
+	public static Target LICENSE_INPUT = Target.the("License input").locatedBy("//input[@name='dgLicenseDetails_0_1']");
+	public static Target SELECT_STATE = Target.the("Select state").locatedBy("//select[@name='dgLicenseDetails_0_2']");
+	public static Target SELECT_TYPE = Target.the("Select type").locatedBy("//select[@name='dgLicenseDetails_0_3']");
+	public static Target IS_RESIDENT = Target.the("Resident").locatedBy("//select[@name='dgLicenseDetails_0_5']");
+	public static Target LOA_LINK = Target.the("Loa").locatedBy("//a[@id='dgLicenseDetails_0_6_lnk']");
+	public static Target ISSUE_DATE = Target.the("Issue date").locatedBy("//input[@name='dgLicenseDetails_0_7']");
+	public static Target EXPIRY_DATE = Target.the("Expiry date").locatedBy("//input[@name='dgLicenseDetails_0_8']");
+    public static Target SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveAndContinue']");
+    public static Target APPLICATION_NO = Target.the("Application No").locatedBy("//label[contains(text(),'Application Verification')]//preceding::div[@id='dtApplnID_Date'][1]//span/span/span");
+}

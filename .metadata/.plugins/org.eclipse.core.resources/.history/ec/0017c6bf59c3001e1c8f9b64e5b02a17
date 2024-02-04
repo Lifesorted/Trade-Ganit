@@ -1,0 +1,8 @@
+Feature: Manage login and logout session for admin
+
+@SmokeTest
+  Scenario: Validate admin login and logout from application
+    Given AgencyAdmin is on Home page of DM application
+    And Login to DM application
+    When AgencyAdmin clicks on logout option
+    Then AgencyAdmin should logout from application and navigate to success screen

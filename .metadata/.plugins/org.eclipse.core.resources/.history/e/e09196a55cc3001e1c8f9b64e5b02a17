@@ -1,0 +1,49 @@
+package com.majesco.test.dm.page_objects;
+
+import java.util.List;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class ApplicationTaskPage extends PageObject {
+
+	public static Target OFFERED_TAB = Target.the("Offered tab").locatedBy("//span[contains(text(),'Offered')]");
+	public static Target LAST_PAGE = Target.the("Last Page").locatedBy("(//a[contains(text(),'>>')])[3]");
+	public static Target FIND_TASK = Target.the("Find Task").locatedBy("//td[@data-colid='Col_2']//span[@data-section='displayvalue']");
+	public static Target SELECT_TASK = Target.the("Select Task").locatedBy("//td[@data-colid='Col_2']//span[@data-section='displayvalue']/preceding::input[contains(@name,'dgOffered')]");
+	public static Target ACCEPT_START = Target.the("Accept Start").locatedBy("//button[@name='btnTab1AcptStart']");
+	public static Target OK = Target.the("Ok").locatedBy("//button[@name='Ok']");
+	public static Target TASK_STARTED_LINK = Target.the("Task Started Link").locatedBy("//td[@data-colid='Col_2_Link']/descendant::a");
+	public static Target CONTINUE_BUTTON = Target.the("Continue Button").locatedBy("//button[@name='btnContinue']");
+	public static Target SELECT_DECISION = Target.the("Select Decision").locatedBy("//select[@name='cmdDecision']");
+	public static Target VERIFY_BUTTON = Target.the("Verify Button").locatedBy("//button[@name='btnVerify']");
+	public static Target SAVE_BUTTON = Target.the("Save Button").locatedBy("//button[@name='btnApprove']");
+	public static Target YES = Target.the("Yes Button").locatedBy("//button[@name='Yes']");
+	public static Target FOR_ALL_PRODUCT = Target.the("For All Product Button").locatedBy("//button[@name='For all products']");
+	
+	public void listOfTasks(String appNo) {
+    	List<WebElement> list = getDriver().findElements(By.xpath("//td[@data-colid='Col_2']//span[@data-section='displayvalue']"));
+		for (int i = 0; i < list.size(); i++) {
+			
+			if (list.get(i).getText().contains(appNo)) {
+				list.get(i).findElement(By.xpath("//td[@data-colid='Col_2']//span[@data-section='displayvalue']/preceding::input[contains(@name,'dgOffered')]")).click();
+			}
+			
+		}
+	}
+	
+	public void listOfTasksLink(String appNo) {
+    	List<WebElement> list = getDriver().findElements(By.xpath("//td[@data-colid='Col_2_Link']/descendant::a"));
+		for (int i = 0; i < list.size(); i++) {
+			
+			if (list.get(i).getText().contains(appNo)) {
+				list.get(i).click();
+				
+			}
+			
+		}
+	}
+}

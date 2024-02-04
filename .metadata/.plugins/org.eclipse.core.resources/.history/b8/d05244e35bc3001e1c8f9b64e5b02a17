@@ -1,0 +1,63 @@
+package com.majesco.test.dm.steps.ui;
+
+import com.majesco.test.dm.tasks.ui.common.NavigateTo;
+import com.majesco.test.dm.tasks.ui.common.SaveAndContinue;
+import com.majesco.test.dm.tasks.ui.dm.*;
+import com.majesco.test.dm.utils.Key;
+
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+
+import net.serenitybdd.core.steps.UIInteractionSteps;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.actors.OnStage;
+import net.serenitybdd.screenplay.ensure.Ensure;
+
+import java.util.logging.Logger;
+
+import static com.majesco.test.dm.questions.ui.ApplicationEnquiryResult.hasApplicationNumber;
+import static net.serenitybdd.screenplay.GivenWhenThen.*;
+import static net.serenitybdd.screenplay.GivenWhenThen.then;
+
+/**
+ * @author dhiraj662364
+ * @created 07/09/2022
+ **/
+
+public class BusinessEntitySteps extends UIInteractionSteps {
+
+    private static Logger logger = Logger.getLogger(BusinessEntitySteps.class.getName());
+    private Actor agencyAdmin;
+
+    @Before(order = 2)
+    public void setup() {
+        agencyAdmin = OnStage.theActor("AA");
+    }
+
+    @Given("attempts to create new Business Entity with default NPN")
+    public void attempts_to_create_new_business_entity_with_default_npn() {
+        givenThat(agencyAdmin).attemptsTo(CreateNewBusinessEntity.withDefaultNPN());
+    }
+
+    @Given("provides Business Entity Agency Profile details as")
+    public void provides_agency_profile_details_as(DataTable agencyProfile) {
+        givenThat(agencyAdmin).attemptsTo(FillBEAgencyProfileInfo.fromUnderlineDetails(agencyProfile),
+                SaveAndContinue.onBEAgencyProfileScreen());
+    }
+
+    @When("{word} verifies the business entity application")
+    public void verifies_the_business_entity_application(String role) {
+        when(agencyAdmin).attemptsTo(NavigateTo.verifyApplicationScreen());
+        when(agencyAdmin).attemptsTo(VerifyOnBoardingApplication.forBusinessEntity());
+    }
+
+    @Then("Business Entity should get created successfully")
+    public void business_entity_should_get_created_successfully() {
+        then(agencyAdmin).attemptsTo(SearchApplication.viaNumber());
+        then(agencyAdmin).attemptsTo(Ensure.that("Application Number",
+                hasApplicationNumber()).isEqualTo(agencyAdmin.recall(Key.APPLICATION_NUMBER)));
+    }
+}

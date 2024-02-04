@@ -1,0 +1,5 @@
+package com.majesco.test.dm.utils;
+
+public class Key {
+    public static final String USER_NAME = "user name";    
+}

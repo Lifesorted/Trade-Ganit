@@ -1,0 +1,67 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.db;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.utils.Key;
+import com.majesco.test.dm.utils.db.QueryConstants;
+
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class RemoveAdditionalStateAppointment implements Task{
+
+	private static Logger logger = Logger.getLogger(GetAdditionalStateAppointment.class.getName());
+    private static Connection connection;
+    private ResultSet rs;
+
+    private String NpnNo;
+
+    public RemoveAdditionalStateAppointment(Connection connection) {
+        this.connection = connection;
+    }
+
+    public static RemoveAdditionalStateAppointment fromDB(Connection connection) {
+        return new RemoveAdditionalStateAppointment(connection);
+    }
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		 try {
+	            String npn = actor.recall(Key.NPN_NUMBER);
+	            String LICENSE_NO = actor.recall(Key.LICENSE_NUMBER);
+	            String state_Code = dbtest.fetchStateCode(LICENSE_NO);
+	            System.out.println(npn);
+	            System.out.println(LICENSE_NO);
+	            System.out.println(state_Code);
+	            String sqlQuery = QueryConstants.REMOVE_ENTITY_LOB;
+	            String sqlQuery1 = QueryConstants.REMOVE_ENTITY_APPOINTMENT;
+	            PreparedStatement prepStmt = connection.prepareStatement(sqlQuery);
+	            PreparedStatement prepStmt1 = connection.prepareStatement(sqlQuery1);
+	            prepStmt.setString(1, state_Code);
+	            prepStmt.setString(2, LICENSE_NO);
+	            prepStmt.setString(3, npn);
+	            prepStmt1.setString(1, state_Code);
+	            prepStmt1.setString(2, LICENSE_NO);
+	            prepStmt1.setString(3, npn);
+	            prepStmt.executeUpdate();
+	            prepStmt1.executeUpdate();
+	            connection.commit();
+	            System.out.println("Data deleted successfully");
+	            connection.close();
+	        } catch (Exception dbe) {
+	            logger.severe("Unable to retrieve ASA data from DB: " + dbe);
+	        }
+		
+	}
+}

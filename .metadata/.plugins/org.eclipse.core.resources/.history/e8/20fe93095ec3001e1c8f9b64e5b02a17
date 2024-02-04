@@ -1,0 +1,41 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import java.util.Arrays;
+import java.util.List;
+import com.majesco.test.dm.page_objects.HomePage;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.ensure.Ensure;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class VerifyAdditionalContractMenu extends UIInteractions implements Task {
+
+	HomePage homePage;
+
+	public VerifyAdditionalContractMenu() {
+
+	}
+
+	public static VerifyAdditionalContractMenu fromUnderlineDetails() {
+
+		return new VerifyAdditionalContractMenu();
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		List<String> expectedMenu = Arrays.asList("Contact Info", "Agency Affiliation", "Direct Deposit Details",
+				"Documents", "Compensation Preferences", "Verify Application");
+		actor.attemptsTo(Ensure.that(homePage.getAdcMenu()).containsOnlyElementsFrom(expectedMenu));
+		
+		System.out.println(homePage.getAdcMenu());
+	}
+
+}

@@ -1,0 +1,24 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 07/09/2022
+ **/
+
+public class BusinessEntity_AgencyProfilePage extends PageObject {
+
+    public static Target BEAP_PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'Agency Profile >>')]");
+    public static Target BE_NAME = Target.the("Name").locatedBy("//input[@name='txtBusinessName']");
+    public static Target BE_TYPE = Target.the("Type").locatedBy("//select[@name='cmbAliasType']");
+    public static Target BE_EFFECTIVE_FROM = Target.the("Effective From").locatedBy("//input[@name='dtEffectiveFrom']");
+    public static Target BE_FEIN = Target.the("FEIN").locatedBy("//input[@name='txtFEIN']");
+    public static Target BE_LEGAL_TYPE = Target.the("Legal Type").locatedBy("//select[@name='cmbLegalType']");
+    public static Target BE_RESIDENT_STATE = Target.the("Resident State").locatedBy("//select[@name='cmbResidentState']");
+    public static Target BE_LICENSE_NO = Target.the("License Number").locatedBy("//input[@name='txtLicense']");
+    public static Target BE_LICENSE_TYPE = Target.the("License Type").locatedBy("(//select[@name='cmbLicenseType'])[2]");
+    public static Target BEAP_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveCont']");
+
+}

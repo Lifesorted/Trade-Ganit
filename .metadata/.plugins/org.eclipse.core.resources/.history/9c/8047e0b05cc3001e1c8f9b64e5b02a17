@@ -1,0 +1,40 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 24/08/2022
+ **/
+public class ProducerLicenseDetailsPage extends PageObject {
+    public static Target LICENSE_DETAILS_TAB = Target.the("Tab").locatedBy("//td[contains(@title,'Contact Info')]/following::td[contains(@title,'License Details')]//a");
+    public static Target LICENSE_MENU = Target.the("License menu").locatedBy("(//span[contains(text(),'License Details')])");
+    public static Target PLD_PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'License Details >>')]");
+    public static Target ADD_BUTTON = Target.the("Add Button").locatedBy("//button[@name='btnNonAdd']");
+    public static Target LICENSE_NO_1 = Target.the("License No").locatedBy("//input[@name='dgResidentStateLicense_0_1']");
+    
+    public static Target selectLicenseNo(String value) {
+        return Target.the("Select License No").locatedBy("//span[text()='"+value+"']/preceding::input[1]");
+    }
+    public static Target STATE_1 = Target.the("State").locatedBy("//select[@name='dgResidentStateLicense_0_2']");
+    public static Target TYPE_1 = Target.the("Type").locatedBy("//select[@name='dgResidentStateLicense_0_3']");
+    public static Target RESIDENT_1 = Target.the("Resident").locatedBy("//select[@name='dgResidentStateLicense_0_5']");
+    public static Target LOA_1 = Target.the("LOA").locatedBy("//a[@id='dgResidentStateLicense_0_7_lnk']/span/span");
+    public static Target LOA_1_LABEL = Target.the("LOA Label").locatedBy("//div[contains(@data-title,'s under License')]//label[@data-name='moduleTitle']");
+
+    public static Target ISSUE_DATE_1 = Target.the("Issue Date").locatedBy("//input[@name='dgResidentStateLicense_0_8']");
+    public static Target EXPIRY_DATE_1 = Target.the("Expiry Date").locatedBy("//input[@name='dgResidentStateLicense_0_9']");
+
+    public static Target loaOption(String value) {
+        return Target.the("LOA Option").locatedBy("//td[@title='"+value+"']/preceding::input[@type='checkbox'][1]");
+    }
+
+    public static Target OK_BTN = Target.the("Ok Button").locatedBy("//button[@name='btnOk']");
+
+    public static Target LD_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveNContinue']");
+    public static Target LD_SAVE_CONTINUE_1 = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveandContinue']");
+    
+    public static Target RES_LICENSE = Target.the("Residence License").locatedBy("//tr[@name='dgResidentStateLicense_r_0']//td[@data-colid='Col_2']");
+
+}

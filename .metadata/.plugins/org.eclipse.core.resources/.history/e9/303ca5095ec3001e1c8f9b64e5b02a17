@@ -1,0 +1,64 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+import java.util.logging.Logger;
+import com.majesco.test.dm.page_objects.ProfileDetailPage;
+import com.majesco.test.dm.utils.DataHelper;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class VerifyProfileDetails extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+	private static String name;
+	private static String type;
+	private static String fein;
+	private static String legaltype;
+	
+	public VerifyProfileDetails(String name, String type, String fein, String legaltype) {
+		this.name = name;
+		this.type = type;
+		this.fein = fein;
+		this.legaltype = legaltype;
+	}
+
+	public static VerifyProfileDetails fromUnderlineDetails() {
+		name = DataHelper.getRecord("NPersonal_Details", 5, 5);
+		type = DataHelper.getRecord("NPersonal_Details", 5, 7);
+		fein = DataHelper.getRecord("NPersonal_Details", 1, 3);
+		legaltype = DataHelper.getRecord("NPersonal_Details", 5, 8);
+
+		return new VerifyProfileDetails(name, type, fein, legaltype);
+	}
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		waitABit(5000);
+		
+		String exName = ProfileDetailPage.NAME.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(ProfileDetailPage.NAME, isVisible()));
+		Ensure.that(exName).isEqualTo(name);
+		waitABit(999);
+		 
+		String extype = ProfileDetailPage.TYPE.resolveFor(actor).getText();  
+		actor.attemptsTo(WaitUntil.the(ProfileDetailPage.TYPE, isVisible()));
+		Ensure.that(extype).isEqualTo(type);
+		waitABit(999);
+		
+		String exlegaltype = ProfileDetailPage.LEGAL_TYPE.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(ProfileDetailPage.LEGAL_TYPE, isVisible()));
+		Ensure.that(exlegaltype).isEqualTo(legaltype);
+		waitABit(999);
+	}
+
+}

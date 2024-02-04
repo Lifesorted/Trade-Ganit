@@ -1,0 +1,21 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class MassOnboardingPage extends PageObject {
+
+	public static Target SELECT_CHANNEL = Target.the("channel").locatedBy("(//input[@name='ByEntity'])[1]");
+    public static Target CHANNEL_VALUE = Target.the("channel-option").locatedBy("//select[@name='cmbChannel']");
+    public static Target BROWSE_FILE = Target.the("browse-file").locatedBy("//input[@accept='.csv']");
+    public static Target VALIDATE_BTN = Target.the("validate").locatedBy("//button[@name='btnDummy']");
+    public static Target UPLOAD_BTN = Target.the("upload").locatedBy("//button[@name='btnUpload']");
+    public static Target OK_BTN = Target.the("Ok").locatedBy("//button[@name='Ok']");
+}

@@ -1,0 +1,68 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import java.util.logging.Logger;
+
+import org.openqa.selenium.Keys;
+
+import com.majesco.test.dm.page_objects.CommonObjects;
+import com.majesco.test.dm.page_objects.HomePage;
+import com.majesco.test.dm.utils.DataHelper;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Browser;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Hit;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class FillbusinessDate extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+	private HomePage homePage;
+
+	public FillbusinessDate() {
+
+	}
+
+	public static FillbusinessDate fromUnderlineDetails() {
+
+		return new FillbusinessDate();
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		waitABit(2000);
+		actor.attemptsTo(WaitUntil.the(homePage.SYS_ADMIN_MENU, isClickable()).then(Click.on(homePage.SYS_ADMIN_MENU)));
+		waitABit(999);
+
+		actor.attemptsTo(
+				Click.on(homePage.BUSINESS_DAY_SUBMENU).then(WaitUntil.the(homePage.NEW_BUSINESS_DATE, isVisible())));
+		waitABit(999);
+
+		actor.attemptsTo(Enter.keyValues("06/08/2023").into(homePage.NEW_BUSINESS_DATE));
+		waitABit(1000);
+
+		actor.attemptsTo(Click.on(homePage.CHANGE_DATE));
+		waitABit(3000);
+
+		actor.attemptsTo(Click.on(CommonObjects.OK_BTN));
+		waitABit(3000);
+		
+		actor.attemptsTo(Browser.refreshPage());
+		waitABit(5000);
+	}
+
+}

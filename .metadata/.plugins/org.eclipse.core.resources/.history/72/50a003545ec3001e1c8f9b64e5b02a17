@@ -1,0 +1,25 @@
+package com.majesco.test.dm.utils;
+
+public class Key {
+    public static final String NPN_NUMBER = "npn-number";
+    public static final String APPLICATION_DATE = "application-date";
+    public static final String APPLICATION_NUMBER = "application-number";
+    public static final String LICENSE_NUMBER = "license-number";
+    public static final String ASCA_LICENSE_NUMBER = "additional-contract-license-number";
+    public static final String APPLICATION_STATUS = "application-status";
+    public static final String ENTITY_STATUS = "entity-status";
+    public static final String STATE_CODE = "state-code";
+    public static final String APPLICATION_FOR = "application-for";
+    public static final String ENTITY_TYPE = "entity-type";
+    public static final String CONTRACT_TYPE = "contract-type";
+    public static final String STATE = "state";
+    public static final String ADDED_EMAIL = "added email";
+    public static final String SELECTED_LOB = "selected lob";
+    public static final String SAVE_FLAG = "save flag";
+    public static final String BROKER_NUMBER = "broker number";
+    public static final String ENTITY_CODE = "entity code";
+    public static final String ROLE_LEVEL = "Role level";
+    public static final String EVENT_JSON = "Event json";
+    public static final String AGENT_NO = "agent no";
+    public static final String AGENT_ACTION = "agent action";
+}

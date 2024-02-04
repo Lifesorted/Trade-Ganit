@@ -1,0 +1,119 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+import java.util.Map;
+import com.majesco.test.dm.page_objects.HomePage;
+import com.majesco.test.dm.page_objects.SchedulePage;
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.HoverOverTarget;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class AddSchedule extends UIInteractions implements Task {
+	HomePage homepage;
+	public static String lobClass;
+	public static String code;
+	public static String name;
+	public static String effectiveFrom;
+	public static String type;
+	public static String subType;
+	public static String accrualBasis;
+	public static String billType;
+
+	public AddSchedule(String lobClass, String code, String name, String effectiveFrom, String type, String subType,
+			String accrualBasis, String billType) {
+        this.lobClass = lobClass;
+        this.code = code;
+        this.name = name;
+        this.effectiveFrom = effectiveFrom;
+        this.type = type;
+        this.subType = subType;
+        this.accrualBasis = accrualBasis;
+        this.billType = billType;
+	}
+
+	public static AddSchedule fromUnderlineDetails(DataTable addscheduleinfo) {
+		Map<String, String> addschedule = ConvertCucumberDataTable.toMap(addscheduleinfo);
+		lobClass = addschedule.get("LOBClass");
+		code = addschedule.get("Code");
+		name = addschedule.get("Name");
+		effectiveFrom = addschedule.get("EffectiveFrom");
+		type = addschedule.get("Type");
+		subType = addschedule.get("SubType");
+		accrualBasis = addschedule.get("AccrualBasis");
+		billType = addschedule.get("BillType");
+		return new AddSchedule(lobClass, code, name, effectiveFrom, type, subType, accrualBasis, billType);
+	}
+	
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		actor.attemptsTo(WaitUntil.the(homepage.COMPENSATION_MANAGEMENT, isClickable())
+				.then(Click.on(homepage.COMPENSATION_MANAGEMENT)));
+		waitABit(999);
+		
+		actor.attemptsTo(HoverOverTarget.over(homepage.BASE_COMPENSATION));
+		waitABit(500);
+		
+		actor.attemptsTo(Click.on(homepage.SCHEDULE_MAINTENANCE));
+		waitABit(1200);
+		
+		actor.attemptsTo(Click.on(SchedulePage.NEW));
+		waitABit(1200);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(lobClass).from(SchedulePage.LOB_CLASS));
+		waitABit(999);
+		
+		code = "SC"+CommonUtil.generateRandomNumber();
+		actor.attemptsTo(Enter.keyValues(code).into(SchedulePage.CODE));
+		waitABit(999);
+		
+		name = "SCH"+CommonUtil.generateRandomNumber(); 
+		actor.attemptsTo(Enter.keyValues(name).into(SchedulePage.NAME));
+		waitABit(999);
+		
+		actor.attemptsTo(Enter.keyValues(CommonUtil.getCurrentDate()).into(SchedulePage.EFF_FROM));
+		waitABit(999);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(type).from(SchedulePage.TYPE));
+		waitABit(10000);
+				
+		actor.attemptsTo(SelectFromOptions.byVisibleText(subType).from(SchedulePage.SUB_TYPE));
+		waitABit(999);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(accrualBasis).from(SchedulePage.ACCRUAL_BASIS));
+		waitABit(999);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(billType).from(SchedulePage.BILL_TYPE));
+		waitABit(999);
+		
+		actor.attemptsTo(Click.on(SchedulePage.ADD_RULE_BTN));
+		waitABit(1200);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText("FWCSCCOMMISSION (FWCSCCOMMISSION)").from(SchedulePage.SELECT_RULE));
+		waitABit(999);
+		
+		actor.attemptsTo(Enter.keyValues(CommonUtil.getCurrentDate()).into(SchedulePage.RULE_EFFECTIVE_FROM));
+		waitABit(999);
+		
+		actor.attemptsTo(Click.on(SchedulePage.SAVE));
+		waitABit(3000);
+		
+		actor.attemptsTo(WaitUntil.the(SchedulePage.OK, isVisible()).then(Click.on(SchedulePage.OK)));
+		waitABit(2000);
+		
+		actor.attemptsTo(Click.on(SchedulePage.FORWARD));
+		waitABit(3000);
+		
+		actor.attemptsTo(WaitUntil.the(SchedulePage.OK, isVisible()).then(Click.on(SchedulePage.OK)));
+		waitABit(2000);
+	}
+
+}

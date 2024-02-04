@@ -1,0 +1,62 @@
+package com.majesco.test.dm.tasks.db;
+
+
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.utils.Key;
+import com.majesco.test.dm.utils.db.QueryConstants;
+
+/**
+ * @author dhiraj662364
+ * @created 13/09/2022
+ **/
+
+public class GetAdditionalContract implements Task {
+    private static Logger logger = Logger.getLogger(GetAdditionalContract.class.getName());
+    private Connection connection;
+    private ResultSet rs;
+
+    private String licenseNo;
+
+    public GetAdditionalContract(Connection connection) {
+        this.connection = connection;
+    }
+
+    public static GetAdditionalContract fromDB(Connection connection) {
+        return new GetAdditionalContract(connection);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        try {
+            String licenseNo = actor.recall(Key.ASCA_LICENSE_NUMBER);
+            String sqlQuery = QueryConstants.FETCH_ADD_CONTRACT_ENTITY_STATUS;
+            PreparedStatement prepStmt = connection.prepareStatement(sqlQuery);
+            prepStmt.setString(1, String.valueOf(licenseNo));
+
+            rs = prepStmt.executeQuery();
+            ResultSetMetaData rsMetadata = rs.getMetaData();
+
+            while (rs.next()) {
+                String entityStatus = rs.getString("ENTITY_STATUS");
+                String applicationStatus = rs.getString("APPLICATION_STATUS");
+
+                actor.remember(Key.ENTITY_STATUS, entityStatus);
+                actor.remember(Key.APPLICATION_STATUS, applicationStatus);
+            }
+            rs.close();
+            prepStmt.close();
+
+        } catch (Exception dbe) {
+            logger.severe("Unable to retrieve ADC data from DB: " + dbe);
+        }
+    }
+}

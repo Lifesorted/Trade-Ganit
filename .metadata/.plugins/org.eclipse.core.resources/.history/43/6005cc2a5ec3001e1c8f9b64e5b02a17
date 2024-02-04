@@ -1,0 +1,41 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import java.util.Map;
+
+import com.majesco.test.dm.page_objects.ProducerDirectDepositDetails;
+import com.majesco.test.dm.tasks.ui.common.NavigateTo;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class FillAgencyContact extends UIInteractions implements Task{
+
+	 public FillAgencyContact() {
+	      
+	    }
+
+	 public static FillAgencyContact fromUnderlineDetails() {
+
+	        return new FillAgencyContact();
+
+	    }
+	    
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+			
+		actor.attemptsTo(Click.on(ProducerDirectDepositDetails.DIRECT_DEPOSIT_DETAIL_TAB));
+		waitABit(999);
+	}
+
+}

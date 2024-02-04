@@ -1,0 +1,56 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.page_objects.AppointmentDetailPage;
+import com.majesco.test.dm.utils.DataHelper;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class VerifyAppointment extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+	
+	public VerifyAppointment() {
+	
+	}
+	
+	public static VerifyAppointment fromUnderlineDetails() {
+		
+		return new VerifyAppointment();
+	}
+	
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		waitABit(2000);
+		
+		actor.attemptsTo(WaitUntil.the(AppointmentDetailPage.NON_ACTIVE, isVisible()).then(Click.on(AppointmentDetailPage.NON_ACTIVE)));
+		waitABit(2000);
+		
+		actor.attemptsTo(WaitUntil.the(AppointmentDetailPage.EXPAND_STATE, isVisible()).then(Click.on(AppointmentDetailPage.EXPAND_STATE)));
+		waitABit(2000);
+				
+		String terminateStatus = AppointmentDetailPage.APPOINTMENT_STATUS.resolveFor(actor).getText();
+		List<String> status = Arrays.asList("Terminated", "Active");
+		
+		Ensure.that(terminateStatus).isIn(status);
+		
+	}
+
+}

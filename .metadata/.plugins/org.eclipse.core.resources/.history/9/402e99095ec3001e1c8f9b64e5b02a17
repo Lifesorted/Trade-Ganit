@@ -1,0 +1,50 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+import java.util.Map;
+
+import com.majesco.test.dm.page_objects.ManualLetterPage;
+import com.majesco.test.dm.tasks.ui.common.NavigateTo;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class VerifyManualLetterGenerate extends UIInteractions implements Task {
+
+	private String letteroption = "Letter 70 E-Contracting Access Credentials";
+	public VerifyManualLetterGenerate() {
+
+	}
+
+	public static VerifyManualLetterGenerate fromUnderlineDetails() {
+		return new VerifyManualLetterGenerate();
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		waitABit(1500);
+		actor.attemptsTo(WaitUntil.the(ManualLetterPage.SELECT_LETTER_TYPE, isVisible())
+				.then(SelectFromOptions.byIndex(1).from(ManualLetterPage.SELECT_LETTER_TYPE)));
+		waitABit(999);
+
+		actor.attemptsTo(Click.on(ManualLetterPage.GENERATE_BTN));
+		waitABit(3500);
+
+	}
+
+}

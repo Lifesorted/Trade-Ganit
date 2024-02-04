@@ -1,0 +1,29 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class TasnferPage extends PageObject{
+
+	public static Target SELECT_REASON = Target.the("select reason").locatedBy("//select[@name='cmbReason']");
+	public static Target TRANSFER_TYPE = Target.the("transfer type").locatedBy("//select[@name='cmbTransferType']");
+	public static Target TRANSFER_TO = Target.the("transfer to").locatedBy("//input[@name='txtTransferToEntityCode']");
+	public static Target EFFECTIVE_FROM = Target.the("effective from").locatedBy("//input[@name='dateEffectiveFrm']");
+	public static Target CLICK_ICON = Target.the("click icon").locatedBy("//a[@id='txtTransferToEntityCode_lnk']");
+	public static Target PORTFOLIO_OWNERSHIP = Target.the("portfolio ownership").locatedBy("//select[@name='cmbPortfolioOwnrshp']");
+	public static Target DOWNLINE = Target.the("downline").locatedBy("//select[@name='cmbDownlineTrans']");
+	public static Target OVERRIDES = Target.the("overrides").locatedBy("//select[@name='cmbCompnstnOvrride']");
+	public static Target PROD_OVERRIDES = Target.the("prod overrides").locatedBy("//select[@name='cmbPrdnOvrride']");
+	public static Target BTN_SAVE = Target.the("save button").locatedBy("//button[@name='btnSave']");
+	public static Target BTN_OK = Target.the("ok button").locatedBy("//button[@name='Ok']");
+	public static Target BTN_FORWARD = Target.the("forward button").locatedBy("//button[@name='btnForward']");
+	public static Target LEVEL_CHANGE_REASON = Target.the("Level chane reason").locatedBy("//select[@name='cmbMovementReason']");
+	public static Target NEW_LEVEL = Target.the("New Level").locatedBy("//select[@name='cmbLevel']");
+	public static Target EO_TAB = Target.the("EO Tab").locatedBy("//a[@data-cid='Tab_11']");
+	public static Target PAYMENT_PREFERENCE = Target.the("Payment preference").locatedBy("//a[@data-cid='Tab_5']");
+	public static Target CASCADE_DOWNLINES = Target.the("Cascade downlines").locatedBy("//select[@name='cbCascadePolicy']");
+	public static Target BTN_SAVE1 = Target.the("save button").locatedBy("/html/body/div[2]/div[2]/div/div/div[2]/div/div/div[3]/div/div[2]/div[4]/div/div/div/div/div/div[2]/div/div/div[3]/div/button");
+	public static Target TRANSFER_REQUEST = Target.the("Transfer Request").locatedBy("//a[@data-cid='Tab_10']");
+	public static Target BTN_SAVE2 = Target.the("save button").locatedBy("/html/body/div[2]/div[2]/div/div/div[2]/div/div/div[3]/div/div[2]/div[5]/div/div/div/div/div/div[2]/div/div/div[2]/div/div[2]/div/div/div[2]/div[2]/div/button");
+	
+}

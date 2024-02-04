@@ -1,0 +1,14 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class LevelChangePage extends PageObject {
+
+	public static Target REASON = Target.the("reason").locatedBy("//select[@name='cmbMovementReason']");
+	public static Target EFFECTIVE_DATE = Target.the("effective date").locatedBy("//input[@name='dtEffectiveDate']");
+	public static Target NEW_LEVEL = Target.the("New level").locatedBy("//select[@name='cmbLevel']");
+	public static Target SAVE_LEVEL = Target.the("Save level").locatedBy("//button[@name='btnSave']");
+	public static Target OK = Target.the("Ok").locatedBy("//button[@name='Ok']");
+	public static Target FORWARD = Target.the("Ok").locatedBy("//button[@name='btnForward']");
+}

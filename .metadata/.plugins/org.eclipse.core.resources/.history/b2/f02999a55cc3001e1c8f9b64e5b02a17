@@ -1,0 +1,23 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class AdditionalEmailPage extends PageObject {
+	
+	 public static Target ADD_EMAIL_EXPAND = Target.the("add email expand").locatedBy("//label[contains(text(),'Additional Email')]");
+	 public static Target EMAIL_TYPE = Target.the("add email type").locatedBy("//select[@name='dgAdditionalEmail_0_0']");
+	 public static Target EMAIL = Target.the("add email").locatedBy("//input[@name='dgAdditionalEmail_0_1']");
+	 public static Target EFF_FROM = Target.the("effective from").locatedBy("//input[@name='dgAdditionalEmail_0_2']");
+	 public static Target EFF_TO = Target.the("effective to").locatedBy("//input[@name='dgAdditionalEmail_0_3']");
+	 public static Target ADD_EMAIL = Target.the("add email").locatedBy("//button[@name='btnAddEmail']");
+	 public static Target SAVE_EMAIL = Target.the("save email").locatedBy("//button[@name='btnSaveEmail']");
+
+}

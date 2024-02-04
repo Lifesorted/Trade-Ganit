@@ -1,0 +1,90 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.ProducerAgencyAffiliationPage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import java.util.Map;
+import static com.majesco.test.dm.page_objects.ProducerAgencyAffiliationPage.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
+/**
+ * @author dhiraj662364
+ * @created 24/08/2022
+ **/
+
+public class FillProducerAgencyAffiliation extends UIInteractions implements Task {
+
+	EnvironmentVariables environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
+	private String marketingChannel;
+	private String entityCode;
+	private String companyCode;
+	private String roleLevel;
+	private String cedFlag;
+
+	public FillProducerAgencyAffiliation(String marketingChannel, String entityCode, String companyCode,
+			String roleLevel, String cedFlag) {
+		this.marketingChannel = marketingChannel;
+		this.entityCode = entityCode;
+		this.companyCode = companyCode;
+		this.roleLevel = roleLevel;
+		this.cedFlag = cedFlag;
+	}
+
+	public static FillProducerAgencyAffiliation fromUnderlineDetails(DataTable agencyAffiliationDetails) {
+		Map<String, String> agencyAffiliation = ConvertCucumberDataTable.toMap(agencyAffiliationDetails);
+		String marketingChannel = agencyAffiliation.get("MarketingChannel");
+		String entityCode = agencyAffiliation.get("EntityCode");
+		String companyCode = agencyAffiliation.get("CompanyCode");
+		String roleLevel = agencyAffiliation.get("RoleLevel");
+		String cedFlag = agencyAffiliation.get("CEDFlag");
+
+		return new FillProducerAgencyAffiliation(marketingChannel, entityCode, companyCode, roleLevel, cedFlag);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		waitABit(1200);
+		actor.attemptsTo(WaitUntil.the(PAA_PAGE_LABEL, isVisible())
+				.then(SelectFromOptions.byVisibleText(marketingChannel).from(MARKETING_CHANNEL)));
+		waitABit(999);
+
+		String contractType = ProducerAgencyAffiliationPage.CONTRACT_TYPE.resolveFor(actor).getText();
+		actor.remember(Key.CONTRACT_TYPE, contractType);
+		
+		waitABit(999);
+		
+		if (contractType.equalsIgnoreCase("Intermediary")) {
+			actor.attemptsTo(Enter.keyValues(EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.parent.entitycode")).into(ENTITY_CODE));
+			waitABit(999);
+
+			actor.attemptsTo(Click.on(SEARCH_ENTITY).then(WaitUntil.the(ENTITY_RECORD, isVisible())));
+			waitABit(2000);
+
+			actor.attemptsTo(Click.on(ENTITY_RECORD));
+			waitABit(2000);
+		}
+
+		waitABit(999);
+		String contracteffDate = actor.recall(Key.APPLICATION_DATE);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(roleLevel).from(ROLE_LEVEL));
+		actor.remember(Key.ROLE_LEVEL, roleLevel);
+		waitABit(999);
+
+		DataHelper.writeAgencyAffiliationData(contracteffDate, roleLevel);
+		waitABit(1500);
+
+	}
+}

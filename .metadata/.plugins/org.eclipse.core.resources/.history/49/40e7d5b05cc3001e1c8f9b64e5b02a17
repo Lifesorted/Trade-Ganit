@@ -1,0 +1,34 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class OtherInfoPage extends PageObject {
+	public static Target OTHERINFO_TAB = Target.the("Other info tab").locatedBy("//a[@data-labelkey='mm.icd.dm.AppEntityContactDetails.OtherInfo']");
+	public static Target ROLE_LEVEL = Target.the("License tab").locatedBy("//*[@data-name='cmbRoleLevel_label']/following::*[@class='selection'][1]");
+	public static Target ROLE_E_DATE = Target.the("License tab").locatedBy("//input[@name='dtEffectiveDate']");
+	public static Target CONTRACT_E_DATE = Target.the("License tab").locatedBy("//input[@name='dtContractDate']");
+	public static Target BROKER_NUM = Target.the("Broker number").locatedBy("//*[@data-name='txtImplBrokerId_label']/following::*[@class='form-control textInput-control '][1]");
+	public static Target PRIM_LOB_LABEL = Target.the("label").locatedBy("//label[@data-name='cmbImplPrimaryLOB_label']");
+	public static Target PRIMARY_LOB = Target.the("lob").locatedBy("//select[@name='cmbImplPrimaryLOB']/option[@value]");
+	public static Target SELECTED_LOB = Target.the("lob").locatedBy("//*[@data-name='cmbImplPrimaryLOB_label']/following::*[@class='selection'][1]");
+	public static Target EDIT_LOB = Target.the("lob").locatedBy("//button[@name='btnImplPrimaryLOBEdit']");
+	public static Target VIEW_LOB = Target.the("lob").locatedBy("//button[@name='btnImplPrimaryLOBView']");
+	public static Target CLOSE_LOB = Target.the("lob").locatedBy("//button[@name='btnImplClosePrimaryLob']");
+	public static Target ADD_LOB = Target.the("lob").locatedBy("//button[@name='btnImplAddPrimaryLob']");
+	public static Target DELETE_LOB = Target.the("lob").locatedBy("//button[@name='btnImplDeletePrimaryLob']");
+	public static Target SAVE_LOB = Target.the("lob").locatedBy("//button[@name='btnImplSavePrimaryLob']");
+	public static Target CANCEL_LOB = Target.the("lob").locatedBy("//button[@name='btnImplCancelPrimaryLob']");
+	public static Target SAVE_BTN = Target.the("lob").locatedBy("//button[@name='btnSave']");
+	public static Target IS_CORE_IMO_LABEL = Target.the("is core imo label").locatedBy("//label[@data-name='cmbImplIsCoreIMO_label']");
+	public static Target IS_CORE_IMO_DISABLE = Target.the("is core imo disable").locatedBy("//select[@name='cmbImplIsCoreIMO']");
+	public static Target IS_CORE_IMO_DEFAULT_OPTION = Target.the("is core imo default option").locatedBy("//select[@name='cmbImplIsCoreIMO']/option");
+	public static Target CE_DATE = Target.the("contract effective date").locatedBy("//input[@name='dtContractDate']");
+}

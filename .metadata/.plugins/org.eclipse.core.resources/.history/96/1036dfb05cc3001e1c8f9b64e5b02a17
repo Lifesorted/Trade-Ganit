@@ -1,0 +1,21 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class IvansDownloadPage extends PageObject{
+
+	public static Target CHECK_RECEIVE_DOWNLOADS = Target.the("Receive downloads").locatedBy("//input[@name='cmbReceiveDownload']");
+	public static Target YCODE = Target.the("Y Code").locatedBy("//input[@name='txtYcode']");
+	public static Target AGENCY_MAILBOX = Target.the("Agency Mailbox").locatedBy("//input[@name='txtAgencyMailbox']");
+	public static Target PRIMARY_CONTACT = Target.the("Primary Contact").locatedBy("//input[@name='txtPrimaryContact']");
+	public static Target PRIMARY_EMAIL = Target.the("Primary Email").locatedBy("//input[@name='txtEmailPrimary']");
+	public static Target IVAN_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveAndContinue']");
+	public static Target IVAN_DOWNLOAD = Target.the("Ivans download tab").locatedBy("//td[contains(@title,' IVANS Download')]//span[contains(text(),' IVANS Download')]");
+	public static Target IVAN_TAB = Target.the("Ivans tab").locatedBy("//a[@data-labelkey='mm.icd.stgdm.appointments.HMIVANS']");
+	public static Target SLIDE_RIGHT_ICON = Target.the("Slide right icon").locatedBy("//span[@class='glyphicon glyphicon-chevron-right']");
+	public static Target YCODE_VALUE = Target.the("Y code value").locatedBy("//div[@id='lblYcode']/descendant::span[@data-section='displayvalue']");
+	public static Target AGENCYMAILBOX_VALUE = Target.the("Agency mailbox value").locatedBy("//div[@id='lblAgencyMailbox']/descendant::span[@data-section='displayvalue']");
+	public static Target PRIMARYCONTACT_VALUE = Target.the("Primary contact value").locatedBy("//div[@id='lblPrimaryContact']/descendant::span[@data-section='displayvalue']");
+	public static Target PRIMARYEMAIL_VALUE = Target.the("Primary email value").locatedBy("//div[@id='lblEmailPrimaryContact']/descendant::span[@data-section='displayvalue']");
+}

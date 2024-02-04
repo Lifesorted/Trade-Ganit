@@ -1,0 +1,294 @@
+package com.majesco.test.dm.tasks.ui.common;
+
+import com.majesco.test.dm.page_objects.IvansDownloadPage;
+import com.majesco.test.dm.page_objects.LicenseDetailPage;
+import com.majesco.test.dm.page_objects.ProducerAppointmentsPage;
+import com.majesco.test.dm.utils.CommonUtil;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import static com.majesco.test.dm.page_objects.AgencyContactsPage.ACI_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.AgencyProfilePage.APP_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.BusinessEntity_AgencyProfilePage.BEAP_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.CommonObjects.OK_BTN;
+import static com.majesco.test.dm.page_objects.CommunicationPreferences.COMP_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.CompensationPreferencesPage.*;
+import static com.majesco.test.dm.page_objects.DesignatedProducerPage.DRLP_SAVE_BTN;
+import static com.majesco.test.dm.page_objects.EOInsurancePage.EO_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerAgencyAffiliationPage.AA_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerAppointmentsPage.PAD_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.CI_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerDirectDepositDetails.DDD_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerLicenseDetailsPage.LD_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerLicenseDetailsPage.LD_SAVE_CONTINUE_1;
+import static com.majesco.test.dm.page_objects.ProducerPersonalInfoPage.PI_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.WorkExperience.WE_SAVE_CONTINUE;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 23/08/2022
+ **/
+
+public class SaveAndContinue extends UIInteractions {
+
+    public static Performable onPersonalInfoScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(Scroll.to(PI_SAVE_CONTINUE));
+                    CommonUtil.staticWaitFor(1000L);
+                    actor.attemptsTo(
+                            WaitUntil.the(PI_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(PI_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(PI_SAVE_CONTINUE));
+                   // CommonUtil.staticWaitFor(1000L);
+                    //actor.attemptsTo(Click.on(OK_BTN));
+                    //CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+
+    public static Performable onContactInfoScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(Scroll.to(CI_SAVE_CONTINUE).andAlignToTop());
+                    CommonUtil.staticWaitFor(1000L);
+                    actor.attemptsTo(
+                            WaitUntil.the(CI_SAVE_CONTINUE, isVisible()).forNoMoreThan(5).seconds(),
+                            WaitUntil.the(CI_SAVE_CONTINUE, isClickable()).forNoMoreThan(5).seconds(),
+                            Click.on(CI_SAVE_CONTINUE)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+    
+    public static Performable onWorkExperienceScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(WE_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(WE_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(WE_SAVE_CONTINUE)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+
+    public static Performable onAgencyAffiliationScreen(String contractType) {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(AA_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(AA_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(AA_SAVE_CONTINUE));
+
+                    if (contractType.equalsIgnoreCase("Direct")) {
+                     
+                        CommonUtil.staticWaitFor(1000L);
+
+                    }else {
+						NavigateTo.compensationPreferencesScreen();
+					}
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+
+    public static Performable onLicenseDetailsScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(LD_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(LD_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Scroll.to(LD_SAVE_CONTINUE).andAlignToTop(),
+                            Click.on(LD_SAVE_CONTINUE)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+
+    public static Performable onADCLicenseDetailsScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(LD_SAVE_CONTINUE_1, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(LD_SAVE_CONTINUE_1, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(LD_SAVE_CONTINUE_1)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+    public static Performable onAppointmentsScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(PAD_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(PAD_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(PAD_SAVE_CONTINUE)
+                    );
+                    CommonUtil.staticWaitFor(6000L);
+                }
+        );
+    }
+
+    public static Performable onDirectDepositDetailsScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(DDD_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(DDD_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(DDD_SAVE_CONTINUE)
+                    );
+                    CommonUtil.staticWaitFor(5000L);
+                }
+        );
+    }
+
+    public static Performable onEOInsuranceScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(EO_SAVE_CONTINUE, isVisible()).forNoMoreThan(5).seconds(),
+                            WaitUntil.the(EO_SAVE_CONTINUE, isClickable()).forNoMoreThan(5).seconds(),
+                            Click.on(EO_SAVE_CONTINUE)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+
+    public static Performable onIvansDownloadScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(IvansDownloadPage.IVAN_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(IvansDownloadPage.IVAN_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(IvansDownloadPage.IVAN_SAVE_CONTINUE)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+    public static Performable onCompensationPreferencesScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(Scroll.to(MODE).andAlignToTop());
+
+                    CommonUtil.staticWaitFor(4000L);
+
+                    actor.attemptsTo(
+                            WaitUntil.the(CP_SAVE_CONTINUE, isVisible()).forNoMoreThan(30).seconds(),
+                            WaitUntil.the(CP_SAVE_CONTINUE, isClickable()).forNoMoreThan(30).seconds(),
+                            Click.on(CP_SAVE_CONTINUE)
+                           
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+
+    public static Performable onCommunicationPreferencesScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(COMP_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(COMP_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(COMP_SAVE_CONTINUE)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+
+    public static Performable onAgencyProfileScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(APP_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(APP_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(APP_SAVE_CONTINUE));
+                   // CommonUtil.staticWaitFor(1000L);
+                   // actor.attemptsTo(Click.on(OK_BTN));
+                   // CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+
+    public static Performable onBEAgencyProfileScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(BEAP_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(BEAP_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(BEAP_SAVE_CONTINUE).then(WaitUntil.the(OK_BTN, isVisible()))
+                                    .then(WaitUntil.the(OK_BTN, isClickable()))
+                    );
+                    CommonUtil.staticWaitFor(1000L);
+                    actor.attemptsTo(Click.on(OK_BTN));
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+
+    public static Performable onDesignatedProducersScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(DRLP_SAVE_BTN, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(DRLP_SAVE_BTN, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(DRLP_SAVE_BTN)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+
+    public static Performable onAgencyContactsScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(ACI_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(ACI_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(ACI_SAVE_CONTINUE)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+    
+    public static Performable onContractSelectScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(ProducerAppointmentsPage.CONTRACT_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(ProducerAppointmentsPage.CONTRACT_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(ProducerAppointmentsPage.CONTRACT_SAVE_CONTINUE)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+    
+    public static Performable onAddLicenseScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(LicenseDetailPage.SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(LicenseDetailPage.SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(LicenseDetailPage.SAVE_CONTINUE)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+}

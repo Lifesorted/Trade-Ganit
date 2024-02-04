@@ -1,0 +1,13 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class AdditionalStatePage extends PageObject {
+
+	public static Target CONTRACT_UNCHECK = Target.the("contract uncheck").locatedBy("(//input[@type='checkbox' and @name='dgProducerSearchDetails_-1_10'])[1]");
+	public static Target CONTRACT_UNSELECT_VALIDATION_MESSAGE = Target.the("contract validation message").locatedBy("//label[@class='modal-message']");
+	public static Target BTN_OK = Target.the("Ok").locatedBy("//button[@name='Ok']");
+	public static Target CONTRACT_SAVE_CONTINUE = Target.the("Save and Continue button").locatedBy("//button[@name='btnSaveandContinue']");
+	
+}

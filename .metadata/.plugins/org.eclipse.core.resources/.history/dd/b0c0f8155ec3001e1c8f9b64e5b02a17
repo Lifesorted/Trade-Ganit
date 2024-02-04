@@ -1,0 +1,136 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+import java.util.Map;
+import java.util.logging.Logger;
+import com.majesco.test.dm.page_objects.TerminatePage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class FillterminationData extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+	private static String event;
+	private static String reason;
+	private static String terminationtype;
+	private static String portfolio;
+
+	public FillterminationData(String event, String reason, String terminationtype, String portfolio) {
+		this.event = event;
+		this.reason = reason;
+		this.terminationtype = terminationtype;
+		this.portfolio = portfolio;
+	}
+
+	public static FillterminationData fromUnderlineDetails(DataTable terminateDetails) {
+		Map<String, String> transferDetail = ConvertCucumberDataTable.toMap(terminateDetails);
+		event = transferDetail.get("Event");
+		reason = transferDetail.get("Reason");
+		terminationtype = transferDetail.get("TerminationType");
+		portfolio = transferDetail.get("Portfolio");
+		return new FillterminationData(event, reason, terminationtype, portfolio);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		waitABit(5000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.EVENT, isVisible())
+				.then(SelectFromOptions.byVisibleText(event).from(TerminatePage.EVENT)));
+		waitABit(1000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.REASONCONTRACT, isVisible())
+				.then(SelectFromOptions.byVisibleText(reason).from(TerminatePage.REASONCONTRACT)));
+		waitABit(1000);
+
+		actor.attemptsTo(
+				WaitUntil.the(TerminatePage.TERMINATION, isVisible()).then(Click.on(TerminatePage.TERMINATION)));
+		waitABit(1000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.TERMINATION_TYPE, isVisible())
+				.then(SelectFromOptions.byVisibleText(terminationtype).from(TerminatePage.TERMINATION_TYPE)));
+		waitABit(1000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.PORTFOLIO, isVisible())
+				.then(SelectFromOptions.byVisibleText(portfolio).from(TerminatePage.PORTFOLIO)));
+		waitABit(1000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.DOWNLINE_HIERARCHY, isVisible())
+				.then(Click.on(TerminatePage.DOWNLINE_HIERARCHY)));
+		waitABit(1000);
+
+		actor.attemptsTo(Scroll.to(TerminatePage.SAVE).andAlignToTop());
+		waitABit(1000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.SAVE, isVisible()).then(Click.on(TerminatePage.SAVE)));
+		waitABit(2000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.OK, isVisible()).then(Click.on(TerminatePage.OK)));
+		waitABit(2000);
+
+		actor.attemptsTo(
+				WaitUntil.the(TerminatePage.PREFERENCE_TAB, isVisible()).then(Click.on(TerminatePage.PREFERENCE_TAB)));
+		waitABit(3000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.ACCRUE_COMP, isVisible())
+				.then(SelectFromOptions.byVisibleText("Yes").from(TerminatePage.ACCRUE_COMP)));
+		waitABit(1000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.ACCRUE_BASIS, isVisible())
+				.then(SelectFromOptions.byVisibleText("As Earned").from(TerminatePage.ACCRUE_BASIS)));
+		waitABit(1000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.BASE_COMP_OPTION, isVisible()).then(SelectFromOptions
+				.byVisibleText("Current schedule with rate changes allowed").from(TerminatePage.BASE_COMP_OPTION)));
+		waitABit(1000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.PAY_THRESHOLD, isVisible())
+				.then(Enter.theValue("1").into(TerminatePage.PAY_THRESHOLD)));
+		waitABit(1000);
+		
+		actor.attemptsTo(
+				WaitUntil.the(TerminatePage.SAVE_BUTTON, isVisible()).then(Click.on(TerminatePage.SAVE_BUTTON)));
+		waitABit(3000);
+		
+		actor.attemptsTo(WaitUntil.the(TerminatePage.OK, isVisible()).then(Click.on(TerminatePage.OK)));
+		waitABit(3000);
+		
+		actor.attemptsTo(WaitUntil.the(TerminatePage.TERMINATION_REQ_TAB, isVisible()).then(Click.on(TerminatePage.TERMINATION_REQ_TAB)));
+		waitABit(4000);
+		
+		actor.attemptsTo(Scroll.to(TerminatePage.SAVE).andAlignToTop());
+		waitABit(1000);
+		
+		actor.attemptsTo(WaitUntil.the(TerminatePage.SAVE, isVisible()).then(Click.on(TerminatePage.SAVE)));
+		waitABit(2000);
+		
+		actor.attemptsTo(WaitUntil.the(TerminatePage.OK, isVisible()).then(Click.on(TerminatePage.OK)));
+		waitABit(2000);
+
+		actor.attemptsTo(WaitUntil.the(TerminatePage.FORWARD, isVisible()).then(Click.on(TerminatePage.FORWARD)));
+		waitABit(3000);
+		
+		actor.attemptsTo(WaitUntil.the(TerminatePage.OK, isVisible()).then(Click.on(TerminatePage.OK)));
+		waitABit(2000);
+	}
+
+}

@@ -1,0 +1,58 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import java.util.Map;
+import java.util.logging.Logger;
+import com.majesco.test.dm.page_objects.HomePage;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import io.cucumber.datatable.DataTable;
+import com.majesco.test.dm.utils.CommonUIInteractions;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.ensure.web.ElementLocated;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+public class ExecuteBatch extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(ExecuteBatch.class.getName());
+	private HomePage homePage;
+	private static String batchtype;
+	
+	public ExecuteBatch(String batchtype) {
+		this.batchtype = batchtype;
+	}
+
+	public static ExecuteBatch fromUnderlineDetails(DataTable batch) {
+		Map<String, String> batchcriteria = ConvertCucumberDataTable.toMap(batch);
+		batchtype = batchcriteria.get("BatchType");
+		return new ExecuteBatch(batchtype);
+	}
+	
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		actor.attemptsTo(
+				WaitUntil.the(homePage.SYSTEM_ADMINISTRATOR, isClickable()).then(Click.on(homePage.SYSTEM_ADMINISTRATOR)));
+		waitABit(999);
+
+		actor.attemptsTo(
+				Click.on(homePage.JOB_SCHEDULER).then(WaitUntil.the(homePage.SELECT_BATCH, isVisible())));
+		waitABit(2000);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText("Policy Interface - Inbound (File to Intermediate)").from(homePage.SELECT_BATCH));
+		waitABit(999);
+		
+		actor.attemptsTo(Click.on(homePage.SUBMIT_BATCH));
+		waitABit(2000);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText("Policy Interface - Inbound (Intermediate to Target)").from(homePage.SELECT_BATCH));
+		waitABit(999);
+		
+		actor.attemptsTo(Click.on(homePage.SUBMIT_BATCH));
+		
+	}
+
+}

@@ -1,0 +1,21 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 29/08/2022
+ **/
+
+public class ApplicationEnquiryPage extends PageObject {
+    public static Target APP_ENQUIRY_SUBMENU = Target.the("Application Enquiry Submenu").locatedBy("//a[@data-target-module='APPLICATION_INQUIRY']");
+    public static Target APP_NO = Target.the("Application Number").locatedBy("(//input[@name='txtInAppno'])");
+    public static Target APP_SEARCH_BTN = Target.the("Search Button").locatedBy("//button[@name='btSubmit']");
+    public static Target APP_NO_RESULT_LABEL = Target.the("App Number Result Label").locatedBy("//label[contains(text(),'Applications Inquiry')]");
+    public static Target RESULT_APP_NO = Target.the("App Number from Result").locatedBy("//a[@id='dgSearchResult_0_0_lnk']/span/span");
+    public static Target RESULT_APP_STATUS = Target.the("App Status from Result").locatedBy("//div[@id='dgSearchResult_0_14']/span/span/span");
+    public static Target APP_NUM = Target.the("Application number").locatedBy("//div[@id='dtApplnID_Date']/span/span/span");
+    public static Target ADD_EMAIL = Target.the("email").locatedBy("//div[@id='dgAgencyBaseDetail_0_6']/descendant::span[@data-section='displayvalue']");
+    
+}

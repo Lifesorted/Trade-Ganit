@@ -1,0 +1,35 @@
+package com.majesco.test.dm.tasks.ui.common;
+
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.Key;
+
+import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Open;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+
+public class NavigateTo {
+	
+    public static Performable theLoginPage() {
+        return Task.where("{0} opens the login page",
+                Open.browserOn().the(LoginPage.class));
+    }
+
+    public static Performable agencyAffiliationScreen() {
+        return Task.where("{0} opens the agency affiliation page",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(AGENCY_AFFILIATION_TAB)
+                                    .then(WaitUntil.the(PAA_PAGE_LABEL, isVisible()))
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }    
+}

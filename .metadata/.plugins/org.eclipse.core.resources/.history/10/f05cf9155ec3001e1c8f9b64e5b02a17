@@ -1,0 +1,125 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.ProducerPersonalInfoPage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import org.junit.platform.commons.util.StringUtils;
+import java.util.Map;
+import java.util.logging.Logger;
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.*;
+
+/**
+ * @author dhiraj662364
+ * @created 23/08/2022
+ **/
+
+public class FillProducerBusinessOrShippingAddress extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(FillProducerBusinessOrShippingAddress.class.getName());
+	private String addressType;
+	private String line1;
+	private String city;
+	private String state;
+	private String zip;
+	private String businessPhone;
+	private static final String OFFICE = "Office";
+
+	public FillProducerBusinessOrShippingAddress(String addressType, String line1, String city, String state,
+			String zip, String businessPhone) {
+		this.addressType = addressType;
+		this.line1 = line1;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.businessPhone = businessPhone;
+	}
+
+	public static FillProducerBusinessOrShippingAddress fromUnderlineDetails(DataTable address) {
+		Map<String, String> addressDetails = ConvertCucumberDataTable.toMap(address);
+		String addressType = addressDetails.get("AddressType");
+		String line1 = addressDetails.get("Line1");
+		String city = addressDetails.get("City");
+		String state = addressDetails.get("State");
+		String zip = addressDetails.get("Zip");
+		String businessPhone = addressDetails.get("BusinessPhone");
+
+		return new FillProducerBusinessOrShippingAddress(addressType, line1, city, state, zip, businessPhone);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		if (ADD_ADDRESS.resolveFor(actor).isEnabled()) {
+			actor.attemptsTo(Click.on(ADD_ADDRESS));
+			waitABit(500);
+		}
+
+		String exapplicationfor = ProducerPersonalInfoPage.APPLICATION_FOR.resolveFor(actor).getText();
+		actor.remember(Key.APPLICATION_FOR, exapplicationfor);
+
+		String exentitytype = ProducerPersonalInfoPage.ENTITY_TYPE.resolveFor(actor).getText();
+		actor.remember(Key.ENTITY_TYPE, exentitytype);
+
+		String excontractType = ProducerPersonalInfoPage.CONTRACT_TYPE.resolveFor(actor).getText();
+		actor.remember(Key.CONTRACT_TYPE, excontractType);
+
+		String applicationNo = APPLICATION_NO.resolveFor(actor).getText();
+		actor.remember(Key.APPLICATION_NUMBER, applicationNo);
+
+		actor.remember(Key.STATE, state);
+		String npn = actor.recall(Key.NPN_NUMBER);
+
+		String saveFlag = actor.recall(Key.SAVE_FLAG);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(addressType).from(RES_ADDRESS_TYPE));
+		waitABit(999);
+
+		actor.attemptsTo(Enter.keyValues(line1).into(RES_LINE1));
+		waitABit(500);
+
+		actor.attemptsTo(Enter.keyValues(city).into(RES_CITY));
+		waitABit(500);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(state).from(RES_STATE));
+		waitABit(1200);
+
+		if (exapplicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+				&& exentitytype.equalsIgnoreCase("Business") && excontractType.equalsIgnoreCase("Direct")
+				&& saveFlag.equalsIgnoreCase("Yes")) {
+			DataHelper.writeApplicationNo(npn, exapplicationfor, exentitytype, excontractType, state, applicationNo);
+		} else if (exapplicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+				&& exentitytype.equalsIgnoreCase("Business") && excontractType.equalsIgnoreCase("Intermediary")
+				&& saveFlag.equalsIgnoreCase("Yes")) {
+			DataHelper.writeApplicationNo(npn, exapplicationfor, exentitytype, excontractType, state, applicationNo);
+		}
+
+		actor.attemptsTo(Enter.keyValues(zip).into(RES_ZIP));
+		waitABit(1000);
+
+		if (StringUtils.isNotBlank(businessPhone)) {
+			actor.attemptsTo(SelectFromOptions.byVisibleText(OFFICE).from(BUSINESS_CONTACT_1_DPDN));
+			waitABit(500);
+			actor.attemptsTo(Enter.keyValues(businessPhone).into(BUSINESS_CONTACT_1));
+			waitABit(500);
+		}
+
+		if (SAVE_ADDRESS.resolveFor(actor).isEnabled()) {
+			actor.attemptsTo(Scroll.to(SAVE_ADDRESS).andAlignToTop());
+			actor.attemptsTo(Click.on(SAVE_ADDRESS));
+			waitABit(5000);
+			if (SAVE_ADDRESS.resolveFor(actor).isDisplayed()) {
+				actor.attemptsTo(Click.on(CANCEL_BTN));
+			}
+		}
+
+	}
+}

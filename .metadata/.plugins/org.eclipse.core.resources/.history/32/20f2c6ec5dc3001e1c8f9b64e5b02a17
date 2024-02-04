@@ -1,0 +1,20 @@
+package com.majesco.test.dm.questions.ui;
+
+import net.serenitybdd.screenplay.Question;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.*;
+
+import com.majesco.test.dm.page_objects.HomePage;
+
+
+public class ApplicationEnquiryResult {
+ 
+	HomePage homepage;
+	private static final String statusval = "Verified";
+    public static Question<String> hasApplicationNumber() {
+        return (actor) -> HomePage.VERIFY_LOGIN_LABEL.resolveFor(actor).getText();
+    }
+    
+    public static Question<String> hasVerificationStatus() {
+        return (actor) -> statusval;
+    }    
+}

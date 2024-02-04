@@ -1,0 +1,277 @@
+serenity {
+  requirements.types = "theme; capability; feature"
+  release.types = "milestone; release; version"
+  project.name = FWC
+  maintain.session = false
+  take.screenshots = FOR_FAILURES
+  full.page.screenshot.strategy = true
+  console.colors = true
+}
+
+ webdriver {
+
+    driver = chrome
+    driver.autodownload = false
+    capabilities {
+
+      browserName = "chrome"
+
+      acceptInsecureCerts = true,
+
+
+      "goog:chromeOptions" {
+
+        args = ["start-maximized", "no-sandbox", "ignore-certificate-errors", "disable-popup-blocking", "--incognito",
+
+                "disable-default-apps", "--remote-allow-origins=*", "disable-extensions-file-access-check", "disable-infobars", "disable-gpu"]
+
+        prefs {
+
+          default_content_settings.popups = 0,
+
+          default_content_settings.geolocation = 2,
+
+          credentials_enable_service = false,
+
+          password_manager_enabled = false
+
+        }
+
+        excludeSwitches = ["enable-automation","load-extension"],
+
+      }
+
+
+
+      timeouts {
+
+        implicit = 15000
+
+        pageLoad = 300000
+
+      }
+
+    }
+
+    wait.for.timeout = 20000
+
+  }
+
+
+drivers {
+
+  windows {
+
+    webdriver.chrome.driver = "src/test/resources/drivers/windows/chromedriver.exe"
+
+    webdriver.gecko.driver = "src/test/resources/drivers/windows/geckodriver.exe"
+
+    webdriver.edge.driver = "src/test/resources/drivers/windows/msedgedriver.exe"
+
+  }
+
+  mac {
+
+    webdriver.chrome.driver = src/test/resources/drivers/mac/chromedriver
+
+  }
+
+  linux {
+
+    webdriver.chrome.driver = src/test/resources/drivers/linux/chromedriver
+
+  }
+
+}
+
+report {
+  customfields.environment = ${environments}
+}
+
+environments {
+  default {
+    webdriver.base.url = "https://fw-intqa1.majesco.io/ICDDMContent/"
+    default.admin.username = "admin"
+    default.admin.password = "admin123"
+    dmapi.base.url = ""
+    dmapi.short.pollinginterval = 3
+    dmapi.short.pollingtimeout = 30
+    dmapi.medium.pollinginterval = 6
+    dmapi.medium.pollingtimeout = 60
+    dmapi.long.pollinginterval = 12
+    dmapi.long.pollingtimeout = 120
+    dm.db.username = "DM_CONTENT"
+    dm.db.password = "DM_CONTENT"
+    dm.db.ip = "10.202.57.197"
+    dm.db.name = "FWINTQA1"
+    dm.db.port = "1521"
+    dm.direct.adc = "17041712"
+    dm.intermediary.adc = "17041722"
+    dm.direct.asca = "17053809"
+    dm.parent.entitycode = "FC000396"
+    dm.addlicense.amendment = "17041712"
+    dm.agencyview.direct.npn = "17041712"
+    dm.agencyview.intermediary.npn = "17041722"
+    dm.transfer = "FC000503"
+    dm.entity.transfer.to = "FC000410"
+    dm.entity.terminate = "FC000422"
+    dm.entity.levelchange = "FC000492"
+    dm.schedule = "COMM1"
+    dm.kpi.name = "KPIWRITTENPREMIUM"
+    dm.app.num = "8396"
+  }
+  qa {
+    webdriver.base.url = "https://fw-intqa1.majesco.io/ICDDMContent/"
+    default.admin.username = "admin"
+    default.admin.password = "admin123"
+    dmapi.base.url = ""
+    dmapi.short.pollinginterval = 3
+    dmapi.short.pollingtimeout = 30
+    dmapi.medium.pollinginterval = 6
+    dmapi.medium.pollingtimeout = 60
+    dmapi.long.pollinginterval = 12
+    dmapi.long.pollingtimeout = 120
+    dm.db.username = "DM_CONTENT"
+    dm.db.password = "DM_CONTENT"
+    dm.db.ip = "10.202.57.197"
+    dm.db.name = "FWINTQA1"
+    dm.db.port = "1521"
+    dm.direct.adc = "17041712"
+    dm.intermediary.adc = "17041722"
+    dm.direct.asca = "17053809"
+    dm.parent.entitycode = "FC000396"
+    dm.addlicense.amendment = "17041712"
+    dm.agencyview.direct.npn = "17041712"
+    dm.agencyview.intermediary.npn = "17041722"
+    dm.transfer = "FC000503"
+    dm.entity.transfer.to = "FC000410"
+    dm.entity.terminate = "FC000422"
+    dm.entity.levelchange = "FC000492"
+    dm.schedule = "COMM1"
+    dm.kpi.name = "KPIWRITTENPREMIUM"
+  }
+  auto {
+    webdriver.base.url = "https://fw-auto.majesco.io/ICDDMContent/"
+    default.admin.username = "admin"
+    default.admin.password = "admin123"
+    dmapi.base.url = ""
+    dmapi.short.pollinginterval = 3
+    dmapi.short.pollingtimeout = 30
+    dmapi.medium.pollinginterval = 6
+    dmapi.medium.pollingtimeout = 60
+    dmapi.long.pollinginterval = 12
+    dmapi.long.pollingtimeout = 120
+    dm.db.username = "DM_CONTENT"
+    dm.db.password = "DM_CONTENT"
+    dm.db.ip = "10.202.57.199"
+    dm.db.name = "FWAUTO"
+    dm.db.port = "1521"
+    dm.direct.adc = "17041712"
+    dm.intermediary.adc = "17041722"
+    dm.direct.asca = "17041712"
+    dm.parent.entitycode = "FC000396"
+    dm.addlicense.amendment = "17041712"
+    dm.agencyview.direct.npn = "17041712"
+    dm.agencyview.intermediary.npn = "17041722"
+    dm.transfer = "FC000355"
+    dm.entity.transfer.to = "FC000410"
+    dm.entity.terminate = "FC000422"
+    dm.entity.levelchange = "FC000365"
+    dm.schedule = "COMM1"
+    dm.kpi.name = "KPIWRITTENPREMIUM"
+  }
+  dev {
+    webdriver.base.url = "https://fw-dsint.majesco.io/ICDDMContent/"
+    default.admin.username = "admin"
+    default.admin.password = "admin123"
+    dmapi.base.url = ""
+    dmapi.short.pollinginterval = 3
+    dmapi.short.pollingtimeout = 30
+    dmapi.medium.pollinginterval = 6
+    dmapi.medium.pollingtimeout = 60
+    dmapi.long.pollinginterval = 12
+    dmapi.long.pollingtimeout = 120
+    dm.db.username = "DM_CONTENT"
+    dm.db.password = "DM_CONTENT"
+    dm.db.ip = "10.202.57.198"
+    dm.db.name = "FWDSINT"
+    dm.db.port = "1521"
+    dm.direct.adc = "17044494"
+    dm.intermediary.adc = "17044502"
+    dm.direct.asca = "17044494"
+    dm.parent.entitycode = "FC000185"
+    dm.addlicense.amendment = "17044494"
+    dm.agencyview.direct.npn = "17044494"
+    dm.agencyview.intermediary.npn = "17044502"
+    dm.transfer = "FC000170"
+    dm.entity.transfer.to = "FC000171"
+    dm.entity.terminate = "FC000169"
+    dm.entity.levelchange = "FC000168"
+    dm.schedule = "COMM1"
+    dm.kpi.name = "KPIWRITTENPREMIUM"
+  }
+  sit {
+    webdriver.base.url = "https://fw-sit.cloudinsurer.com/ICDDMContent/"
+    default.admin.username = "admin2908"
+    default.admin.password = "F3S!t@0908"
+    dmapi.base.url = ""
+    dmapi.short.pollinginterval = 3
+    dmapi.short.pollingtimeout = 30
+    dmapi.medium.pollinginterval = 6
+    dmapi.medium.pollingtimeout = 60
+    dmapi.long.pollinginterval = 12
+    dmapi.long.pollingtimeout = 120
+    dm.db.username = "DM_CONTENT"
+    dm.db.password = "DM_CONTENT"
+    dm.db.ip = "10.202.67.196"
+    dm.db.name = "FWSIT"
+    dm.db.port = "1521"
+    dm.direct.adc = "17044326"
+    dm.intermediary.adc = "17046879"
+    dm.direct.asca = "17044326"
+    dm.parent.entitycode = "FC000217"
+    dm.addlicense.amendment = "17044326"
+    dm.agencyview.direct.npn = "17044326"
+    dm.agencyview.intermediary.npn = "17046879"
+    dm.transfer = "FC000189"
+    dm.entity.transfer.to = "FC000217"
+    dm.entity.terminate = "FC000092"
+    dm.entity.levelchange = "FC000125"
+    dm.schedule = "COMM1"
+    dm.kpi.name = "KPIWRITTENPREMIUM"
+  }
+  uat {
+    webdriver.base.url = "https://fw-uat.cloudinsurer.com/ICDDMContent/"
+    default.admin.username = "admin2909"
+    default.admin.password = "F3U@t@0909"
+    dmapi.base.url = ""
+    dmapi.short.pollinginterval = 3
+    dmapi.short.pollingtimeout = 30
+    dmapi.medium.pollinginterval = 6
+    dmapi.medium.pollingtimeout = 60
+    dmapi.long.pollinginterval = 12
+    dmapi.long.pollingtimeout = 120
+    dm.db.username = "DM_CONTENT"
+    dm.db.password = "DM_CONTENT"
+    dm.db.ip = "10.202.67.197"
+    dm.db.name = "FWUAT"
+    dm.db.port = "1521"
+    dm.direct.adc = "17041712"
+    dm.intermediary.adc = "17041722"
+    dm.direct.asca = "17041712"
+    dm.parent.entitycode = "FC000052"
+    dm.addlicense.amendment = "17041712"
+    dm.agencyview.direct.npn = "17041712"
+    dm.agencyview.intermediary.npn = "17041722"
+    dm.transfer = "FC000355"
+    dm.entity.transfer.to = "FC000410"
+    dm.entity.terminate = "FC000422"
+    dm.entity.levelchange = "FC000365"
+    dm.schedule = "COMM1"
+    dm.kpi.name = "KPIWRITTENPREMIUM"
+  }
+  all {
+    login.page = "#{webdriver.base.url}"
+    home.page = "#{webdriver.base.url}"
+  }
+}

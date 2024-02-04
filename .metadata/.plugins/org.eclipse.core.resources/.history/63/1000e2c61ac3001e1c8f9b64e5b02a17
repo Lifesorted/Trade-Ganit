@@ -1,0 +1,24 @@
+package com.majesco.test.dm.runners;
+
+import org.junit.runner.RunWith;
+
+import io.cucumber.junit.CucumberOptions;
+import net.serenitybdd.cucumber.CucumberWithSerenity;
+
+/**
+ * @author Onkar663100
+ * @author dhiraj662364 
+ *
+ */
+
+@RunWith(CucumberWithSerenity.class)
+@CucumberOptions(
+		features = {"src/test/resources/features/Producer_onboarding/producer_amendment/licensed_producer_amendment.feature"},
+		plugin = { "pretty" },
+		glue = {"com.majesco.test.dm"},
+		tags = "@SmokeTest",
+		dryRun = false)
+
+public class TestRunner {
+
+}

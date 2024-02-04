@@ -1,0 +1,113 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.AgencyProfilePage;
+import com.majesco.test.dm.tasks.ui.common.SaveAndContinue;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.Key;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.joda.time.DateTime;
+import org.junit.platform.commons.util.StringUtils;
+import org.openqa.selenium.Keys;
+
+import java.text.SimpleDateFormat;
+import java.util.Map;
+
+import static com.majesco.test.dm.page_objects.BusinessEntity_AgencyProfilePage.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+/**
+ * @author dhiraj662364
+ * @created 07/09/2022
+ **/
+
+public class FillBEAgencyProfileInfo extends UIInteractions implements Task {
+    private String name;
+    private String type;
+    private String effectiveFrom;
+    private String fein;
+    private String legalType;
+    private String residentState;
+    private String licenseNo;
+    private String licenseType;
+    
+    public FillBEAgencyProfileInfo(String name, String type, String effectiveFrom, String fein, String legalType,
+                                   String residentState, String licenseNo, String licenseType) {
+        this.name = name;
+        this.type = type;
+        this.effectiveFrom = effectiveFrom;
+        this.fein = fein;
+        this.legalType = legalType;
+        this.residentState = residentState;
+        this.licenseNo = licenseNo;
+        this.licenseType = licenseType;
+    }
+
+    public static FillBEAgencyProfileInfo fromUnderlineDetails (DataTable agencyProfile) {
+        Map<String, String> agencyProfileInfo = ConvertCucumberDataTable.toMap(agencyProfile);
+        String name = agencyProfileInfo.get("Name");
+        String type = agencyProfileInfo.get("Type");
+        String effectiveFrom = agencyProfileInfo.get("EffectiveFrom");
+        String fein = agencyProfileInfo.get("FEIN");
+        String legalType = agencyProfileInfo.get("LegalType");
+        String residentState = agencyProfileInfo.get("ResidentState");
+        String licenseNo = agencyProfileInfo.get("LicenseNo");
+        String licenseType = agencyProfileInfo.get("LicenseType");
+        
+        return new FillBEAgencyProfileInfo(name, type, effectiveFrom, fein, legalType, residentState, licenseNo, licenseType);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        actor.attemptsTo(WaitUntil.the(BEAP_PAGE_LABEL, isVisible())
+                .then(Enter.keyValues(name).into(BE_NAME)));
+        waitABit(500);
+
+        actor.attemptsTo(SelectFromOptions.byVisibleText(type).from(BE_TYPE));
+        waitABit(999);
+
+        if (StringUtils.isBlank(effectiveFrom)) {
+            String defaultEffectiveFrom = actor.recall(Key.APPLICATION_DATE);
+            actor.attemptsTo(Enter.keyValues(defaultEffectiveFrom).into(BE_EFFECTIVE_FROM).thenHit(Keys.TAB));
+        } else {
+            actor.attemptsTo(Enter.keyValues(effectiveFrom).into(BE_EFFECTIVE_FROM).thenHit(Keys.TAB));
+        }
+        waitABit(500);
+
+        if (StringUtils.isBlank(fein)) {
+            String defaultFEIN = String.valueOf(System.currentTimeMillis() / 10000);
+            actor.attemptsTo(Enter.keyValues(defaultFEIN).into(BE_FEIN));
+        } else {
+            actor.attemptsTo(Enter.keyValues(fein).into(BE_FEIN));
+        }
+        waitABit(500);
+
+        actor.attemptsTo(SelectFromOptions.byVisibleText(legalType).from(BE_LEGAL_TYPE));
+        waitABit(999);
+
+        if (StringUtils.isNotBlank(residentState)) {
+            actor.attemptsTo(SelectFromOptions.byVisibleText(residentState).from(BE_RESIDENT_STATE));
+            waitABit(999);
+        }
+
+        if (StringUtils.isNotBlank(licenseNo)) {
+            String defaultLicenseNo = new SimpleDateFormat("yyMMddHHmmss").format(DateTime.now().toDate());
+            actor.attemptsTo(Enter.keyValues(defaultLicenseNo).into(BE_LICENSE_NO));
+            waitABit(500);
+        }
+
+        if (StringUtils.isNotBlank(licenseType)) {
+            actor.attemptsTo(SelectFromOptions.byVisibleText(licenseType).from(BE_LICENSE_TYPE));
+            waitABit(999);
+        }
+        
+    }
+}

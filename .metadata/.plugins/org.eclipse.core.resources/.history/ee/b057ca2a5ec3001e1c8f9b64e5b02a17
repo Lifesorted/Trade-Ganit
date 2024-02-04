@@ -1,0 +1,158 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.HomePage;
+import com.majesco.test.dm.page_objects.SearchLicensedProducerPage;
+import com.majesco.test.dm.utils.CommonUIInteractions;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.Key;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Clear;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import net.thucydides.model.util.EnvironmentVariables;
+import org.joda.time.DateTime;
+import org.junit.platform.commons.util.StringUtils;
+import org.openqa.selenium.Keys;
+import java.text.SimpleDateFormat;
+import java.util.Map;
+import java.util.logging.Logger;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 22/08/2022
+ **/
+
+public class CreateNewLicensedProducer extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(CreateNewLicensedProducer.class.getName());
+
+	private String currentDate = new SimpleDateFormat("MM/dd/yyyy").format(DateTime.now().minusDays(1).toDate());
+	private CommonUIInteractions commonUIInteractions;
+	private HomePage homePage;
+	EnvironmentVariables environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
+	private SearchLicensedProducerPage searchProducerPage;
+
+	private String npn;
+
+	private String applicationDate;
+
+	private String type;
+
+	private String subType;
+
+	private String role;
+
+	private String contractType;
+
+	private String saveFlag;
+
+	private String eventTest;
+
+	public CreateNewLicensedProducer(String npn, String applicationDate, String type, String subType, String role,
+			String contractType, String saveFlag, String eventTest) {
+		this.npn = npn;
+		this.applicationDate = applicationDate;
+		this.type = type;
+		this.subType = subType;
+		this.role = role;
+		this.contractType = contractType;
+		this.saveFlag = saveFlag;
+		this.eventTest = eventTest;
+	}
+
+	public static CreateNewLicensedProducer fromUnderlineDetails(DataTable searchCriteria) {
+		Map<String, String> searchCriteriaDetails = ConvertCucumberDataTable.toMap(searchCriteria);
+		String npn = searchCriteriaDetails.get("NPN");
+		String type = searchCriteriaDetails.get("Type");
+		String subType = searchCriteriaDetails.get("SubType");
+		String role = searchCriteriaDetails.get("Role");
+		String contractType = searchCriteriaDetails.get("ContractType");
+		String saveFlag = searchCriteriaDetails.get("SaveFlag");
+		String eventTest = searchCriteriaDetails.get("EventTest");
+		return new CreateNewLicensedProducer(npn, null, type, subType, role, contractType, saveFlag, eventTest);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(
+				WaitUntil.the(homePage.ONBOARDING_MENU, isClickable()).then(Click.on(homePage.ONBOARDING_MENU)));
+		waitABit(999);
+
+		actor.attemptsTo(
+				Click.on(homePage.LICENSED_PRODUCER_SUBMENU).then(WaitUntil.the(searchProducerPage.NPN, isVisible())));
+		waitABit(999);
+
+		if (StringUtils.isBlank(npn) && eventTest.equalsIgnoreCase("No")) {
+			npn = String.valueOf(System.currentTimeMillis() / 100000);
+			actor.attemptsTo(
+					WaitUntil.the(searchProducerPage.NPN, isClickable()).then(Click.on(searchProducerPage.NPN_RADIO))
+							.then(Enter.keyValues(npn).into(searchProducerPage.NPN)));
+			actor.remember(Key.NPN_NUMBER, npn);
+		} else if (StringUtils.isBlank(npn) && eventTest.equalsIgnoreCase("NoD")) {
+			npn = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.direct.adc");
+			actor.attemptsTo(
+					WaitUntil.the(searchProducerPage.NPN, isClickable()).then(Click.on(searchProducerPage.NPN_RADIO))
+							.then(Enter.keyValues(npn).into(searchProducerPage.NPN)));
+			actor.remember(Key.NPN_NUMBER, npn);
+		} else if (StringUtils.isBlank(npn) && eventTest.equalsIgnoreCase("NoI")) {
+			npn = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.intermediary.adc");
+			actor.attemptsTo(
+					WaitUntil.the(searchProducerPage.NPN, isClickable()).then(Click.on(searchProducerPage.NPN_RADIO))
+							.then(Enter.keyValues(npn).into(searchProducerPage.NPN)));
+			actor.remember(Key.NPN_NUMBER, npn);
+		}
+		waitABit(999);
+
+		actor.attemptsTo(Click.on(searchProducerPage.SEARCH_BTN)
+				.then(WaitUntil.the(searchProducerPage.APPLICATION_DATE, isVisible())));
+		waitABit(999);
+
+		if (StringUtils.isNotBlank(applicationDate)) {
+			actor.attemptsTo(Clear.field(searchProducerPage.APPLICATION_DATE),
+					Enter.keyValues(applicationDate).into(searchProducerPage.APPLICATION_DATE).thenHit(Keys.TAB));
+			waitABit(999);
+		}
+
+		if (StringUtils.isNotBlank(type)) {
+			actor.attemptsTo(
+					Click.on(searchProducerPage.OPEN_ENTITY_TYPE)
+							.then(WaitUntil.the(searchProducerPage.entityType(type), isVisible())),
+					Click.on(searchProducerPage.entityType(type)));
+			waitABit(999);
+		}
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(subType).from(searchProducerPage.ENTITY_SUBTYPE));
+		waitABit(999);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(role).from(searchProducerPage.ROLE));
+		waitABit(999);
+
+		waitABit(999);
+		if (contractType.equalsIgnoreCase("Intermediary")) {
+			actor.attemptsTo(Click.on(searchProducerPage.getContractType(contractType)));
+			waitABit(999);
+		}
+
+		String storeApplicationDate = searchProducerPage.APPLICATION_DATE.resolveFor(actor).getAttribute("value");
+		actor.remember(Key.APPLICATION_DATE, storeApplicationDate);
+
+		actor.remember(Key.SAVE_FLAG, saveFlag);
+		actor.remember(Key.EVENT_JSON, eventTest);
+
+		actor.attemptsTo(Scroll.to(searchProducerPage.CONTINUE_BTN).andAlignToTop());
+		actor.attemptsTo(Click.on(searchProducerPage.CONTINUE_BTN));
+
+		commonUIInteractions.isLandingComplete(actor);
+		waitABit(1000);
+	}
+}

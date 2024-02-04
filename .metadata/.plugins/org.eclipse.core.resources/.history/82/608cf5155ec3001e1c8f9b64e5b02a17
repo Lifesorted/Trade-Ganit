@@ -1,0 +1,55 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.utils.Key;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.*;
+import static com.majesco.test.dm.page_objects.HomePage.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+/**
+ * @author dhiraj662364
+ * @created 29/08/2022
+ **/
+
+public class SearchApplication extends UIInteractions implements Task {
+
+    public SearchApplication() {
+    }
+
+    public static SearchApplication viaNumber() {
+        return new SearchApplication();
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        String appNumber = actor.recall(Key.APPLICATION_NUMBER);
+                  
+        actor.attemptsTo(
+                WaitUntil.the(ONBOARDING_MENU, isClickable())
+                        .then(Click.on(ONBOARDING_MENU))
+        );
+        waitABit(1000);
+
+        actor.attemptsTo(
+                Click.on(APP_ENQUIRY_SUBMENU)
+                        .then(WaitUntil.the(APP_NO, isVisible()))
+        );
+        waitABit(1000);
+
+        actor.attemptsTo(Enter.keyValues(appNumber).into(APP_NO));
+        waitABit(500);
+
+        actor.attemptsTo(Click.on(APP_SEARCH_BTN)
+                .then(WaitUntil.the(APP_NO_RESULT_LABEL, isVisible())));
+        waitABit(3000);
+
+    }
+}

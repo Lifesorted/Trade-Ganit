@@ -1,0 +1,53 @@
+package com.majesco.test.dm.page_objects;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 02/09/2022
+ **/
+
+public class DesignatedProducerPage extends PageObject {
+
+    public static Target DRLP_PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'Designated Responsible Licensed Producers >>')]");
+    public static Target FIRST_NAME = Target.the("First Name").locatedBy("//input[@name='txtfName']");
+    public static Target LAST_NAME = Target.the("Last Name").locatedBy("//input[@name='txtLName']");
+    public static Target NPN = Target.the("NPN Number").locatedBy("//input[@name='txtNpn']");
+
+    public static Target getGender(String value) {
+        if(value.equalsIgnoreCase("Male")) {
+            return Target.the("Male").locatedBy("(//input[@value='M'])[1]");
+        } else if (value.equalsIgnoreCase("Female")) {
+            return Target.the("Female").locatedBy("(//input[@value='F'])[1]");
+        } else {
+            return Target.the("Prefer not to say").locatedBy("(//input[@value='P'])[1]");
+        }
+    }
+
+    public static Target RESIDENT_STATE = Target.the("Resident State").locatedBy("//select[@name='comboResidentState']");
+    public static Target LICENSE_NO = Target.the("License Number").locatedBy("//*[@id='page24']/div/div/div[2]/div/div/div/div/div/div/div/div[2]/div[2]/div[2]/div/div/div[1]/div[3]/div/div/div[2]/input");
+    public static Target LICENSE_NO1 = Target.the("License Number").locatedBy("//input[@name='txtLicense']");
+    public static Target LICENSE_TYPE = Target.the("License Type").locatedBy("//select[@name='cmbLicenseType']");
+    public static Target LICENSE_TYPE1 = Target.the("License Type").locatedBy("//select[@name='cmbLicenseType' and not(contains( @disabled,'disabled'))]");
+    public static Target ROLE = Target.the("Role").locatedBy("//select[@name='comboRole']");
+    public static Target PERIOD_FROM = Target.the("Period From").locatedBy("//input[@name='dtEffectvFrm']");
+    public static Target PERIOD_TO = Target.the("Period To").locatedBy("//input[@name='dtEffectiveto']");
+    public static Target ADD_BTN = Target.the("Add Button").locatedBy("//button[@name='btnAddDRLP']");
+    public static Target V_NAME = Target.the("Verify Name").locatedBy("//a[contains(@id,'dataGrid1_0_1_lnk')]/span/span");
+    public static Target AGENT_NO = Target.the("Agent Number").locatedBy("//select[@name='cmbImplAgent']");
+    public static Target AGENT_NOS = Target.the("Agent Number").locatedBy("//select[@name='cmbImplAgent']/child::option");
+    public static Target OK_BTN = Target.the("Ok button").locatedBy("//button[@name='Ok']");
+    public static Target DRLP_SAVE_BTN = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveNext1']");
+    public static Target AGENT_NO_REQUIRED = Target.the("Save & Continue Button").locatedBy("//label[contains(text(),'Agent # is required.')]");
+
+    public List<String> getJobTabs() {
+        return findAll(AGENT_NOS).stream()
+            .map(WebElementFacade::getText)
+            .collect(Collectors.toList());
+    }
+}

@@ -1,0 +1,154 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import java.util.Map;
+
+import org.openqa.selenium.Keys;
+
+import com.majesco.test.dm.page_objects.HomePage;
+import com.majesco.test.dm.page_objects.SalesStaffMgmtPage;
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Clear;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class AddNodeInfo extends UIInteractions implements Task {
+	
+	private HomePage homepage;
+	
+	private static String hierarchy;
+
+	private static String parentType;
+
+	private static String nodeType;
+
+	private static String officeId;
+
+	private static String officeName;
+
+	private static String role;
+
+	private static String businessArea;
+	
+	public AddNodeInfo(String hierarchy, String parentType, String nodeType, String officeId, String officeName,
+			String role, String businessArea) {
+		this.hierarchy = hierarchy;
+		this.parentType = parentType;
+		this.nodeType = nodeType;
+		this.officeId = officeId;
+		this.officeName = officeName;
+		this.role = role;
+		this.businessArea = businessArea;
+	}
+
+	public static AddNodeInfo fromUnderlineDetails(DataTable addnodeinfo) {
+		Map<String, String> addnodeinfos = ConvertCucumberDataTable.toMap(addnodeinfo);
+		hierarchy = addnodeinfos.get("Hierarchy");
+		parentType = addnodeinfos.get("ParentType");
+		nodeType = addnodeinfos.get("NodeType");
+		officeId = addnodeinfos.get("OfficeId");
+		officeName = addnodeinfos.get("OfficeName");
+		role = addnodeinfos.get("Role");
+		businessArea = addnodeinfos.get("BusinessArea");
+		return new AddNodeInfo(hierarchy, parentType, nodeType, officeId, officeName, role, businessArea);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		actor.attemptsTo(
+				WaitUntil.the(HomePage.SALESSTAFF_MENU, isClickable()).then(Click.on(HomePage.SALESSTAFF_MENU)));
+		waitABit(999);
+		
+		actor.attemptsTo(
+				Click.on(HomePage.SALES_HIERARCHY_SUBMENU).then(WaitUntil.the(SalesStaffMgmtPage.SALES_LABEL, isVisible())));
+		waitABit(999);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(hierarchy).from(SalesStaffMgmtPage.SELECT_HIERARCHY));
+		waitABit(999);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(parentType).from(SalesStaffMgmtPage.PARENT_TYPE));
+		waitABit(999);
+		
+		if(nodeType.equalsIgnoreCase("Office")){
+			actor.attemptsTo(SelectFromOptions.byVisibleText(nodeType).from(SalesStaffMgmtPage.NODE_TYPE));
+			waitABit(999);
+			
+			officeId = "OFF"+CommonUtil.generateRandomNumber();
+			actor.attemptsTo(
+					Enter.keyValues(officeId).into(SalesStaffMgmtPage.OFFICE_ID));
+			waitABit(999);
+			
+			officeName = "MainOffice"+CommonUtil.generateRandomNumber();
+			actor.attemptsTo(
+					Enter.keyValues(officeName).into(SalesStaffMgmtPage.OFFICE_NAME));
+			waitABit(999);
+			DataHelper.saveSalesStaffInfo(officeId, officeName);
+		}else {
+			actor.attemptsTo(SelectFromOptions.byVisibleText(nodeType).from(SalesStaffMgmtPage.NODE_TYPE));
+			waitABit(999);
+			
+			officeId = DataHelper.getRecord("Sales_Staff", 1, 0);
+			actor.attemptsTo(
+					Enter.keyValues(officeId).into(SalesStaffMgmtPage.PARENT));
+			waitABit(999);
+			
+			actor.attemptsTo(Click.on(SalesStaffMgmtPage.LOOKUP_ICON));
+			waitABit(999);
+			
+			String staffId = "STF"+CommonUtil.generateRandomNumber();
+			actor.attemptsTo(
+					Enter.keyValues(staffId).into(SalesStaffMgmtPage.STAFF_ID));
+			waitABit(999);
+			
+			actor.attemptsTo(
+					Enter.keyValues(officeId).into(SalesStaffMgmtPage.OFFICE_ID_IN_STAFF));
+			waitABit(999);
+			
+			actor.attemptsTo(
+					Enter.keyValues("Adam").into(SalesStaffMgmtPage.FIRST_NAME));
+			waitABit(999);
+			
+			actor.attemptsTo(
+					Enter.keyValues("Michael").into(SalesStaffMgmtPage.MID_NAME));
+			waitABit(999);
+			
+			actor.attemptsTo(
+					Enter.keyValues("Obama").into(SalesStaffMgmtPage.LAST_NAME));
+			waitABit(999);
+		}
+		
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(role).from(SalesStaffMgmtPage.ROLE));
+		waitABit(999);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(businessArea).from(SalesStaffMgmtPage.BUSINESS_AREA));
+		waitABit(999);
+		
+		actor.attemptsTo(Scroll.to(SalesStaffMgmtPage.SAVE).andAlignToTop());
+		
+		actor.attemptsTo(Click.on(SalesStaffMgmtPage.SAVE));
+		waitABit(3000);
+		
+		actor.attemptsTo(Click.on(SalesStaffMgmtPage.BTN_OK));
+		waitABit(2000);
+		
+		actor.attemptsTo(Click.on(SalesStaffMgmtPage.REFRESH_ICON));
+		waitABit(1500);
+		
+		actor.attemptsTo(Click.on(SalesStaffMgmtPage.EXPAND_ICON));
+		waitABit(1500);
+	}
+
+}

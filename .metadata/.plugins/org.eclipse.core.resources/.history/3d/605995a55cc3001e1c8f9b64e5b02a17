@@ -1,0 +1,34 @@
+package com.majesco.test.dm.page_objects;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class BankDetailPage extends PageObject {
+	
+	public static Target EO_TAB = Target.the("Eo tab").locatedBy("//a[@data-labelkey='mm.icd.stgdm.viewscreen.eo.details']");
+	public static Target ACCOUNT_NO = Target.the("Account No").locatedBy("//tr[@name='dgBankAccount_r_0']//td[@data-colid='Col_2']");
+	public static Target TYPE = Target.the("Type").locatedBy("//tr[@name='dgBankAccount_r_0']//td[@data-colid='Col_3']");
+	public static Target FINANCIAL_INS = Target.the("Financila ins").locatedBy("//tr[@name='dgBankAccount_r_0']//td[@data-colid='Col_4']");
+	public static Target ACCOUNT_NAME = Target.the("Account Name").locatedBy("//tr[@name='dgBankAccount_r_0']//td[@data-colid='Col_5']");
+	public static Target ROUTING_NO = Target.the("Routing number").locatedBy("//tr[@name='dgBankAccount_r_0']//td[@data-colid='Col_6']");
+	public static Target ADD_BANK_ACCOUNT = Target.the("Add bank account").locatedBy("//button[@name='btnAddbankAcount']");
+	public static Target SAVE_BANK_ACCOUNT = Target.the("Save bank account").locatedBy("//button[@name='btnSaveBankDetails']");
+	public static Target VALIDATION_MESSAGE = Target.the("Validation message").locatedBy("//h5[@class='modal-title errorModalTitle ui-draggable-handle']/label");
+	public static Target OK_BTN = Target.the("OK button").locatedBy("//button[@name='Ok']");
+	public static Target ACCOUNT_NUM_INPUT = Target.the("account number").locatedBy("//tr[starts-with(@data-rowid, 'ViewAgencyBankDetails')]/td[@data-colid='Col_2' and @title='']/descendant::input");
+	public static Target TYPE_SELECT = Target.the("type").locatedBy("//tr[starts-with(@data-rowid, 'ViewAgencyBankDetails')]/td[@data-colid='Col_3' and @title='']/descendant::Select");
+	public static Target FINANCIAL_INSTITUTION = Target.the("financial").locatedBy("//tr[starts-with(@data-rowid, 'ViewAgencyBankDetails')]/td[@data-colid='Col_4' and @title='']/descendant::Select");
+	public static Target ACCOUNT_HOLDER_NAME = Target.the("account holder").locatedBy("//tr[starts-with(@data-rowid, 'ViewAgencyBankDetails')]/td[@data-colid='Col_5' and @title='']/descendant::input");
+	public static Target ROUTING_NUM = Target.the("routing").locatedBy("//tr[starts-with(@data-rowid, 'ViewAgencyBankDetails')]/td[@data-colid='Col_6' and @title='']/descendant::input");
+	
+	
+	public List<String> getAccountList(Target target) {
+        return findAll(target).stream()
+           .map(WebElementFacade::getText)
+           .collect(Collectors.toList());
+   }
+}

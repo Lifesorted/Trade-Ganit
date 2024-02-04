@@ -1,0 +1,5 @@
+package com.majesco.test.dm.steps.ui;
+
+public class TradeUserSteps {
+
+}

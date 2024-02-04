@@ -1,0 +1,243 @@
+package com.majesco.test.dm.tasks.db;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.db.QueryConstants;
+
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
+
+public class dbtest {
+
+	static EnvironmentVariables environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
+	static String ip = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.db.ip");
+	static String port = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.db.port");
+	static String dbName = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.db.name");
+	static String username = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.db.username");
+	static String password = EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.db.password");
+	static Connection connection;
+	static ResultSet rs;
+
+	public static String fetchStateCode(String licenseno) {
+		String stateCode = "";
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			String strConnection = "jdbc:oracle:thin:@" + ip + ":" + port + ":" + dbName;
+			connection = DriverManager.getConnection(strConnection, username, password);
+			String licenseNo = licenseno;
+			String sqlQuery = QueryConstants.FETCH_STATE_CODE;
+			PreparedStatement prepStmt = connection.prepareStatement(sqlQuery);
+			prepStmt.setString(1, licenseNo);
+
+			rs = prepStmt.executeQuery();
+			while (rs.next()) {
+				stateCode = rs.getString("STATE_CODE");
+			}
+			rs.close();
+			prepStmt.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return stateCode;
+	}
+
+	public static void updateFGMasterNumber(String entityCode) {
+		String fgmasterNumber = "FG000" + CommonUtil.generateNineDigitNumber();
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			String strConnection = "jdbc:oracle:thin:@" + ip + ":" + port + ":" + dbName;
+			connection = DriverManager.getConnection(strConnection, username, password);
+			String sqlQuery = QueryConstants.UPDATE_FG_MASTER_NUMBER;
+			PreparedStatement prepStmt = connection.prepareStatement(sqlQuery);
+			prepStmt.setString(1, fgmasterNumber);
+			prepStmt.setString(2, entityCode);
+			prepStmt.executeUpdate();
+			prepStmt.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+
+	public static String fetchFGMasterNumber(String entityCode) {
+		String fgMasterNumber = "";
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			String strConnection = "jdbc:oracle:thin:@" + ip + ":" + port + ":" + dbName;
+			connection = DriverManager.getConnection(strConnection, username, password);
+			String sqlQuery = QueryConstants.FETCH_FG_MASTER_NUMBER;
+			PreparedStatement prepStmt = connection.prepareStatement(sqlQuery);
+			prepStmt.setString(1, entityCode);
+
+			rs = prepStmt.executeQuery();
+			while (rs.next()) {
+				fgMasterNumber = rs.getString("IMPL_FGL_MIGRATED_MASTER_ID");
+			}
+			rs.close();
+			prepStmt.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return fgMasterNumber;
+	}
+
+	public static Object getEventData(String NPN, String eventName, String jsonObject) {
+		String eventData = "";
+		String npnNO = NPN;
+		String evenTName = eventName;
+		JSONParser parser = new JSONParser();
+		JSONObject json = null;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			String strConnection = "jdbc:oracle:thin:@" + ip + ":" + port + ":" + dbName;
+			connection = DriverManager.getConnection(strConnection, username, password);
+			String sqlQuery = QueryConstants.FETCH_EVENT_DATA;
+			PreparedStatement prepStmt = connection.prepareStatement(sqlQuery);
+			prepStmt.setString(1, evenTName);
+			prepStmt.setString(2, npnNO);
+			rs = prepStmt.executeQuery();
+			while (rs.next()) {
+				eventData = rs.getString("EVENT_DATA");
+				try {
+					json = (JSONObject) parser.parse(eventData.replace("\\", ""));
+				} catch (ParseException e) {
+					e.printStackTrace();
+				}
+			}
+			rs.close();
+			prepStmt.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		if (jsonObject == "") {
+			return json;
+		} else {
+			return json.get(jsonObject);
+		}
+
+	}
+
+	public static Set<String> getAllKeys(String NPN, String eventName, String jsonObject, String nestedObject) {
+		JSONParser parser = new JSONParser();
+		JSONObject eventkeys = null;
+		Map<String, Object> map;
+		eventkeys = (JSONObject) dbtest.getEventData(NPN, eventName, jsonObject);
+		if (nestedObject == "") {
+			map = eventkeys;
+		} else {
+			map = (Map<String, Object>) eventkeys.get(nestedObject);
+		}
+
+		Set<String> keys = map.keySet();
+		return keys;
+	}
+
+	public static Map<String, Object> getEventKeyValueData(String NPN, String eventName, String jsonObject,
+			String nestedObject) {
+		JSONParser parser = new JSONParser();
+		JSONObject eventData = null;
+		Map<String, Object> map = new HashMap<>();
+		eventData = (JSONObject) dbtest.getEventData(NPN, eventName, jsonObject);
+		if (eventData.containsKey("majescoMasterID")) {
+			eventData.remove("majescoMasterID");
+		}
+		if (nestedObject == "") {
+			Iterator<String> keysItr = eventData.keySet().iterator();
+			while (keysItr.hasNext()) {
+				String key = keysItr.next();
+				Object value = eventData.get(key);
+				map.put(key, value);
+			}
+		} else {
+			JSONArray jarr = ((JSONArray) eventData.get(nestedObject));
+			Iterator keysItr = jarr.iterator();
+			while (keysItr.hasNext()) {
+				String key = keysItr.next().toString();
+				Object value = eventData.get(key);
+				map.put(key, value);
+			}
+		}
+
+		return map;
+	}
+
+	public static Object getEventData1(String NPN, String eventName, String jsonObject) {
+		String eventData = "";
+		String npnNO = NPN;
+		String evenTName = eventName;
+		JSONParser parser = new JSONParser();
+		JSONObject json = null;
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			String strConnection = "jdbc:oracle:thin:@" + ip + ":" + port + ":" + dbName;
+			connection = DriverManager.getConnection(strConnection, username, password);
+			String sqlQuery = QueryConstants.FETCH_EVENT_DATA;
+			PreparedStatement prepStmt = connection.prepareStatement(sqlQuery);
+			prepStmt.setString(1, evenTName);
+			prepStmt.setString(2, npnNO);
+			rs = prepStmt.executeQuery();
+			while (rs.next()) {
+				eventData = rs.getString("EVENT_DATA").replace("\\", "");
+			}
+			rs.close();
+			prepStmt.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return eventData;
+
+	}
+
+	public static String fetchContractEffectiveDate(String agentNo) {
+		String ced = "";
+		try {
+			Class.forName("oracle.jdbc.driver.OracleDriver");
+			String strConnection = "jdbc:oracle:thin:@" + ip + ":" + port + ":" + dbName;
+			connection = DriverManager.getConnection(strConnection, username, password);
+			String sqlQuery = QueryConstants.FETCH_CONTRACT_E_DATE;
+			PreparedStatement prepStmt = connection.prepareStatement(sqlQuery);
+			prepStmt.setString(1, agentNo);
+
+			rs = prepStmt.executeQuery();
+			while (rs.next()) {
+				ced = rs.getString("IMPL_CONTRACT_EFF_DATE");
+			}
+			rs.close();
+			prepStmt.close();
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+		return ced;
+	}
+
+	public static String getContractEffectiveDate(String agentNo) {
+		String strDate = dbtest.fetchContractEffectiveDate(agentNo).substring(0, 10);
+		return CommonUtil.dateFormatConvertor(strDate, "YYYY-MM-dd", "MM/dd/YYYY").replaceAll("1970", "2023");
+	}
+
+	
+	/*
+	 * public static void main(String args[]) {
+	 * System.out.println(dbtest.fetchStateCode("32456875")); }
+	 * 
+	 */
+}

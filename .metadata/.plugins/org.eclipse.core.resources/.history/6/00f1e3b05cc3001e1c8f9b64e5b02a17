@@ -1,0 +1,24 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 29/08/2022
+ **/
+
+public class VerifyApplication {
+    public static Target VA_PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'Application Verification')]");
+    public static Target VA_TAB = Target.the("Tab").locatedBy("//td[contains(@title,'Verify Application')]//span[contains(text(),'Verify Application')]");
+    public static Target REMARKS = Target.the("Remarks").locatedBy("//textarea[@name='txtRemarks']");
+    public static Target OVERRIDE_WARNINGS = Target.the("Override Warnings Checkbox").locatedBy("//input[@name='chkOverrideWarnings']");
+    public static Target VERIFY_BTN = Target.the("Verify Button").locatedBy("//button[@name='btnVerify']");
+    public static Target FORWARD_BTN = Target.the("Forward Button").locatedBy("//button[@name='btnForward']");
+    public static Target SECTION_LICENSE_ERROR = Target.the("License details error").locatedBy("(//span[contains(text(),'License Details')])[2]");
+    public static Target LICENSE_ERROR = Target.the("License error").locatedBy("//span[contains(text(),'At least one active license is required.')]");
+    public static Target SECTION_APPOINTMENT_ERROR = Target.the("Appointment details error").locatedBy("(//span[contains(text(),'Appointments Summary')])[2]");
+    public static Target APPOINTMENT_ERROR = Target.the("Appointment error").locatedBy("//span[contains(text(),'Minimum one appointment is required.')]");
+    public static Target OK_BUTTON = Target.the("Ok button").locatedBy("//div[@class='modal-footer']/child::button[@name='Ok']");
+    public static Target MODAL_MESSAGE = Target.the("modal message").locatedBy("//label[@class='modal-message']");
+    
+}

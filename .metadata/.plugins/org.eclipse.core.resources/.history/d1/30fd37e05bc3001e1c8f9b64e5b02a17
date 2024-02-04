@@ -1,0 +1,43 @@
+package com.majesco.test.dm.steps.ui;
+
+import com.majesco.test.dm.tasks.ui.dm.CreateNewNonLicensedProducer;
+import com.majesco.test.dm.tasks.ui.dm.SearchEntity;
+
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.Before;
+
+import io.cucumber.java.en.Given;
+import net.serenitybdd.core.steps.UIInteractionSteps;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.actors.OnStage;
+
+import java.util.logging.Logger;
+
+import static net.serenitybdd.screenplay.GivenWhenThen.givenThat;
+
+/**
+ * @author dhiraj662364
+ * @created 06/09/2022
+ **/
+
+public class NonLicensedProducerSteps extends UIInteractionSteps {
+
+    private static Logger logger = Logger.getLogger(NonLicensedProducerSteps.class.getName());
+    private Actor agencyAdmin;
+
+    @Before(order = 2)
+    public void setup() {
+        agencyAdmin = OnStage.theActor("AA");
+    }
+
+    @Given("attempts to create new Non-Licensed Producer with details as")
+    public void attempts_to_create_new_licensed_producer_with_details_as(DataTable searchCriteria) {
+        givenThat(agencyAdmin).attemptsTo(CreateNewNonLicensedProducer.fromUnderlineDetails(searchCriteria));
+    }
+    
+    @Given("attempts to search Licensed Producer with details as")
+    @Given("attempts to search Non-Licensed Producer with details as")
+    public void attempts_to_search_Non_Licensed_Producer_with_details_as(DataTable searchCriteria) {
+        givenThat(agencyAdmin).attemptsTo(SearchEntity.fromUnderlineDetails(searchCriteria));
+    }
+}

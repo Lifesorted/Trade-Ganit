@@ -1,0 +1,40 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.page_objects.InGoodOrderPage;
+import com.majesco.test.dm.utils.DataHelper;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.ensure.Ensure;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class VerifyInGoodOrder extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+		
+	public VerifyInGoodOrder() {
+		
+	}
+	
+	public static VerifyInGoodOrder fromUnderlineDetails() {
+		
+		return new VerifyInGoodOrder();
+	}
+	
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		String igoText = InGoodOrderPage.SUCCESS_TEXT.resolveFor(actor).getText();
+		Ensure.that(igoText).isEqualTo("IGO/NIGO checks are done against Resident state");	
+	}
+
+}

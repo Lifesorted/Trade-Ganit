@@ -1,0 +1,29 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class KpiMaintenancePage extends PageObject {
+
+	public static Target LOB_CLASS = Target.the("Lob Class").locatedBy("(//select[@name='cmbLobClass'])[2]");
+	public static Target CODE = Target.the("code").locatedBy("//input[@name='txtCode']");
+	public static Target NAME = Target.the("name").locatedBy("//input[@name='tctName']");
+	public static Target EVALUATION_TYPE = Target.the("type").locatedBy("(//select[@name='cmbEvaluationType'])[2]");
+	public static Target CATEGORY = Target.the("category").locatedBy("(//select[@name='cmbCategory'])[2]");
+	public static Target BASIS = Target.the("basis").locatedBy("(//select[@name='cmbBasis'])[2]");
+	public static Target SUB_BASIS = Target.the("sub basis").locatedBy("//select[@name='cmbSubBasis']");
+	public static Target PRODUCTION_BASE = Target.the("production base").locatedBy("//select[@name='cmbProductionBase']");
+	public static Target KPI_VALUE_TYPE = Target.the("kpi value type").locatedBy("//select[@name='cmbKPIValueTyoe']");
+	public static Target EFFECTIVE_FROM = Target.the("effective from").locatedBy("//input[@name='dtEffectiveFrom']");
+	public static Target SAVE = Target.the("save").locatedBy("//button[@name='btnSave']");
+	public static Target FORWARD = Target.the("forward").locatedBy("//button[@name='btnForward']");
+	public static Target OK = Target.the("ok").locatedBy("//button[@name='Ok']");
+	public static Target YES = Target.the("yes").locatedBy("//button[@name='Yes']");
+	public static Target ADD = Target.the("Add").locatedBy("//button[@name='btnAddRuleSet']");
+	public static Target SELECT_RULE = Target.the("rule").locatedBy("//select[@name='dgRuleSet_0_1']");
+	public static Target RULE_EFFECTIVE_FROM = Target.the("eff from").locatedBy("//input[@name='dgRuleSet_0_2']");
+	public static Target KPI_RULE_TAB = Target.the("Kpi rule tab").locatedBy("//a[@data-labelkey='mm.icd.stgdm.KPI.kpiRule']");
+	public static Target KPI_CODE = Target.the("Kpi code").locatedBy("//input[@name='txtKpiCode']");
+	public static Target SEARCH = Target.the("search").locatedBy("//button[@name='btnSearch']");
+	public static Target KPI_SEARCH_RESULT = Target.the("kpi search result").locatedBy("//td[@data-colid='Col_2' and @title='KPIWRITTENPREMIUM(KPIWRITTENPREMIUM)']");
+}

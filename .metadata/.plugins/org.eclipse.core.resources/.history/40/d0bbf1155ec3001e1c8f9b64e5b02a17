@@ -1,0 +1,74 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import java.util.logging.Logger;
+
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_NUM;
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.APPLICATION_NO;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+import com.majesco.test.dm.page_objects.ProducerAppointmentsPage;
+import com.majesco.test.dm.page_objects.ProducerPersonalInfoPage;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class MakeAnAsaAppointment extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(MakeAnAsaAppointment.class.getName());
+
+	public static MakeAnAsaAppointment selectAnAsaAppointment() {
+		return new MakeAnAsaAppointment();
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		waitABit(5000);
+		
+		actor.attemptsTo(Click.on(ProducerAppointmentsPage.SELECT_ALL_STATE));
+		waitABit(999);
+		
+		actor.attemptsTo(Click.on(ProducerAppointmentsPage.SELECT_ALL_COMPANY));
+		waitABit(999);
+		
+		/*
+		 * actor.attemptsTo(WaitUntil.the(ProducerAppointmentsPage.CUSTOM_APPOINTMENT,
+		 * isVisible()) .then(Click.on(ProducerAppointmentsPage.CUSTOM_APPOINTMENT)));
+		 * waitABit(999);
+		 * 
+		 * actor.attemptsTo(WaitUntil.the(ProducerAppointmentsPage.
+		 * CUSTOM_APPOINTMENT_STATE, isClickable())
+		 * .then(Click.on(ProducerAppointmentsPage.CUSTOM_APPOINTMENT_STATE)));
+		 * waitABit(999);
+		 * 
+		 * actor.attemptsTo(WaitUntil.the(ProducerAppointmentsPage.CUSTOM_APPOINTER_CO,
+		 * isClickable())
+		 * .then(Click.on(ProducerAppointmentsPage.CUSTOM_APPOINTER_CO)));
+		 * waitABit(999);
+		 * 
+		 * actor.attemptsTo(WaitUntil.the(ProducerAppointmentsPage.CUSTOM_APPOINTER_LOA,
+		 * isClickable())
+		 * .then(Click.on(ProducerAppointmentsPage.CUSTOM_APPOINTER_LOA)));
+		 * waitABit(999);
+		 */
+
+		actor.remember(Key.APPLICATION_NUMBER, APP_NUM.resolveFor(actor).getText());
+		waitABit(999);
+
+	}
+
+}

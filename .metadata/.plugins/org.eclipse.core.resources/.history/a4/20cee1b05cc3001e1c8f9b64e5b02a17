@@ -1,0 +1,25 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 24/08/2022
+ **/
+
+public class ProducerMonitoringRelationsPage extends PageObject {
+
+    public static Target PAGE_LABEL = Target.the("Page Label").locatedBy("(//label[contains(text(),'Staff Monitoring Relations >>')])[2]");
+    public static Target STAFF_OFFICE_SEARCH = Target.the("Staff/Office Search Button").locatedBy("(//a[@id='txtStaffNode_lnk'])[2]");
+    public static Target STAFF_OFFICE_LOOKUP_LABEL = Target.the("Staff/Office Lookup Label").locatedBy("//label[contains(text(),'Staff/Office Lookup')]");
+    public static Target HIERARCHY_NAME = Target.the("Hierarchy Name").locatedBy("//select[@name='cmbHierarchyName']");
+    public static Target NODE_ID = Target.the("Node Id").locatedBy("//input[@name='txtNodeID']");
+    public static Target TYPE = Target.the("Type").locatedBy("//select[@name='txtType']");
+    public static Target BUSINESS_AREA = Target.the("Business Area").locatedBy("//select[@name='cmbBusinessArea']");
+    public static Target ROLE = Target.the("Role").locatedBy("//select[@name='cmbRole']");
+    public static Target SEARCH_BUTTON = Target.the("Search Button").locatedBy("//button[@name='btnSearch']");
+    public static Target LOB = Target.the("LOB").locatedBy("(//select[@name='cmbLOB'])[2]");
+    public static Target PRODUCT = Target.the("Product").locatedBy("(//select[@name='cmbProduct'])[2]");
+    public static Target ADD_BUTTON = Target.the("Add Button").locatedBy("(//button[@name='btnAdd'])[6]");
+}

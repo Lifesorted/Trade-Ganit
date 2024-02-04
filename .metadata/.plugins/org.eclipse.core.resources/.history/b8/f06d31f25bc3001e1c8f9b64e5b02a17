@@ -1,0 +1,357 @@
+package com.majesco.test.dm.tasks.ui.common;
+
+import com.majesco.test.dm.page_objects.AppointmentDetailPage;
+import com.majesco.test.dm.page_objects.BankDetailPage;
+import com.majesco.test.dm.page_objects.BookOfBusinessPage;
+import com.majesco.test.dm.page_objects.ContactDetailPage;
+import com.majesco.test.dm.page_objects.EntityContactPage;
+import com.majesco.test.dm.page_objects.HierarchyDetailPage;
+import com.majesco.test.dm.page_objects.InGoodOrderPage;
+import com.majesco.test.dm.page_objects.IvansDownloadPage;
+import com.majesco.test.dm.page_objects.LicenseDetailPage;
+import com.majesco.test.dm.page_objects.LoginPage;
+import com.majesco.test.dm.page_objects.ManualLetterPage;
+import com.majesco.test.dm.page_objects.OtherInfoPage;
+import com.majesco.test.dm.page_objects.PersonalDetailPage;
+import com.majesco.test.dm.page_objects.ProducerAppointmentsPage;
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.Key;
+
+import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Open;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_ENQUIRY_SUBMENU;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_NO;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_NO_RESULT_LABEL;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_SEARCH_BTN;
+import static com.majesco.test.dm.page_objects.CompensationPreferencesPage.*;
+import static com.majesco.test.dm.page_objects.EOInsurancePage.*;
+import static com.majesco.test.dm.page_objects.HomePage.ONBOARDING_MENU;
+import static com.majesco.test.dm.page_objects.ProducerAgencyAffiliationPage.*;
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.SAVE_ADDRESS;
+import static com.majesco.test.dm.page_objects.ProducerDirectDepositDetails.*;
+import static com.majesco.test.dm.page_objects.ProducerLicenseDetailsPage.*;
+import static com.majesco.test.dm.page_objects.VerifyApplication.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 11/04/2022
+ **/
+
+public class NavigateTo {
+	
+    public static Performable theLoginPage() {
+        return Task.where("{0} opens the login page",
+                Open.browserOn().the(LoginPage.class));
+    }
+
+    public static Performable agencyAffiliationScreen() {
+        return Task.where("{0} opens the agency affiliation page",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(AGENCY_AFFILIATION_TAB)
+                                    .then(WaitUntil.the(PAA_PAGE_LABEL, isVisible()))
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+
+    public static Performable licenseDetailsScreen() {
+        return Task.where("{0} opens the license details page",
+                (actor) -> {
+                	CommonUtil.staticWaitFor(1000L);
+                    actor.attemptsTo(
+                            Click.on(LICENSE_DETAILS_TAB)
+                                    .then(WaitUntil.the(PLD_PAGE_LABEL, isVisible()))
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable licenseDetailScreen() {
+        return Task.where("{0} opens the license details page",
+                (actor) -> {
+                	CommonUtil.staticWaitFor(5000L);
+                    actor.attemptsTo(
+                            Click.on(LICENSE_MENU)
+                                    .then(WaitUntil.the(PLD_PAGE_LABEL, isVisible()))
+                    );
+                    String storeResLicense = RES_LICENSE.resolveFor(actor).getAttribute("title");
+            		actor.remember(Key.LICENSE_NUMBER, storeResLicense);
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+
+    public static Performable appointmentScreen() {
+        return Task.where("{0} opens the license details page",
+                (actor) -> {
+                	//CommonUtil.staticWaitFor(5000L);
+                    actor.attemptsTo(
+                            Click.on(ProducerAppointmentsPage.APPOINTMENT_TAB)
+                                    .then(WaitUntil.the(ProducerAppointmentsPage.PAD_PAGE_LABEL, isVisible()))
+                    );
+                    
+                   // actor.attemptsTo(Click.on(ProducerAppointmentsPage.APPOINTMENT_TAB));
+                   // CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+    
+    public static Performable directDepositDetailsScreen() {
+        return Task.where("{0} opens the direct deposit details page",
+                (actor) -> {
+                    actor.attemptsTo(
+                            WaitUntil.the(DIRECT_DEPOSIT_DETAILS_TAB, isClickable())
+                                    .then(Click.on(DIRECT_DEPOSIT_DETAILS_TAB))
+                    );
+                   // CommonUtil.staticWaitFor(2000L);
+                    //actor.attemptsTo(WaitUntil.the(FINANCIAL_INSTITUTION, isClickable()));
+                   //actor.attemptsTo(Click.on(DIRECT_DEPOSIT_DETAILS_TAB));
+                   CommonUtil.staticWaitFor(1000L);
+                }
+        );
+    }
+    
+    public static Performable directDepositDetailScreen() {
+        return Task.where("{0} opens the direct deposit details page",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(DIRECT_DEPOSIT_DETAIL_TAB)
+                    );              
+                   CommonUtil.staticWaitFor(1000L);
+                }
+        );
+    }
+
+
+    public static Performable eoInsuranceScreen() {
+        return Task.where("{0} opens the EO Insurance page",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(EO_INSURANCE_TAB)
+                                    .then(WaitUntil.the(EO_PAGE_LABEL, isVisible()))
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+
+    public static Performable iVansScreen() {
+        return Task.where("{0} opens the ivans download page",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(IvansDownloadPage.IVAN_DOWNLOAD)
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    public static Performable compensationPreferencesScreen() {
+        return Task.where("{0} opens the compensation preferences details page",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(COMPENSATION_PREFERENCES_TAB)
+                                    .then(WaitUntil.the(CP_PAGE_LABEL, isVisible()))
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+
+    public static Performable verifyApplicationScreen() {
+        return Task.where("{0} opens the verify application page",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(VA_TAB)
+                                    .then(WaitUntil.the(VA_PAGE_LABEL, isVisible()))
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable contactTab() {
+        return Task.where("{0} opens the contact tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(PersonalDetailPage.CONTACT)
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable contactsTab() {
+        return Task.where("{0} opens the contact tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(PersonalDetailPage.CONTACT1)
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable contactMenu() {
+        return Task.where("{0} opens the contact tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(PersonalDetailPage.CONTACT_MENU)
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable licenseTab() {
+        return Task.where("{0} opens the contact tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(ContactDetailPage.LICENSE_TAB)
+             
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable bankTab() {
+        return Task.where("{0} opens the bank tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(LicenseDetailPage.BANK_TAB)
+             
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable EOTab() {
+        return Task.where("{0} opens the EO tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(BankDetailPage.EO_TAB)
+             
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable appointmentTab() {
+        return Task.where("{0} opens the appointment tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(AppointmentDetailPage.APPOINTMENT_TAB)
+                    );
+                    CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+    
+    public static Performable hierarchyTab() {
+        return Task.where("{0} opens the appointment tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(HierarchyDetailPage.HIERARCHY_TAB)
+             
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable entityContactTab() {
+        return Task.where("{0} opens the entity contact tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(EntityContactPage.ENTITY_CONTACT_TAB)
+             
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable otherInfoTab() {
+        return Task.where("{0} opens the appointment tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(OtherInfoPage.OTHERINFO_TAB)
+             
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable manualLetterTab() {
+        return Task.where("{0} opens the appointment tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(ManualLetterPage.MANUAL_LETTER_TAB)
+             
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable inGoodOrderTab() {
+        return Task.where("{0} opens the appointment tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(InGoodOrderPage.INGOODORDER_TAB)
+             
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable appointmentsTab() {
+        return Task.where("{0} opens the appointments tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(AppointmentDetailPage.APPOINTMENT)
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable IvansTab() {
+        return Task.where("{0} opens the ivans tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(IvansDownloadPage.IVAN_TAB)
+             
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+    public static Performable bookOfBusinessTab() {
+        return Task.where("{0} opens the ivans tab",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(BookOfBusinessPage.BOB_TAB)
+             
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
+    
+}

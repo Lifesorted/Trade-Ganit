@@ -1,0 +1,33 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.utils.CommonUIInteractions;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.annotations.Steps;
+/**
+ * @author Shaile908568
+ *
+ */
+public class VerifyMasterLevelDetails extends UIInteractions implements Task {
+
+	@Steps
+	private CommonUIInteractions commonUIInteractions;
+	
+	public VerifyMasterLevelDetails() {
+    }
+	
+	public static VerifyMasterLevelDetails forProducer() {
+        return new VerifyMasterLevelDetails();
+    }
+	 
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		commonUIInteractions.isLandingComplete(actor);
+	}
+
+}

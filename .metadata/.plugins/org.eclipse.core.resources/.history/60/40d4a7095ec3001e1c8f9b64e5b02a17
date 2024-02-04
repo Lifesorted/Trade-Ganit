@@ -1,0 +1,64 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static com.majesco.test.dm.page_objects.VerifyApplication.OVERRIDE_WARNINGS;
+import static com.majesco.test.dm.page_objects.VerifyApplication.REMARKS;
+import static com.majesco.test.dm.page_objects.VerifyApplication.VA_PAGE_LABEL;
+import static com.majesco.test.dm.page_objects.VerifyApplication.VERIFY_BTN;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import com.majesco.test.dm.page_objects.VerifyApplication;
+import com.majesco.test.dm.utils.CommonUIInteractions;
+import net.serenitybdd.annotations.Steps;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import net.thucydides.core.annotations.*;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class VerifyOnBoardingError extends UIInteractions implements Task{
+
+	private String remarks = "TAF Automation Remark";
+	@Steps
+	private CommonUIInteractions commonUIInteractions;
+
+	public VerifyOnBoardingError() {
+	}
+
+	public static VerifyOnBoardingError forProducer() {
+		return new VerifyOnBoardingError();
+	}
+
+	public static VerifyOnBoardingError forBusinessEntity() {
+		return new VerifyOnBoardingError();
+	}
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		actor.attemptsTo(WaitUntil.the(VA_PAGE_LABEL, isVisible()));
+		waitABit(2000);
+
+		actor.attemptsTo(Enter.keyValues(remarks).into(REMARKS));
+		waitABit(1500);
+
+		actor.attemptsTo(Click.on(VERIFY_BTN));
+		waitABit(3000);
+		
+		if (VerifyApplication.SECTION_LICENSE_ERROR.resolveFor(actor).isDisplayed()) {
+			Ensure.that(VerifyApplication.LICENSE_ERROR).textContent().contains("At least one active license is required.");
+		}
+		
+		if (VerifyApplication.SECTION_APPOINTMENT_ERROR.resolveFor(actor).isDisplayed()) {
+			Ensure.that(VerifyApplication.APPOINTMENT_ERROR).textContent().contains("Minimum one appointment is required.");
+		}
+	}
+
+}

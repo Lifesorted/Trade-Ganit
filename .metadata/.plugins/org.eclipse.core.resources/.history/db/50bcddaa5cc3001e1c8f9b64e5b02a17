@@ -1,0 +1,19 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class ContactDetailPage extends PageObject {
+	
+	public static Target LICENSE_TAB = Target.the("License tab").locatedBy("//a[@data-labelkey='mm.icd.stgdm.viewscreen.licenses']");
+	public static Target ADDRESS_TYPE = Target.the("License tab").locatedBy("//select[@name='cmbAddressType']");
+	public static Target ADDRESS_TYPE_RES = Target.the("License tab").locatedBy("//div[@id='dgClientAddressDetails_0_0']/descendant::span[@data-section='displayvalue']");
+	public static Target FULL_ADDRESS = Target.the("License tab").locatedBy("//div[@id='dgClientAddressDetails_0_1']/descendant::span[@data-section='displayvalue']");
+}

@@ -1,0 +1,173 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.ProducerPersonalInfoPage;
+import com.majesco.test.dm.utils.CommonUIInteractions;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+import io.cucumber.datatable.DataTable;
+
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import org.joda.time.DateTime;
+import org.junit.platform.commons.util.StringUtils;
+import org.openqa.selenium.Keys;
+
+import java.text.SimpleDateFormat;
+import java.util.Map;
+import java.util.logging.Logger;
+
+import static com.majesco.test.dm.page_objects.ProducerPersonalInfoPage.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 23/08/2022
+ **/
+
+public class FillProducerPersonalInfo extends CommonUIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(FillProducerPersonalInfo.class.getName());
+
+	private String currentDate = new SimpleDateFormat("MM/dd/yyyy").format(DateTime.now().toDate());
+	private String firstName;
+	private String lastName;
+	private String type;
+	private String effectiveFrom;
+	private String ssnNo;
+	private String residentState;
+	private String licenseNo;
+	private String licenseType;
+	private String gender;
+	private String dob;
+	private String nationality;
+	private static String applicationfor;
+	private static String entityType;
+	private static String contractType;
+
+	public FillProducerPersonalInfo(String firstName, String lastName, String type, String effectiveFrom, String ssnNo,
+			String residentState, String licenseNo, String licenseType, String gender, String dob, String nationality,
+			String applicationfor, String entityType, String contractType) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.type = type;
+		this.effectiveFrom = effectiveFrom;
+		this.ssnNo = ssnNo;
+		this.residentState = residentState;
+		this.licenseNo = licenseNo;
+		this.licenseType = licenseType;
+		this.gender = gender;
+		this.dob = dob;
+		this.nationality = nationality;
+		this.applicationfor = applicationfor;
+		this.entityType = entityType;
+		this.contractType = contractType;
+	}
+
+	public static FillProducerPersonalInfo fromUnderlineDetails(DataTable personalInfo) {
+		Map<String, String> personalInfoDetails = ConvertCucumberDataTable.toMap(personalInfo);
+		String firstName = personalInfoDetails.get("FirstName");
+		String lastName = personalInfoDetails.get("LastName");
+		String type = personalInfoDetails.get("Type");
+		String residentState = personalInfoDetails.get("ResidentState");
+		String gender = personalInfoDetails.get("Gender");
+		String licenseNo = personalInfoDetails.get("LicenseNo");
+		String licenseType = personalInfoDetails.get("LicenseType");
+		String dob = personalInfoDetails.get("DOB");
+
+		return new FillProducerPersonalInfo(firstName, lastName, type, null, null, residentState, licenseNo,
+				licenseType, gender, dob, null, applicationfor, entityType, contractType);
+
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(WaitUntil.the(PAGE_LABEL, isVisible()).then(Enter.keyValues(firstName).into(FIRST_NAME)));
+		waitABit(500);
+
+		String exapplicationfor = ProducerPersonalInfoPage.APPLICATION_FOR.resolveFor(actor).getText();
+		String exentitytype = ProducerPersonalInfoPage.ENTITY_TYPE.resolveFor(actor).getText();
+		String excontractType = ProducerPersonalInfoPage.CONTRACT_TYPE.resolveFor(actor).getText();
+
+		actor.attemptsTo(Enter.keyValues(lastName).into(LAST_NAME));
+		waitABit(500);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(type).from(TYPE));
+		waitABit(999);
+
+		if (StringUtils.isBlank(effectiveFrom)) {
+			String defaultEffectiveFrom = actor.recall(Key.APPLICATION_DATE);
+			actor.attemptsTo(Enter.keyValues(defaultEffectiveFrom).into(EFFECTIVE_FROM).thenHit(Keys.TAB));
+
+		} else {
+			actor.attemptsTo(Enter.keyValues(effectiveFrom).into(EFFECTIVE_FROM).thenHit(Keys.TAB));
+		}
+		waitABit(500);
+
+		String defaultSSNNo = String.valueOf(System.currentTimeMillis() / 10000);
+		if (StringUtils.isBlank(ssnNo)) {
+			SSN_NO.resolveFor(actor).clear();
+			actor.attemptsTo(Enter.keyValues(defaultSSNNo).into(SSN_NO));
+		} else {
+			actor.attemptsTo(Enter.keyValues(ssnNo).into(SSN_NO));
+		}
+		waitABit(2000);
+
+		String newssn = defaultSSNNo.substring(0, 3);
+		char newssn1 = defaultSSNNo.charAt(3);
+		String newssn2 = defaultSSNNo.substring(4, 6);
+		char newssn3 = defaultSSNNo.charAt(6);
+		char newssn4 = defaultSSNNo.charAt(7);
+		char newssn5 = defaultSSNNo.charAt(8);
+		String finalssn = newssn + newssn2 + newssn4 + newssn5 + newssn3 + newssn1;
+
+		System.out.println("final:"+finalssn);
+		actor.attemptsTo(Click.on(ProducerPersonalInfoPage.EYE_ICON));
+		waitABit(999);
+		
+		if (RESIDENT_STATE.resolveFor(actor).isEnabled()) {
+			actor.attemptsTo(SelectFromOptions.byVisibleText(residentState).from(RESIDENT_STATE));
+			waitABit(999);
+		}
+
+		if (StringUtils.isNotBlank(licenseNo)) {
+			String defaultLicenseNo = new SimpleDateFormat("yyMMddHHmmss").format(DateTime.now().toDate());
+			actor.attemptsTo(Enter.keyValues(defaultLicenseNo).into(LICENSE_NO));
+			waitABit(500);
+		}
+
+		if (StringUtils.isNotBlank(licenseType)) {
+			actor.attemptsTo(SelectFromOptions.byVisibleText(licenseType).from(LICENSE_TYPE));
+			waitABit(999);
+		}
+
+		actor.attemptsTo(Click.on(GENDER(gender)));
+		waitABit(999);
+
+		actor.attemptsTo(Enter.keyValues(dob).into(DOB).thenHit(Keys.TAB));
+		waitABit(500);
+
+		if (StringUtils.isBlank(nationality)) {
+			actor.attemptsTo(SelectFromOptions.byVisibleText("American").from(NATIONALITY));
+		} else {
+			actor.attemptsTo(SelectFromOptions.byVisibleText(nationality).from(NATIONALITY));
+		}
+
+		String npnNo = NPN_NO.resolveFor(actor).getAttribute("value");
+		String storeLicenseNo = LICENSE_NO.resolveFor(actor).getAttribute("value");
+
+		String saveFlag = actor.recall(Key.SAVE_FLAG);
+
+		waitABit(1000);
+
+		logger.info("NPN Number ==> " + npnNo);
+		actor.remember(Key.NPN_NUMBER, npnNo);
+		actor.remember(Key.LICENSE_NUMBER, storeLicenseNo);
+	}
+}

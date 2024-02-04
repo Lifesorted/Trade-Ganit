@@ -1,0 +1,18 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.annotations.DefaultUrl;
+
+
+/**
+ * @author dhiraj662364
+ *
+ */
+
+@DefaultUrl("page:login.page")
+public class LoginPage extends PageObject {
+    public static Target USERNAME = Target.the("Username").locatedBy("//input[@placeholder='Username']");
+    public static Target PASSWORD = Target.the("Password").locatedBy("//input[@placeholder='Password']");
+    public static Target LOGIN_BTN = Target.the("Login Button").locatedBy("//input[@value='Log in']");
+}

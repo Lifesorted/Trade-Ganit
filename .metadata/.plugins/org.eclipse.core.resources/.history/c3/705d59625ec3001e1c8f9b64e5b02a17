@@ -1,0 +1,8 @@
+package com.majesco.test.dm.utils;
+
+public class Key {
+    public static final String NPN_NUMBER = "npn-number";
+    public static final String APPLICATION_DATE = "application-date";
+    public static final String APPLICATION_NUMBER = "application-number";
+    
+}

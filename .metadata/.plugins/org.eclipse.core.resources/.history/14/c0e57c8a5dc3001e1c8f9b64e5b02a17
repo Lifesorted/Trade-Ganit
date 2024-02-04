@@ -1,0 +1,56 @@
+package com.majesco.test.dm.tasks.ui.common;
+
+import com.majesco.test.dm.page_objects.IvansDownloadPage;
+import com.majesco.test.dm.page_objects.LicenseDetailPage;
+import com.majesco.test.dm.page_objects.ProducerAppointmentsPage;
+import com.majesco.test.dm.utils.CommonUtil;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import static com.majesco.test.dm.page_objects.AgencyContactsPage.ACI_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.AgencyProfilePage.APP_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.BusinessEntity_AgencyProfilePage.BEAP_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.CommonObjects.OK_BTN;
+import static com.majesco.test.dm.page_objects.CommunicationPreferences.COMP_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.CompensationPreferencesPage.*;
+import static com.majesco.test.dm.page_objects.DesignatedProducerPage.DRLP_SAVE_BTN;
+import static com.majesco.test.dm.page_objects.EOInsurancePage.EO_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerAgencyAffiliationPage.AA_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerAppointmentsPage.PAD_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.CI_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerDirectDepositDetails.DDD_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerLicenseDetailsPage.LD_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.ProducerLicenseDetailsPage.LD_SAVE_CONTINUE_1;
+import static com.majesco.test.dm.page_objects.ProducerPersonalInfoPage.PI_SAVE_CONTINUE;
+import static com.majesco.test.dm.page_objects.WorkExperience.WE_SAVE_CONTINUE;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 23/08/2022
+ **/
+
+public class SaveAndContinue extends UIInteractions {
+
+    public static Performable onPersonalInfoScreen() {
+        return Task.where("{0} save & continue",
+                (actor) -> {
+                    actor.attemptsTo(Scroll.to(PI_SAVE_CONTINUE));
+                    CommonUtil.staticWaitFor(1000L);
+                    actor.attemptsTo(
+                            WaitUntil.the(PI_SAVE_CONTINUE, isVisible()).forNoMoreThan(3).seconds(),
+                            WaitUntil.the(PI_SAVE_CONTINUE, isClickable()).forNoMoreThan(3).seconds(),
+                            Click.on(PI_SAVE_CONTINUE));
+                   // CommonUtil.staticWaitFor(1000L);
+                    //actor.attemptsTo(Click.on(OK_BTN));
+                    //CommonUtil.staticWaitFor(3000L);
+                }
+        );
+    }
+}

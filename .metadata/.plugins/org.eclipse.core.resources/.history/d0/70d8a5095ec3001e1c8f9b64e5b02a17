@@ -1,0 +1,52 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.page_objects.AppointmentDetailPage;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.ensure.Ensure;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class VerifyAppointmentDetails extends UIInteractions implements Task {
+	
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+	private static String state;
+	private static String licensetype;
+	private static String licenseno;
+	private static String company;
+	private static String comlicensetype;
+	
+	public VerifyAppointmentDetails(String state, String licensetype, String licenseno, String company, String comlicensetype) {
+		this.state = state;
+		this.licensetype = licensetype;
+		this.licenseno = licenseno;
+		this.company = company;
+		this.comlicensetype = comlicensetype;
+	}
+	
+	public static VerifyAppointmentDetails fromUnderlineDetails() {
+		state = DataHelper.getRecord("License_Details", 1, 0);
+		licensetype = DataHelper.getRecord("License_Details", 1, 1);
+		licenseno = DataHelper.getRecord("License_Details", 1, 2);
+		company = DataHelper.getRecord("License_Details", 1, 3);
+		comlicensetype = DataHelper.getRecord("License_Details", 1, 4);
+
+		return new VerifyAppointmentDetails(state, licensetype, licenseno, company, comlicensetype );
+	}
+	
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		waitABit(2000);
+	}
+}

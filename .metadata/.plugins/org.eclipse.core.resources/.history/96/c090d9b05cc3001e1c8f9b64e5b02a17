@@ -1,0 +1,31 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class MassOnboardingInquiryPage extends PageObject {
+	
+	public static Target SELECT_CHANNEL = Target.the("channel").locatedBy("//input[@value='CHANNEL']");
+    public static Target CHANNEL_VALUE = Target.the("channel-option").locatedBy("//select[@name='cmbChannelCode']");
+    public static Target SEARCH_BTN = Target.the("search btn").locatedBy("//button[@name='btnSearch']");
+    public static Target VALIDATE_BTN = Target.the("validate").locatedBy("//button[@name='btnDummy']");
+    public static Target UPLOAD_BTN = Target.the("upload").locatedBy("//button[@name='btnUpload']");
+    public static Target OK_BTN = Target.the("Ok").locatedBy("//button[@name='Ok']");
+    public static Target BATCH_ID = Target.the("Batch").locatedBy("(//a[@id='dgBatchList_0_0_lnk']/descendant::span[@data-section='displayvalue'])[1]");
+    public static Target SELECT_CATEGORY = Target.the("Category").locatedBy("//select[@name='cbmCategory']");
+    public static Target CATEGORY = Target.the("Category").locatedBy("//div[@id='dgTransactionDtl_0_4']/descendant::span[@data-section='displayvalue']");
+    public static Target APPLICATION_NO = Target.the("application").locatedBy("//div[@id='dgTransactionDtl_0_6']/descendant::span[@data-section='displayvalue']");
+    public static Target STATUS = Target.the("status").locatedBy("//div[@id='dgTransactionDtl_0_8']/descendant::span[@data-section='displayvalue']");
+    public static Target VIEW_ERROR = Target.the("view error").locatedBy("//a[@id='dgTransactionDtl_0_7_lnk']");
+    public static Target CED_ERROR = Target.the("ced error").locatedBy("//div[@id='dgErrorDtl_0_0']/descendant::span[@data-section='displayvalue']");
+    public static Target COM_CODE_ERROR = Target.the("com code error").locatedBy("//div[@id='dgErrorDtl_1_0']/descendant::span[@data-section='displayvalue']");
+    public static Target NPN_NUM = Target.the("npn").locatedBy("//div[@id='dgTransactionDtl_0_2']/descendant::span[@data-section='displayvalue']");
+    
+}

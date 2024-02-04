@@ -1,0 +1,53 @@
+package com.majesco.test.dm.tasks.db;
+
+import com.majesco.test.dm.utils.Key;
+import com.majesco.test.dm.utils.db.QueryConstants;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+
+import java.sql.*;
+import java.util.logging.Logger;
+
+/**
+ * @author dhiraj662364
+ * @created 23/09/2022
+ **/
+
+public class GetAdditionalStateAppointment implements Task {
+
+    private static Logger logger = Logger.getLogger(GetAdditionalStateAppointment.class.getName());
+    private Connection connection;
+    private ResultSet rs;
+
+    private String licenseNo;
+
+    public GetAdditionalStateAppointment(Connection connection) {
+        this.connection = connection;
+    }
+
+    public static GetAdditionalStateAppointment fromDB(Connection connection) {
+        return new GetAdditionalStateAppointment(connection);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        try {
+            String licenseNo = actor.recall(Key.LICENSE_NUMBER);
+            String sqlQuery = QueryConstants.FETCH_STATE_CODE;
+            PreparedStatement prepStmt = connection.prepareStatement(sqlQuery);
+            prepStmt.setString(1, licenseNo);
+
+            rs = prepStmt.executeQuery();
+            while (rs.next()) {
+                String stateCode = rs.getString("STATE_CODE");
+                System.out.println(stateCode);
+                actor.remember(Key.STATE_CODE, stateCode);
+            }
+            rs.close();
+            prepStmt.close();
+        } catch (Exception dbe) {
+            logger.severe("Unable to retrieve ASA data from DB: " + dbe);
+        }
+    }
+}

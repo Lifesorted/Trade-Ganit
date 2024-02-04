@@ -1,0 +1,39 @@
+package com.trade.test.gaint.tasks.ui.dm;
+import java.util.logging.Logger;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+
+public class UserOperations extends UIInteractions implements Task{
+
+	private static Logger logger = Logger.getLogger(UserOperations.class.getName());
+	private static String usertype;
+	private static String firstname;
+	private static String lastname;
+	private static String emailid;
+	private static String phonenumber;
+	private static String password;
+	
+	public UserOperations(String usertype, String firstname, String lastname, String emailid, String phonenumber, String password) {
+		this.usertype = usertype;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.emailid = emailid;
+		this.phonenumber = phonenumber;
+		this.password = password;
+	}
+
+	public static UserOperations fromUnderlineDetails() {
+		name = DataHelper.getRecord("NPersonal_Details", 5, 5);
+		type = DataHelper.getRecord("NPersonal_Details", 5, 7);
+		fein = DataHelper.getRecord("NPersonal_Details", 1, 3);
+		legaltype = DataHelper.getRecord("NPersonal_Details", 5, 8);
+
+		return new UserOperations(name, type, fein, legaltype);
+	}
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+	
+	}
+
+}

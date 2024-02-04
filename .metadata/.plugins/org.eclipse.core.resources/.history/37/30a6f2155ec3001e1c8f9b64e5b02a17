@@ -1,0 +1,108 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.Key;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.junit.platform.commons.util.StringUtils;
+import java.util.Map;
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 23/08/2022
+ **/
+
+public class FillProducerResidentialAddress extends UIInteractions implements Task {
+    private String addressType;
+    private String line1;
+    private String city;
+    private String state;
+    private String zip;
+    
+    public FillProducerResidentialAddress(String addressType, String line1, String city, String state, String zip) {
+        this.addressType = addressType;
+        this.line1 = line1;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+    }
+
+    public static FillProducerResidentialAddress fromUnderlineDetails(DataTable address) {
+        Map<String, String> addressDetails = ConvertCucumberDataTable.toMap(address);
+
+        String addressType = addressDetails.get("AddressType");
+        String line1 = addressDetails.get("Line1");
+        String city = addressDetails.get("City");
+        String state = addressDetails.get("State");
+        String zip = addressDetails.get("Zip");
+                
+        return new FillProducerResidentialAddress(addressType, line1, city, state, zip);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        actor.attemptsTo(WaitUntil.the(PAGE_LABEL, isVisible()));
+        waitABit(500);
+        
+        if (ADD_ADDRESS.resolveFor(actor).isEnabled()) {
+        	actor.attemptsTo(Scroll.to(ADD_ADDRESS).andAlignToTop());
+			actor.attemptsTo(Click.on(ADD_ADDRESS));
+			actor.attemptsTo(Scroll.to(SAVE_ADDRESS).andAlignToTop());
+			waitABit(500);
+		}
+
+        if (StringUtils.isNotBlank(addressType)) {
+            actor.attemptsTo(SelectFromOptions.byVisibleText(addressType).from(RES_ADDRESS_TYPE));
+            waitABit(999);
+        }
+
+        actor.attemptsTo(Enter.keyValues(line1).into(RES_LINE1));
+        waitABit(500);
+
+        actor.attemptsTo(Enter.keyValues(city).into(RES_CITY));
+        waitABit(500);
+
+        actor.attemptsTo(SelectFromOptions.byVisibleText(state).from(RES_STATE));
+        waitABit(500);
+
+        actor.attemptsTo(Enter.keyValues(zip).into(RES_ZIP));
+        waitABit(500);
+        
+        String uniqueEmail = "test"+CommonUtil.generateNineDigitNumber()+"@gmail.com";
+        actor.attemptsTo(Enter.keyValues(uniqueEmail).into(EMAIL));
+        actor.remember(Key.ADDED_EMAIL, uniqueEmail);
+        waitABit(2000);
+        
+        if (IS_PREFERRED.isVisibleFor(actor)) {
+        	actor.attemptsTo(Scroll.to(SAVE_ADDRESS).andAlignToTop());
+			actor.attemptsTo(Click.on(IS_PREFERRED));
+			waitABit(5000);
+		}else {
+			   actor.attemptsTo(Click.on(IS_PREFERRED));
+		        waitABit(1000);
+		}
+     
+        if (SAVE_ADDRESS.resolveFor(actor).isEnabled()) {
+        	actor.attemptsTo(Scroll.to(SAVE_ADDRESS).andAlignToTop());
+			actor.attemptsTo(Click.on(SAVE_ADDRESS));
+			waitABit(6000);
+			if (SAVE_ADDRESS.resolveFor(actor).isDisplayed()) {
+				actor.attemptsTo(Click.on(CANCEL_BTN));
+			}
+			
+		}
+        waitABit(6000);
+    }
+}

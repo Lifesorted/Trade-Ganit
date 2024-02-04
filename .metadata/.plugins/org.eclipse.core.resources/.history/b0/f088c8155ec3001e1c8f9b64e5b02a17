@@ -1,0 +1,139 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+import java.util.Map;
+import com.majesco.test.dm.page_objects.HomePage;
+import com.majesco.test.dm.page_objects.KpiMaintenancePage;
+import com.majesco.test.dm.page_objects.SchedulePage;
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class KpiManitenance extends UIInteractions implements Task {
+
+	HomePage homepage;
+	public static String lobClass;
+	public static String code;
+	public static String name;
+	public static String evaluationType;
+	public static String category;
+	public static String basis;
+	public static String subbasis;
+	public static String productionbasedon;
+	public static String kpivalueType;
+	public static String effectiveFrom;
+	
+	public KpiManitenance(String lobClass, String code, String name, String evaluationType, String category, String basis, String subbasis,
+			String productionbasedon, String kpivalueType, String effectiveFrom) {
+        this.lobClass = lobClass;
+        this.code = code;
+        this.name = name;
+        this.evaluationType = evaluationType;
+        this.category = category;
+        this.basis = basis;
+        this.subbasis = subbasis;
+        this.productionbasedon = productionbasedon;
+        this.kpivalueType = kpivalueType;
+        this.effectiveFrom = effectiveFrom;
+	}
+
+	public static KpiManitenance fromUnderlineDetails(DataTable addscheduleinfo) {
+		Map<String, String> addschedule = ConvertCucumberDataTable.toMap(addscheduleinfo);
+		lobClass = addschedule.get("LOBClass");
+		code = addschedule.get("Code");
+		name = addschedule.get("Name");
+		evaluationType = addschedule.get("EvaluationType");
+		category = addschedule.get("Category");
+		basis = addschedule.get("Basis");
+		subbasis = addschedule.get("SubBasis");
+		productionbasedon = addschedule.get("ProductionBasedOn");
+		kpivalueType = addschedule.get("KpiValueType");
+		effectiveFrom = addschedule.get("EffectiveFrom");
+		return new KpiManitenance(lobClass, code, name, evaluationType, category, basis, subbasis, productionbasedon, kpivalueType, effectiveFrom);
+	}
+	
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		actor.attemptsTo(WaitUntil.the(homepage.PERFORMANCE_MANAGEMENT, isClickable())
+				.then(Click.on(homepage.PERFORMANCE_MANAGEMENT)));
+		waitABit(999);
+				
+		actor.attemptsTo(Click.on(homepage.KPI_MAINTENANCE));
+		waitABit(1200);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(lobClass).from(KpiMaintenancePage.LOB_CLASS));
+		waitABit(999);
+		
+		code = "SC"+CommonUtil.generateRandomNumber();
+		actor.attemptsTo(Enter.keyValues(code).into(KpiMaintenancePage.CODE));
+		waitABit(999);
+		
+		name = "SCH"+CommonUtil.generateRandomNumber(); 
+		actor.attemptsTo(Enter.keyValues(name).into(KpiMaintenancePage.NAME));
+		waitABit(999);
+				
+		actor.attemptsTo(SelectFromOptions.byVisibleText(evaluationType).from(KpiMaintenancePage.EVALUATION_TYPE));
+		waitABit(10000);
+				
+		actor.attemptsTo(SelectFromOptions.byVisibleText(category).from(KpiMaintenancePage.CATEGORY));
+		waitABit(999);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(basis).from(KpiMaintenancePage.BASIS));
+		waitABit(999);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(subbasis).from(KpiMaintenancePage.SUB_BASIS));
+		waitABit(999);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(productionbasedon).from(KpiMaintenancePage.PRODUCTION_BASE));
+		waitABit(999);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(kpivalueType).from(KpiMaintenancePage.KPI_VALUE_TYPE));
+		waitABit(999);
+		
+		actor.attemptsTo(Enter.keyValues(CommonUtil.getCurrentDate()).into(KpiMaintenancePage.EFFECTIVE_FROM));
+		waitABit(999);
+		
+		actor.attemptsTo(Click.on(KpiMaintenancePage.KPI_RULE_TAB));
+		waitABit(1200);
+		
+		actor.attemptsTo(Click.on(KpiMaintenancePage.ADD));
+		waitABit(1200);
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText("KPICOUNT").from(KpiMaintenancePage.SELECT_RULE));
+		waitABit(999);
+		
+		actor.attemptsTo(Enter.keyValues(CommonUtil.getCurrentDate()).into(KpiMaintenancePage.RULE_EFFECTIVE_FROM));
+		waitABit(999);
+		
+		actor.attemptsTo(Scroll.to(KpiMaintenancePage.SAVE));
+		
+		actor.attemptsTo(Click.on(KpiMaintenancePage.SAVE));
+		waitABit(3000);
+		
+		actor.attemptsTo(WaitUntil.the(KpiMaintenancePage.YES, isVisible()).then(Click.on(KpiMaintenancePage.YES)));
+		waitABit(2000);
+		
+		actor.attemptsTo(WaitUntil.the(KpiMaintenancePage.OK, isVisible()).then(Click.on(KpiMaintenancePage.OK)));
+		waitABit(2000);
+		
+		actor.attemptsTo(Click.on(KpiMaintenancePage.FORWARD));
+		waitABit(3000);
+		
+		actor.attemptsTo(WaitUntil.the(KpiMaintenancePage.YES, isVisible()).then(Click.on(KpiMaintenancePage.YES)));
+		waitABit(2000);
+		
+		actor.attemptsTo(WaitUntil.the(KpiMaintenancePage.OK, isVisible()).then(Click.on(KpiMaintenancePage.OK)));
+		waitABit(2000);
+	}
+
+}

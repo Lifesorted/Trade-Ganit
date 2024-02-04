@@ -1,0 +1,20 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 29/08/2022
+ **/
+
+public class CommunicationPreferences extends PageObject {
+
+    public static Target COMP_PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'Communication Preferences')]");
+    public static Target CATEGORY = Target.the("Category").locatedBy("//select[@name='cmbCategory']");
+    public static Target EVENT = Target.the("Event").locatedBy("//select[@name='cmbEvent']");
+
+    public static Target COMP_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveAndContinue']");
+
+
+}

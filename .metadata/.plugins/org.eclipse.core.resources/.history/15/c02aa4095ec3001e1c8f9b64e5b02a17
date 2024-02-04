@@ -1,0 +1,93 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.page_objects.BookOfBusinessPage;
+import com.majesco.test.dm.page_objects.IvansDownloadPage;
+import com.majesco.test.dm.utils.DataHelper;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class VerifyBookOfBusinessDetails extends UIInteractions implements Task {
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+	private static String lineOfBusiness;
+	private static String MGAInsurer;
+	private static String Admitted;
+	private static String TotalInforcePremium;
+	private static String IndustrySegment;
+	private static String Commission;
+	private static String ContingencyProgram;
+	
+	public VerifyBookOfBusinessDetails(String lineOfBusiness, String MGAInsurer, String Admitted, String TotalInforcePremium,
+			String IndustrySegment, String Commission, String ContingencyProgram) {
+		this.lineOfBusiness = lineOfBusiness;
+		this.MGAInsurer = MGAInsurer;
+		this.Admitted = Admitted;
+		this.TotalInforcePremium = TotalInforcePremium;
+		this.IndustrySegment = IndustrySegment;
+		this.Commission = Commission;
+		this.ContingencyProgram = ContingencyProgram;
+	}
+
+	public static VerifyBookOfBusinessDetails fromUnderlineDetails() {
+		lineOfBusiness = DataHelper.getRecord("BobData", 1, 0);
+		MGAInsurer = DataHelper.getRecord("BobData", 1, 1);
+		Admitted = DataHelper.getRecord("BobData", 1, 2);
+		TotalInforcePremium = DataHelper.getRecord("BobData", 1, 3);
+		IndustrySegment = DataHelper.getRecord("BobData", 1, 4);
+		Commission = DataHelper.getRecord("BobData", 1, 5);
+		ContingencyProgram = DataHelper.getRecord("BobData", 1, 6);
+
+		return new VerifyBookOfBusinessDetails(lineOfBusiness, MGAInsurer, Admitted, TotalInforcePremium, IndustrySegment, Commission, ContingencyProgram);
+	}
+	
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		waitABit(2000);
+		String lobval = BookOfBusinessPage.LOB_VAL.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(BookOfBusinessPage.LOB_VAL, isVisible()));
+		Ensure.that(lobval).isEqualTo(lineOfBusiness);
+		waitABit(999);
+
+		String mgaval = BookOfBusinessPage.MGA_VAL.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(BookOfBusinessPage.MGA_VAL, isVisible()));
+		Ensure.that(mgaval).isEqualTo(MGAInsurer);
+		waitABit(999);
+
+		String admittedval = BookOfBusinessPage.ADMITTED_VAL.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(BookOfBusinessPage.ADMITTED_VAL, isVisible()));
+		Ensure.that(admittedval).isEqualTo(Admitted);
+		waitABit(999);
+
+		String totalinforceval = BookOfBusinessPage.TOTAL_INFORCE_PREMIUM_VAL.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(BookOfBusinessPage.TOTAL_INFORCE_PREMIUM_VAL, isVisible()));
+		Ensure.that(totalinforceval).isEqualTo(TotalInforcePremium);
+		waitABit(999);
+		
+		String industrysegmentval = BookOfBusinessPage.INDUSTRY_SEGMENT_VAL.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(BookOfBusinessPage.INDUSTRY_SEGMENT_VAL, isVisible()));
+		Ensure.that(industrysegmentval).isEqualTo(IndustrySegment);
+		waitABit(999);
+		
+		String commissionval = BookOfBusinessPage.COMMISSION_PERCENTAGE_VAL.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(BookOfBusinessPage.COMMISSION_PERCENTAGE_VAL, isVisible()));
+		Ensure.that(commissionval).isEqualTo(Commission);
+		waitABit(999);
+		
+		String contingencyval = BookOfBusinessPage.CONTINGENCY_VAL.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(BookOfBusinessPage.CONTINGENCY_VAL, isVisible()));
+		Ensure.that(contingencyval).isEqualTo(ContingencyProgram);
+		waitABit(999);
+		
+		
+	}
+
+}

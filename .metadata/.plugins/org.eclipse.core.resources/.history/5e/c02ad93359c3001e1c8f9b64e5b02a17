@@ -1,0 +1,85 @@
+package com.majesco.test.dm.page_objects;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.core.pages.WebElementFacade;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
+import net.serenitybdd.screenplay.targets.Target;
+import net.serenitybdd.annotations.DefaultUrl;
+
+
+/**
+ * @author dhiraj662364
+ */
+
+@DefaultUrl("page:home.page")
+public class HomePage extends PageObject {
+
+    public static Target HOME_BTN = Target.the("Username").locatedBy("#home");
+    public static Target TASKS = Target.the("Task List").locatedBy("//div[@class='title header_logo']");
+    public static Target ONBOARDING_MENU = Target.the("On-boarding Menu").locatedBy("//a[text()='Onboarding']");
+    public static Target SALESSTAFF_MENU = Target.the("Sales staff menu").locatedBy("//a[text()='Sales Staff Management']");
+    public static Target SYS_ADMIN_MENU = Target.the("sys admin Menu").locatedBy("//a[text()='System Administration']");
+    public static Target LICENSED_PRODUCER_SUBMENU = Target.the("Licensed Producer Submenu").locatedBy("//a[@data-target-module='LICENSED_PRODUCER']");
+    public static Target SALES_HIERARCHY_SUBMENU = Target.the("Sales hierarchy Submenu").locatedBy("//a[@data-target-module='COMPANYSALESVIEW']");
+    public static Target BUSINESS_DAY_SUBMENU = Target.the("bsiness day Submenu").locatedBy("//a[text()='Business Day Change']");
+    public static Target NEW_BUSINESS_DATE = Target.the("new bsiness date").locatedBy("//input[@name='dtBusinessDate']");
+    public static Target CHANGE_DATE = Target.the("change date").locatedBy("//button[@name='btnSubmit']");
+    public static Target NON_LICENSED_PRODUCER_SUBMENU = Target.the("Non-Licensed Producer Submenu").locatedBy("//a[@data-target-module='OTHER_APPOINTMENTS']");
+    public static Target REG_BUSINESS_ENTITY_SUBMENU = Target.the("Register Business Entity Submenu").locatedBy("//a[@data-target-module='OTHER_TRANSACTIONS']");
+    public static Target STATE_APPOINTMENTS_SUBMENU = Target.the("State Appointments Submenu").locatedBy("//a[contains(text(),'State Appointments')]");
+    public static Target NEW_STATE_APPOINTMENT_SUBMENU = Target.the("New State Appointment Submenu").locatedBy("//a[@data-target-module='NEW_APPOINTMENTS']");
+    public static Target ACCEPT_OFFER_BTN = Target.the("Accept Offer Button").locatedBy("//button[@name='btnTab1AcptOff']");
+    public static Target MASS_ONBOARDING = Target.the("Mass Onboarding").locatedBy("//a[contains(text(),'Mass Onboarding')]");
+    public static Target MASS_ONBOARDING_SUBMENU = Target.the("Mass onboarding batch Submenu").locatedBy("//a[@data-target-module='MASS_CONTRACT_ONBOARDIGN']");
+    public static Target MASS_ONBOARDING_SUBMENU_INQUIRY = Target.the("Mass onboarding batch Submenu inquiry").locatedBy("//a[@data-target-module='MASS_ONBOARD_BATCH_INQUIRY']");
+    public static Target ADC_MENU = Target.the("adc menu").locatedBy("//a[contains(@id,'dgAppointmentsFlow')]/descendant::span[@data-section='displayvalue']");
+    public static Target ASCA_MENU = Target.the("asca menu").locatedBy("//a[contains(@id,'dgAppointmentsFlow')]/descendant::span[@data-section='displayvalue']");
+    public static Target PRODUCER_MANAGEMENT_MENU = Target.the("Producer management Menu").locatedBy("//a[text()='Producer Management']");
+    public static Target AMENDMENT_SUBMENU = Target.the("Amendment Submenu").locatedBy("//a[contains(text(),'Amendments')]");
+    public static Target ADD_LICENSE_AMENDMENT_SUBMENU = Target.the("Add license amendment Submenu").locatedBy("//a[@data-target-module='ADD_LICENSE']");
+    public static Target ADD_LICENSE_AMENDMENT_INQUIRY = Target.the("Add license amendment Inquiry").locatedBy("//a[@data-target-module='AMENDMENTS_INQUIRY']");
+    public static Target SEARCH_BUTTON = Target.the("Search Button").locatedBy("//button[@name='btnSearch']");
+    public static Target SYSTEM_ADMINISTRATOR = Target.the("System administrator").locatedBy("//a[text()='System Administration']");
+    public static Target JOB_SCHEDULER = Target.the("Job Scheduler").locatedBy("//a[@data-target-module='JOB SCHEDULER']");
+    public static Target SELECT_BATCH = Target.the("Select batch").locatedBy("//select[@name='cmbJobSelect']");
+    public static Target SUBMIT_BATCH = Target.the("Submit batch").locatedBy("//button[@name='btnSelectInterface']");
+    public static Target COMPENSATION_MANAGEMENT = Target.the("Compensation").locatedBy("//a[text()='Compensation Management']");
+    public static Target BASE_COMPENSATION = Target.the("Base compensation").locatedBy("//a[text()='Base Commission & Fee']");
+    public static Target POLICY_SUMMARY = Target.the("Policy Summary").locatedBy("//a[@data-target-module='POLICYSUMMARYINQUIRY']");
+    public static Target SCHEDULE_MAINTENANCE = Target.the("Schedule Maintenance").locatedBy("//a[@data-target-module='COMP_SCHEDULE_INQUIRY']");
+    public static Target LOGO = Target.the("Logo").locatedBy("//div[@class='title header_logo']");
+    public static Target PERFORMANCE_MANAGEMENT = Target.the("performance").locatedBy("//a[text()='Performance Management']");
+    public static Target KPI_MAINTENANCE = Target.the("kpi maintenance").locatedBy("//a[@data-target-module='KPI_WRAPPER_PAGE']");
+       
+    public boolean isLandingComplete(Actor actor) {
+
+        double startTime = System.currentTimeMillis();
+        while (System.currentTimeMillis() < startTime + getWaitForTimeout().getSeconds() * 1000) {
+            String previousState = BrowseTheWeb.as(actor).getDriver().getPageSource();
+            waitABit(1500);
+            if (previousState.equals(BrowseTheWeb.as(actor).getDriver().getPageSource())) {
+                break;
+            }
+        }
+
+        BrowseTheWeb.as(actor).waitFor(TASKS.getCssOrXPathSelector());
+        return TASKS.isVisibleFor(actor);
+    }
+    
+    public List<String> getAdcMenu() {
+        return findAll(ADC_MENU).stream()
+            .map(WebElementFacade::getText)
+            .collect(Collectors.toList());
+    }
+    
+    public List<String> getAscaMenu() {
+        return findAll(ASCA_MENU).stream()
+            .map(WebElementFacade::getText)
+            .collect(Collectors.toList());
+    }
+
+}

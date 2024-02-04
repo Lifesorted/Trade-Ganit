@@ -1,0 +1,68 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.MassOnboardingInquiryPage;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.ensure.Ensure;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class VerifyMoProducerData extends UIInteractions implements Task {
+
+	public VerifyMoProducerData() {
+		
+	}
+
+	public static VerifyMoProducerData fromUnderlineDetails() {
+		return new VerifyMoProducerData();
+	}
+	
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		waitABit(1500);
+		String excategory = MassOnboardingInquiryPage.CATEGORY.resolveFor(actor).getText();
+		
+		waitABit(999);
+		String application = MassOnboardingInquiryPage.APPLICATION_NO.resolveFor(actor).getText();
+		actor.remember(Key.APPLICATION_NUMBER, application);
+		
+		waitABit(999);
+		String status = MassOnboardingInquiryPage.STATUS.resolveFor(actor).getText();
+		actor.remember(Key.APPLICATION_STATUS, status);
+		
+		waitABit(999);
+		String npnNo = MassOnboardingInquiryPage.NPN_NUM.resolveFor(actor).getText();
+		actor.remember(Key.NPN_NUMBER, npnNo);
+		
+		if (excategory.equalsIgnoreCase("NIGO")) {
+			actor.attemptsTo(Click.on(MassOnboardingInquiryPage.VIEW_ERROR));
+			waitABit(1500);
+			String excederror = MassOnboardingInquiryPage.CED_ERROR.resolveFor(actor).getText();
+			String excompanycoderror = MassOnboardingInquiryPage.COM_CODE_ERROR.resolveFor(actor).getText();
+			waitABit(999);
+			Ensure.that(excederror).isEqualTo("Contract Effective date should be greater than or same as of Agent Effective Date.");
+			waitABit(999);
+			Ensure.that(excompanycoderror).isEqualTo("Company Code selected in the Affiliation screen is not matching with state.");
+			
+		}else {
+			waitABit(999);
+			Ensure.that(excategory).isEqualTo("IGO");
+			waitABit(999);
+			//DataHelper.writeReportInfo( "Alabama",application, npnNo, "Licensed Producer (New Contract) MO", "Individual", "Direct");
+			waitABit(999);
+		}
+		
+	}
+
+}

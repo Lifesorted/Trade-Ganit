@@ -1,0 +1,46 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.utils;
+
+import java.util.Properties;
+
+import com.jcraft.jsch.ChannelSftp;
+import com.jcraft.jsch.JSch;
+import com.jcraft.jsch.Session;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class FileServerHelper {
+	
+	public static void getFile() {
+		try {
+			String user = "covoffro";
+			String pass = "Ks]uuyp=3G";
+			Properties config = new Properties();
+			config.put("StrictHostKeyChecking", "no");
+			String host = "10.183.125.135";
+			JSch jsch = new JSch();
+			Session session = jsch.getSession(user, host);
+			session.setPassword(pass);
+			session.setConfig(config);
+			//session.setTimeout(500000);
+			session.connect();
+			ChannelSftp channelSftp = (ChannelSftp)session.openChannel("sftp");
+			channelSftp.connect();
+			System.out.println("Session Connected:"+session.isConnected());
+			channelSftp.disconnect();
+			session.disconnect();
+			
+ 		} catch (Exception e) {
+			System.out.println(e);
+		}
+	}
+	
+	public static void main(String args[]) {
+		FileServerHelper.getFile();
+	}
+
+}

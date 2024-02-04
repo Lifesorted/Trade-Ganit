@@ -1,0 +1,17 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class ManualLetterPage extends PageObject {
+	public static Target MANUAL_LETTER_TAB = Target.the("Manual letter").locatedBy("//a[@data-labelkey='mm.icd.dm.ManualLetterGenerate.ManualLetterGenerate']");
+	public static Target SELECT_LETTER_TYPE = Target.the("Letter Type").locatedBy("//select[@name='implManualLetter']");
+	public static Target GENERATE_BTN = Target.the("Generate btn").locatedBy("//button[@name='implGenerate']");
+}

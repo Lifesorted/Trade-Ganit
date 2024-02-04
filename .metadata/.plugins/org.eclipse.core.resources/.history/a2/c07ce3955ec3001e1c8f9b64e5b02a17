@@ -1,0 +1,723 @@
+package com.majesco.test.dm.steps.ui;
+
+import com.majesco.test.dm.page_objects.AdditionalStatePage;
+import com.majesco.test.dm.page_objects.ApplicationEnquiryPage;
+import com.majesco.test.dm.page_objects.CommonObjects;
+import com.majesco.test.dm.page_objects.HomePage;
+import com.majesco.test.dm.page_objects.IvansDownloadPage;
+import com.majesco.test.dm.page_objects.KpiMaintenancePage;
+import com.majesco.test.dm.page_objects.SchedulePage;
+import com.majesco.test.dm.tasks.ui.common.NavigateTo;
+import com.majesco.test.dm.tasks.ui.common.SaveAndContinue;
+import com.majesco.test.dm.tasks.ui.dm.*;
+import com.majesco.test.dm.tasks.ui.common.Login;
+import com.majesco.test.dm.utils.Key;
+import io.cucumber.datatable.DataTable;
+import io.cucumber.java.Before;
+import io.cucumber.java.en.Given;
+import io.cucumber.java.en.Then;
+import io.cucumber.java.en.When;
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.core.steps.UIInteractionSteps;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.HoverOverTarget;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.actors.OnStage;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import java.sql.Connection;
+import java.util.logging.Logger;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_NO;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_NO_RESULT_LABEL;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_SEARCH_BTN;
+import static com.majesco.test.dm.page_objects.SearchLicensedProducerPage.APPLICATION_DATE;
+import static com.majesco.test.dm.page_objects.SearchLicensedProducerPage.CONTINUE_BTN;
+import static com.majesco.test.dm.page_objects.SearchLicensedProducerPage.NPN;
+import static com.majesco.test.dm.questions.ui.ApplicationEnquiryResult.*;
+import static net.serenitybdd.screenplay.GivenWhenThen.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
+
+/**
+ * @author dhiraj662364
+ * @created 22/08/2022
+ **/
+
+public class LicensedProducerSteps extends UIInteractionSteps {
+
+	private static Logger logger = Logger.getLogger(LicensedProducerSteps.class.getName());
+	static EnvironmentVariables environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
+
+	private Actor agencyAdmin;
+	private Connection connection;
+	private HomePage homepage;
+
+	@Before(order = 2)
+	public void setup() {
+		agencyAdmin = OnStage.theActor("AA");
+		connection = agencyAdmin.recall("connection");
+	}
+
+	@Given("{word} is on Home page of DM application")
+	public void user_is_on_home_page_of_dm_application(String role) {
+		agencyAdmin.assignName(role);
+		givenThat(agencyAdmin).attemptsTo(Login.withAgencyAdminCredentials());
+	}
+
+	@Given("attempts to create new additional contract for Licensed Producer with details as")
+	@Given("attempts to create new Licensed Producer with details as")
+	public void attempts_to_create_new_licensed_producer_with_details_as(DataTable searchCriteria) {
+		givenThat(agencyAdmin).attemptsTo(CreateNewLicensedProducer.fromUnderlineDetails(searchCriteria));
+	}
+
+	@Given("attempts to create new additional state appointment for Licensed Producer with details as")
+	public void attempts_to_create_new_additional_state_appointment_for_licensed_producer_with_details_as(
+			DataTable searchCriteria) {
+		givenThat(agencyAdmin).attemptsTo(CreateNewAdditionalStateAppointment.fromUnderlineDetails(searchCriteria));
+	}
+
+	@Given("attempts to upload producer data through file")
+	public void attempts_to_upload_producer_data_through_file(DataTable searchCriteria) {
+		givenThat(agencyAdmin).attemptsTo(OnboardNewLicensedProducer.fromUnderlineDetails(searchCriteria));
+	}
+
+	@Given("Navigates to mass onboarding batch inquiry screen")
+	public void Navigates_to_mass_onboarding_batch_inquiry_screen(DataTable searchCriteria) {
+		givenThat(agencyAdmin).attemptsTo(MassOnboardingInquiry.fromUnderlineDetails(searchCriteria));
+	}
+
+	@Given("provides Personal Information as")
+	public void provides_personal_information_as(DataTable personalInfo) {
+		givenThat(agencyAdmin).attemptsTo(FillProducerPersonalInfo.fromUnderlineDetails(personalInfo),
+				SaveAndContinue.onPersonalInfoScreen());
+	}
+
+	@Given("provides Agency Profile details as")
+	public void provides_agency_profile_details_as(DataTable agencyProfile) {
+		givenThat(agencyAdmin).attemptsTo(FillAgencyProfileInfo.fromUnderlineDetails(agencyProfile),
+				SaveAndContinue.onAgencyProfileScreen());
+	}
+
+	@Given("provides Contact Info with Residence Address as")
+	public void provides_contact_info_with_residence_address_as(DataTable address) {
+		givenThat(agencyAdmin).attemptsTo(FillProducerResidentialAddress.fromUnderlineDetails(address));
+		waitABit(1000);
+	}
+
+	@Given("Verify left menu options for additional contract")
+	public void Verify_left_menu_options_for_additional_contract() {
+		givenThat(agencyAdmin).attemptsTo(VerifyAdditionalContractMenu.fromUnderlineDetails());
+		waitABit(1000);
+	}
+
+	@Given("provides additional email for producer contact")
+	public void provides_additional_email_for_producer_contact(DataTable address) {
+		givenThat(agencyAdmin).attemptsTo(AditionalEMail.fromUnderlineDetails(address));
+	}
+
+	@Given("provides Contact Info with Business or Shipping Address as")
+	public void provides_contact_info_with_business_or_shipping_address_as(DataTable address) {
+		givenThat(agencyAdmin).attemptsTo(FillProducerBusinessOrShippingAddress.fromUnderlineDetails(address),
+				SaveAndContinue.onContactInfoScreen());
+	}
+
+	@Given("provides Contact info and exit application")
+	public void provides_Contact_info_and_exit_application(DataTable address) {
+		givenThat(agencyAdmin).attemptsTo(FillContactInfo.fromUnderlineDetails(address), NavigateTo.contactMenu());
+	}
+
+	@Given("provides Work Experience details as")
+	public void provides_work_experience_details_as(DataTable workExperience) {
+		givenThat(agencyAdmin).attemptsTo(FillWorkExperience.fromUnderlineDetails(workExperience),
+				SaveAndContinue.onWorkExperienceScreen());
+	}
+
+	@Given("provides Designated Responsible terminated Licensed Producers details as")
+	@Given("provides Designated Responsible Licensed Producers details as")
+	public void provides_designated_responsible_licensed_producers_details_as(DataTable designatedProducers) {
+		givenThat(agencyAdmin).attemptsTo(FillDesignatedProducerInfo.fromUnderlineDetails(designatedProducers));
+	}
+
+	@Given("provides Agency Contacts details as")
+	public void provides_agency_contacts_details_as(DataTable agencyContacts) {
+		givenThat(agencyAdmin).attemptsTo(FillAgencyContactsInfo.fromUnderlineDetails(agencyContacts),
+				SaveAndContinue.onAgencyContactsScreen());
+	}
+
+	@Given("provides {string} contract type Agency Affiliation details as")
+	public void provides_agency_affiliation_details_as(String contractType, DataTable agencyAffiliationDetails) {
+		givenThat(agencyAdmin).attemptsTo(NavigateTo.agencyAffiliationScreen());
+		givenThat(agencyAdmin).attemptsTo(FillProducerAgencyAffiliation.fromUnderlineDetails(agencyAffiliationDetails),
+				SaveAndContinue.onAgencyAffiliationScreen(contractType));
+		waitABit(1000);
+		// givenThat(agencyAdmin).attemptsTo(NavigateTo.licenseDetailsScreen());
+	}
+
+	@Given("provides {string} contract type for Agency Affiliation details as")
+	public void provides_contract_type_for_Agency_Affiliation_details_as(String contractType,
+			DataTable agencyAffiliationDetails) {
+		givenThat(agencyAdmin).attemptsTo(NavigateTo.agencyAffiliationScreen());
+		givenThat(agencyAdmin).attemptsTo(FillProducerAgencyAffiliation.fromUnderlineDetails(agencyAffiliationDetails),
+				SaveAndContinue.onAgencyAffiliationScreen(contractType));
+	}
+
+	@Given("provides Monitoring Relations details as")
+	public void provides_Monitoring_Relations_details_as() {
+		givenThat(agencyAdmin).attemptsTo(NavigateTo.licenseDetailsScreen());
+	}
+
+	@Given("provides agency contact details as")
+	public void provides_agency_contact_details_as() {
+		givenThat(agencyAdmin).attemptsTo(FillAgencyContact.fromUnderlineDetails());
+	}
+
+	@Given("provides {string} contract type Agency Affiliation detail as")
+	public void provides_agency_affiliation_detail_as(String contractType, DataTable agencyAffiliationDetails) {
+		givenThat(agencyAdmin).attemptsTo(NavigateTo.agencyAffiliationScreen());
+		givenThat(agencyAdmin).attemptsTo(FillProducerAgencyAffiliation.fromUnderlineDetails(agencyAffiliationDetails));
+	}
+
+	@Given("provides License details as")
+	public void provides_license_details_as(DataTable licenseDetails) {
+		givenThat(agencyAdmin).attemptsTo(NavigateTo.licenseDetailsScreen());
+		givenThat(agencyAdmin).attemptsTo(FillProducerLicenseDetails.fromUnderlineDetails(licenseDetails),
+				SaveAndContinue.onLicenseDetailsScreen());
+	}
+
+	@Given("provides ADC License details as")
+	public void provides_adc_license_details_as(DataTable licenseDetails) {
+		givenThat(agencyAdmin).attemptsTo(FillADCLicenseDetails.fromUnderlineDetails(licenseDetails),
+				SaveAndContinue.onADCLicenseDetailsScreen());
+	}
+
+	@Given("select contract details as")
+	public void select_contract_details_as() {
+		givenThat(agencyAdmin).attemptsTo(Click.on(AdditionalStatePage.CONTRACT_UNCHECK));
+		givenThat(agencyAdmin).attemptsTo(Click.on(AdditionalStatePage.CONTRACT_SAVE_CONTINUE));
+	}
+
+	@Given("provides ASA License details as")
+	public void provides_asa_license_details_as() {
+		givenThat(agencyAdmin).attemptsTo(SaveAndContinue.onLicenseDetailsScreen());
+		waitABit(5000);
+	}
+
+	@Given("provides ASA Appointments details as")
+	public void provides_ASA_appointments_details_as() {
+		givenThat(agencyAdmin).attemptsTo(MakeAnAsaAppointment.selectAnAsaAppointment(),
+				SaveAndContinue.onAppointmentsScreen());
+	}
+
+	@Given("provides Appointments details as")
+	public void provides_appointments_details_as(DataTable appointmentDetails) {
+		givenThat(agencyAdmin).attemptsTo(MakeAnAppointment.withUnderlineDetails(appointmentDetails),
+				SaveAndContinue.onAppointmentsScreen());
+	}
+
+	@Given("provides Appointment details as")
+	public void provides_appointment_details_as(DataTable appointmentDetails) {
+		givenThat(agencyAdmin).attemptsTo(NavigateTo.directDepositDetailsScreen());
+	}
+
+	@Given("provides Direct Deposit details as")
+	public void provides_direct_deposit_details_as(DataTable directDepositDetails) {
+		givenThat(agencyAdmin).attemptsTo(NavigateTo.directDepositDetailsScreen());
+		givenThat(agencyAdmin).attemptsTo(FillDirectDepositDetails.withUnderlineDetails(directDepositDetails));
+	}
+
+	@Given("provides Direct Deposit detail as")
+	public void provides_direct_deposit_detail_as(DataTable directDepositDetails) {
+		givenThat(agencyAdmin).attemptsTo(FillDirectDepositDetails.withUnderlineDetails(directDepositDetails));
+	}
+
+	@Given("provides Errors and Omission Insurance details as")
+	public void provides_errors_and_omission_insurance_details_as(DataTable eoInsuranceDetails) {
+		givenThat(agencyAdmin).attemptsTo(NavigateTo.eoInsuranceScreen());
+		givenThat(agencyAdmin).attemptsTo(FillEOInsuranceDetails.fromUnderlineDetails(eoInsuranceDetails));
+		// SaveAndContinue.onEOInsuranceScreen());
+	}
+
+	@Given("provides ivans download information")
+	public void provides_ivans_download_information(DataTable ivansdownload) {
+		givenThat(agencyAdmin).attemptsTo(FillIvansDownloadInfo.fromUnderlineDetails(ivansdownload));
+		SaveAndContinue.onIvansDownloadScreen();
+	}
+
+	@Given("provides ivan download information")
+	public void provides_ivan_download_information(DataTable ivansdownload) {
+		// givenThat(agencyAdmin).attemptsTo(NavigateTo.);
+		givenThat(agencyAdmin).attemptsTo(WaitUntil.the(IvansDownloadPage.IVAN_DOWNLOAD, isClickable())
+				.then(Click.on(IvansDownloadPage.IVAN_DOWNLOAD)));
+		givenThat(agencyAdmin).attemptsTo(FillIvansDownloadInfo.fromUnderlineDetails(ivansdownload));
+		SaveAndContinue.onIvansDownloadScreen();
+	}
+
+	@Given("provides book of business information")
+	public void provides_book_of_business_information(DataTable bobinfo) {
+		givenThat(agencyAdmin).attemptsTo(FillBoBInfo.fromUnderlineDetails(bobinfo),
+				SaveAndContinue.onIvansDownloadScreen());
+	}
+
+	@Given("provides Compensation Preferences details as")
+	public void provides_compensation_preferences_details_as(DataTable compensationPreferences) {
+		givenThat(agencyAdmin).attemptsTo(NavigateTo.compensationPreferencesScreen());
+		givenThat(agencyAdmin).attemptsTo(FillCompensationPreferences.fromUnderlineDetails(compensationPreferences));
+		// SaveAndContinue.onCompensationPreferencesScreen());
+	}
+
+	@Given("provides Communication Preferences details as")
+	public void provides_communication_preferences_details_as(DataTable communicationPreferences) {
+		givenThat(agencyAdmin).attemptsTo(FillCommunicationPreferences.fromUnderlineDetails(communicationPreferences),
+				SaveAndContinue.onCommunicationPreferencesScreen());
+	}
+
+	@When("{word} verifies the additional contract for producer application")
+	@When("{word} verifies the producer application")
+	public void verifies_the_producer_application(String role) {
+		when(agencyAdmin).attemptsTo(VerifyOnBoardingApplication.forProducer());
+	}
+
+	@When("{word} verifies producer application should see appointment required validation message")
+	@When("{word} verifies producer application should see license required validation message")
+	public void verifies_producer_application_should_see_license_required_validation_message(String role) {
+		when(agencyAdmin).attemptsTo(VerifyOnBoardingError.forProducer());
+	}
+
+	@When("{word} verifies the Additional State Appointment for producer application")
+	public void verifies_the_additional_state_appointment_for_producer_application(String role) {
+		when(agencyAdmin).attemptsTo(NavigateTo.verifyApplicationScreen());
+		when(agencyAdmin).attemptsTo(VerifyOnBoardingApplication.forProducer());
+	}
+
+	@When("{word} verifies mass onboarded producer validation message")
+	@When("{word} verifies mass onboarded producer information")
+	public void verifies_mass_onboarded_producer_information(String role) {
+		givenThat(agencyAdmin).attemptsTo(VerifyMoProducerData.fromUnderlineDetails());
+	}
+
+	@When("{word} verified all adc menu options")
+	public void verified_all_adc_menu_options(String role) {
+	}
+
+	@When("{word} verified agent number required validation message")
+	public void verified_agent_number_required_validation_message(String role) {
+	}
+
+	@When("{word} verifies validation message")
+	public void verifies_validation_message(String role) {
+	}
+
+	@When("{word} verified contract effective date required validation message")
+	public void verified_contract_effective_date_required_validation_message(String role) {
+	}
+
+	@When("{word} verifies the pay to options at compensation screen")
+	public void verifies_the_pay_to_options_at_compensation_screen(String role) {
+	}
+
+	@When("{word} verifies the role options")
+	public void verifies_the_role_options(String role) {
+	}
+
+	@Given("Login to DM application")
+	public void Login_to_DM_application() {
+	}
+
+	@When("{word} clicks on logout option")
+	public void clicks_on_logout_option(String role) {
+		waitABit(1000);
+		then(agencyAdmin).attemptsTo(Click.on(CommonObjects.DOWN_ARROW));
+		waitABit(1000);
+		then(agencyAdmin).attemptsTo(Click.on(CommonObjects.LOGOUT));
+	}
+
+	@Then("{word} should logout from application and navigate to success screen")
+	public void should_logout_from_application_and_navigate_to_success_screen(String role) {
+		waitABit(1000);
+		then(agencyAdmin).attemptsTo(Ensure.that(CommonObjects.SUCCESS_MESSAGE).isDisplayed());
+	}
+
+	@Then("Non-Licensed Producer should get created successfully")
+	@Then("Licensed Producer should get created successfully")
+	public void licensed_producer_should_get_created_successfully() {
+		then(agencyAdmin).attemptsTo(SearchApplication.viaNumber());
+		then(agencyAdmin).attemptsTo(Ensure.that("Application Number", hasApplicationNumber())
+				.isEqualTo(agencyAdmin.recall(Key.APPLICATION_NUMBER)));
+	}
+
+	@Then("application status should be {string}")
+	public void application_status_should_be(String status) {
+		then(agencyAdmin).attemptsTo(Ensure.that("Application Status", hasApplicationStatus()).isEqualTo(status));
+	}
+
+	@Then("added email should present on quick search screen")
+	public void added_email_should_present_on_quick_search_screen() {
+		then(agencyAdmin)
+				.attemptsTo(Ensure.that("Added email is present", hasAddedEmail()).isNotEqualTo(Key.ADDED_EMAIL));
+	}
+
+	@Then("Additional Contract for Licensed Producer should get created successfully")
+	public void additional_contract_for_licensed_producer_should_get_created_successfully() {
+		then(agencyAdmin).attemptsTo(SearchApplication.viaNumber());
+		then(agencyAdmin).attemptsTo(Ensure.that("Application Number", hasApplicationNumber())
+				.isEqualTo(agencyAdmin.recall(Key.APPLICATION_NUMBER)));
+	}
+
+	@Then("contract entity status should be {string}")
+	public void contract_entity_status_should_be(String status) {
+		then(agencyAdmin).attemptsTo(Ensure.that("Application Status", hasApplicationStatus()).isEqualTo(status));
+	}
+
+	@Then("Additional State Appointment for Licensed Producer should get created successfully")
+	public void additional_state_appointment_for_licensed_producer_should_get_created_successfully() {
+		then(agencyAdmin).attemptsTo(SearchApplication.viaNumber());
+		then(agencyAdmin).attemptsTo(Ensure.that("Application Number", hasApplicationNumber())
+				.isEqualTo(agencyAdmin.recall(Key.APPLICATION_NUMBER)));
+		;
+	}
+
+	@Then("State Appointment Application status should be {string}")
+	public void state_appointment_status_should_be(String status) {
+		then(agencyAdmin).attemptsTo(Ensure.that("Application Status", hasApplicationStatus()).isEqualTo(status));
+	}
+
+	@Given("Navigates to Personal tab at master level and verify details")
+	public void Navigates_to_Personal_tab_at_master_level_and_verify_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyPersonalDetails.fromUnderlineDetails(), NavigateTo.contactTab());
+	}
+
+	@Given("Navigates to Personal tab at master level and verify")
+	public void Navigates_to_Personal_tab_at_master_level_and_verify() {
+		givenThat(agencyAdmin).attemptsTo(VerifyPersonalDetails.fromUnderlineDetails(), NavigateTo.appointmentsTab());
+	}
+
+	@Given("Navigates to appointment tab at contract level and verify reinstate status")
+	@Given("Navigates to appointment tab at contract level and verify terminate status")
+	public void Navigates_to_appointment_tab_at_contract_level_and_verify_terminate_status() {
+		givenThat(agencyAdmin).attemptsTo(VerifyAppointment.fromUnderlineDetails());
+	}
+
+	@Given("Change business date to future date")
+	public void Change_business_date_to_future_date() {
+		givenThat(agencyAdmin).attemptsTo(FillbusinessDate.fromUnderlineDetails());
+	}
+
+	@Given("Navigates to Profile tab at master level and verify details")
+	public void Navigates_to_Profile_tab_at_master_level_and_verify_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyProfileDetails.fromUnderlineDetails(), NavigateTo.contactsTab());
+	}
+
+	@Given("Navigates to Profile tab at master level and select mentioned option")
+	public void Navigates_to_Profile_tab_at_master_level_and_select_mentioned_option(DataTable actionoption) {
+		givenThat(agencyAdmin).attemptsTo(EntityOperation.fromUnderlineDetails(actionoption));
+	}
+
+	@Given("Navigates to Personal tab at master level and select agent option from action")
+	public void Navigates_to_Personal_tab_at_master_level_and_select_agent_option_from_action(DataTable agentoption) {
+		givenThat(agencyAdmin).attemptsTo(AgentOperation.fromUnderlineDetails(agentoption));
+	}
+
+	@Given("provides transfer data and forward to process")
+	public void provides_transfer_data_and_forward_to_process(DataTable transferDetails) {
+		givenThat(agencyAdmin).attemptsTo(FillTransferData.fromUnderlineDetails(transferDetails));
+	}
+
+	@Given("provides termination info and forward to process")
+	public void provides_termination_info_and_forward_to_process(DataTable terminationDetails) {
+		givenThat(agencyAdmin).attemptsTo(FillterminationData.fromUnderlineDetails(terminationDetails));
+	}
+
+	@Given("provides reinstate info and forward to process")
+	public void provides_reinstate_info_and_forward_to_process(DataTable appointmentsDetails) {
+		givenThat(agencyAdmin).attemptsTo(FillReinstateInfo.fromUnderlineDetails(appointmentsDetails));
+	}
+
+	@Given("Navigates to Contact tab at master level and verify contact details")
+	public void Navigates_to_Contact_tab_at_master_level_and_verify_contact_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyContactDetails.fromUnderlineDetails(), NavigateTo.licenseTab());
+	}
+
+	@Given("Navigates to License tab at master level and verify license details")
+	public void Navigates_to_License_tab_at_master_level_and_verify_license_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyLicenseDetails.fromUnderlineDetails(), NavigateTo.bankTab());
+	}
+
+	@Given("Navigates to Bank Account tab at master level and verify Bank details")
+	public void Navigates_to_Bank_Account_tab_at_master_level_and_verify_Bank_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyBankDetails.fromUnderlineDetails(), NavigateTo.EOTab());
+	}
+
+	@Given("Navigates to Bank Account tab at master level and add Bank details")
+	public void Navigates_to_Bank_Account_tab_at_master_level_and_add_Bank_details() {
+		givenThat(agencyAdmin).attemptsTo(AddBankInfo.fromUnderlineDetails());
+	}
+
+	@Given("Navigates to E&O tab at master level and verify policy details")
+	public void Navigates_to_EO_tab_at_master_level_and_verify_Bank_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyPolicyDetails.fromUnderlineDetails(), NavigateTo.appointmentTab());
+	}
+
+	@Given("Navigates to agent appointment tab at contract level and verify appointment details")
+	public void Navigates_to_agent_appointment_tab_at_contract_level_and_verify_appointment_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyAppointmentDetails.fromUnderlineDetails(), NavigateTo.contactTab());
+		givenThat(agencyAdmin).attemptsTo(VerifyContactDetails.fromUnderlineDetails(), NavigateTo.hierarchyTab());
+	}
+
+	@Given("Navigates to agent appointment tab at contract level and verify appointments details")
+	public void Navigates_to_agent_appointment_tab_at_contract_level_and_verify_appointments_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyAppointmentDetails.fromUnderlineDetails(), NavigateTo.contactTab());
+		givenThat(agencyAdmin).attemptsTo(VerifyContactDetails.fromUnderlineDetails(), NavigateTo.hierarchyTab());
+	}
+
+	@Given("Navigates to agent appointment tab at contract level and verify appointment detail")
+	public void Navigates_to_agent_appointment_tab_at_contract_level_and_verify_appointment_detail() {
+		NavigateTo.appointmentTab();
+		givenThat(agencyAdmin).attemptsTo(VerifyAppointmentDetails.fromUnderlineDetails(),
+				NavigateTo.manualLetterTab());
+	}
+
+	@Given("Navigates to agent hierarchy tab at contract level and verify details")
+	public void Navigates_to_agent_hierarchy_tab_at_contract_level_and_verify_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyHierarchyDetails.fromUnderlineDetails(), NavigateTo.IvansTab());
+	}
+
+	@Given("Navigates to agent hierarchy tab at contract level and verify detail")
+	public void Navigates_to_agent_hierarchy_tab_at_contract_level_and_verify_detail() {
+		givenThat(agencyAdmin).attemptsTo(VerifyHierarchyDetails.fromUnderlineDetails(), NavigateTo.IvansTab());
+	}
+
+	@Given("Navigates to Entity Contacts tab at contract level and verify details")
+	public void Navigates_to_Entity_Contacts_tab_at_contract_level_and_verify_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyEntityContact.fromUnderlineDetails());
+	}
+
+	@Given("Navigates to agent other info tab at contract level and verify details")
+	public void Navigates_to_agent_other_info_tab_at_contract_level_and_verify_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyOtherinfoDetails.fromUnderlineDetails());
+	}
+
+	@Given("Navigate to agent other info tab at contract level and verify details")
+	public void Navigate_to_agent_other_info_tab_at_contract_level_and_verify_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyOtherinfoDetails.fromUnderlineDetails(), NavigateTo.inGoodOrderTab());
+	}
+
+	@Given("Navigates to agent other info tab at contract level and verify detail")
+	public void Navigates_to_agent_other_info_tab_at_contract_level_and_verify_detail() {
+		givenThat(agencyAdmin).attemptsTo(VerifyOtherinfoDetails.fromUnderlineDetails(), NavigateTo.manualLetterTab());
+	}
+
+	@Given("Navigates to In Good Order Tab at contract level and verify details")
+	public void Navigates_to_In_Good_Order_Tab_at_contract_level_and_verify_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyInGoodOrder.fromUnderlineDetails());
+	}
+
+	@Given("Navigates to manual letters generate tab and generate letter")
+	public void Navigates_to_manual_letters_generate_tab_and_generate_letter() {
+		givenThat(agencyAdmin).attemptsTo(VerifyManualLetterGenerate.fromUnderlineDetails());
+	}
+
+	@Given("exit created application and again proceed with same npn")
+	public void exit_created_application_and_again_proceed_with_same_npn() {
+		givenThat(agencyAdmin).attemptsTo(VerifyManualLetterGenerate.fromUnderlineDetails());
+	}
+
+	@When("{word} verifies the producer details at master level")
+	public void verifies_the_producer_details_at_master_level(String role) {
+		when(agencyAdmin).attemptsTo(VerifyMasterLevelDetails.forProducer());
+	}
+
+	@Then("verification status should be {string}")
+	public void verification_status_should_be(String status) {
+		then(agencyAdmin).attemptsTo(Ensure.that("Verification Status", hasVerificationStatus()).isEqualTo(status));
+	}
+
+	@Given("Navigates to ivansdownload tab at contract level and verify details")
+	public void Navigates_to_ivansdownload_tab_at_contract_level_and_verify_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyIvansDetails.fromUnderlineDetails());
+	}
+
+	@Given("Navigates to book of business tab at contract level and verify details")
+	public void Navigates_to_book_of_business_tab_at_contract_level_and_verify_details() {
+		givenThat(agencyAdmin).attemptsTo(VerifyBookOfBusinessDetails.fromUnderlineDetails());
+	}
+
+	// Sales Staff steps
+	@Given("attempts to create new office node under specific hierarchy with details as")
+	public void attempts_to_create_new_office_node_under_specific_hierarchy_with_details_as(DataTable addnodedata) {
+		givenThat(agencyAdmin).attemptsTo(AddNodeInfo.fromUnderlineDetails(addnodedata));
+	}
+
+	@When("{word} verifies the added node in hierarchy")
+	public void verifies_the_added_node_in_hierarchy(String role) {
+	}
+
+	@Then("added node in hierarchy should be visible")
+	public void added_node_in_hierarchy_should_be_visible() {
+		then(agencyAdmin).attemptsTo(Ensure.that("Verification Status", hasVerificationStatus()).isEqualTo("Verified"));
+	}
+
+	// Amendment steps
+
+	@Given("attempts to search existing producer and continue")
+	public void attempts_to_search_existing_producer_and_continue() {
+		givenThat(agencyAdmin).attemptsTo(WaitUntil.the(homepage.PRODUCER_MANAGEMENT_MENU, isClickable())
+				.then(Click.on(homepage.PRODUCER_MANAGEMENT_MENU)));
+		waitABit(999);
+		givenThat(agencyAdmin).attemptsTo(HoverOverTarget.over(homepage.AMENDMENT_SUBMENU));
+		waitABit(500);
+		givenThat(agencyAdmin).attemptsTo(Click.on(homepage.ADD_LICENSE_AMENDMENT_SUBMENU));
+		waitABit(999);
+		givenThat(agencyAdmin).attemptsTo(WaitUntil.the(NPN, isVisible()), Enter.keyValues(
+				EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.addlicense.amendment"))
+				.into(NPN));
+		waitABit(500);
+		givenThat(agencyAdmin)
+				.attemptsTo(Click.on(homepage.SEARCH_BUTTON).then(WaitUntil.the(APPLICATION_DATE, isVisible())));
+		waitABit(500);
+		givenThat(agencyAdmin).attemptsTo(Click.on(CONTINUE_BTN));
+		waitABit(999);
+	}
+
+	@Given("Add license info to an existing producer")
+	public void Add_license_info_to_an_existing_producer(DataTable licensedata) {
+		givenThat(agencyAdmin).attemptsTo(AddLicenseDetails.fromUnderlineDetails(licensedata),
+				SaveAndContinue.onAddLicenseScreen());
+	}
+
+	@Then("Add License via amendment should get created successfully")
+	public void Add_license_via_amendment_should_get_created_successfully() {
+		then(agencyAdmin).attemptsTo(WaitUntil.the(homepage.PRODUCER_MANAGEMENT_MENU, isClickable())
+				.then(Click.on(homepage.PRODUCER_MANAGEMENT_MENU)));
+		waitABit(999);
+		then(agencyAdmin).attemptsTo(HoverOverTarget.over(homepage.AMENDMENT_SUBMENU));
+		waitABit(500);
+		String appnum = agencyAdmin.recall(Key.APPLICATION_NUMBER);
+		then(agencyAdmin).attemptsTo(Click.on(homepage.ADD_LICENSE_AMENDMENT_INQUIRY));
+		waitABit(1200);
+		then(agencyAdmin).attemptsTo(Enter.keyValues(appnum).into(APP_NO));
+		waitABit(1200);
+		then(agencyAdmin).attemptsTo(Click.on(APP_SEARCH_BTN));
+		waitABit(1200);
+	}
+
+	// Batch Steps
+
+	@Given("Navigate to job scheduler and run policy interface batch")
+	public void Navigate_to_job_scheduler_and_run_policy_interface_batch(DataTable batchdata) {
+		givenThat(agencyAdmin).attemptsTo(ExecuteBatch.fromUnderlineDetails(batchdata));
+	}
+
+	@When("Batch run successfully")
+	public void Batch_run_successfully() {
+	}
+
+	@Then("Consumed policy should be generated")
+	public void Consumed_policy_should_be_generated() {
+	}
+
+	// Policy SUmmary
+
+	@Given("Navigate to policy summary and verify")
+	public void Navigate_to_policy_summary_and_verify() {
+		givenThat(agencyAdmin).attemptsTo(VerifyPolicySummary.fromUnderlineDetails());
+	}
+
+	@Then("Admin will accept the task and save the application")
+	public void Admin_will_accept_the_task_and_save_the_application() {
+		givenThat(agencyAdmin).attemptsTo(ApplicationTask.fromUnderlineDetails());
+	}
+
+	// Schedule Steps
+
+	@Given("attempts to add new schedule with details as")
+	public void attempts_to_add_new_schedule_with_details_as(DataTable addschedule) {
+		givenThat(agencyAdmin).attemptsTo(AddSchedule.fromUnderlineDetails(addschedule));
+	}
+
+	@When("agencyadmin verifies the searched kpi in kpi maintenance")
+	@When("AgencyAdmin verifies the added kpi in performance management")
+	@When("agencyadmin verifies the searched schedule in schedule maintenance")
+	@When("AgencyAdmin verifies the added schedule in compensation management")
+	public void AgencyAdmin_verifies_the_added_schedule_in_compensation_management() {
+	}
+
+	@Then("kpi in kpi maintenance should be visible")
+	@Then("added kpi in performace management should be visible")
+	@Then("schedule in schedule maintenance should be visible")
+	@Then("added schedule in compensation management should be visible")
+	public void added_schedule_in_compensation_management_should_be_visible() {
+		then(agencyAdmin).attemptsTo(Ensure.that("Verification Status", hasVerificationStatus()).isEqualTo("Verified"));
+	}
+
+	@Given("attempts to search schedule by schedule Name")
+	public void attempts_to_search_schedule_by_schedule_Name() {
+		givenThat(agencyAdmin).attemptsTo(WaitUntil.the(homepage.COMPENSATION_MANAGEMENT, isClickable())
+				.then(Click.on(homepage.COMPENSATION_MANAGEMENT)));
+		waitABit(999);
+		givenThat(agencyAdmin).attemptsTo(HoverOverTarget.over(homepage.BASE_COMPENSATION));
+		waitABit(500);
+		givenThat(agencyAdmin).attemptsTo(Click.on(homepage.SCHEDULE_MAINTENANCE));
+		waitABit(999);
+		givenThat(agencyAdmin).attemptsTo(
+				SelectFromOptions.byVisibleText("Property And Casualty").from(SchedulePage.SELECT_LOB_CLASS));
+		waitABit(999);
+		givenThat(agencyAdmin).attemptsTo(
+				Enter.keyValues(EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.schedule"))
+						.into(SchedulePage.SCHEDULE_NAME));
+		waitABit(500);
+		givenThat(agencyAdmin).attemptsTo(Click.on(SchedulePage.SEARCH));
+		waitABit(500);
+		givenThat(agencyAdmin).attemptsTo(Ensure.that(SchedulePage.SEARCHED_SCHEDULE_NAME).text()
+				.isEqualTo(EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.schedule")));
+		waitABit(999);
+	}
+
+	// kpi steps
+
+	@Given("attempts to add new kpi for production policy count with details as")
+	public void attempts_to_add_new_kpi_for_production_policy_count_with_details_as(DataTable addkpi) {
+		givenThat(agencyAdmin).attemptsTo(KpiManitenance.fromUnderlineDetails(addkpi));
+	}
+
+	@Given("attempts to search kpi by kpi Name")
+	public void attempts_to_search_kpi_by_kpi_Name() {
+		givenThat(agencyAdmin).attemptsTo(WaitUntil.the(homepage.PERFORMANCE_MANAGEMENT, isClickable())
+				.then(Click.on(homepage.PERFORMANCE_MANAGEMENT)));
+		waitABit(999);
+		givenThat(agencyAdmin).attemptsTo(Click.on(homepage.KPI_MAINTENANCE));
+		waitABit(999);
+		givenThat(agencyAdmin).attemptsTo(
+				Enter.keyValues(EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.kpi.name"))
+						.into(KpiMaintenancePage.KPI_CODE));
+		waitABit(500);
+		givenThat(agencyAdmin).attemptsTo(Click.on(KpiMaintenancePage.SEARCH));
+		waitABit(999);
+		givenThat(agencyAdmin).attemptsTo(Ensure.that(KpiMaintenancePage.KPI_SEARCH_RESULT).text()
+				.contains(EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.kpi.name")));
+		waitABit(999);
+	}
+
+	@Given("navigate to application inquiry screen")
+	public void navigate_to_application_inquiry_screen() {
+		givenThat(agencyAdmin).attemptsTo(Click.on(homepage.ONBOARDING_MENU));
+		waitABit(999);
+		givenThat(agencyAdmin).attemptsTo(Click.on(ApplicationEnquiryPage.APP_ENQUIRY_SUBMENU));
+		waitABit(999);
+	}
+
+	@Given("search application via application no")
+	public void search_application_via_application_no() {
+		givenThat(agencyAdmin).attemptsTo(
+				Enter.keyValues(EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.pending.app.num"))
+						.into(APP_NO));
+		waitABit(500);
+		givenThat(agencyAdmin)
+				.attemptsTo(Click.on(APP_SEARCH_BTN).then(WaitUntil.the(APP_NO_RESULT_LABEL, isVisible())));
+		waitABit(3000);
+	}
+
+}

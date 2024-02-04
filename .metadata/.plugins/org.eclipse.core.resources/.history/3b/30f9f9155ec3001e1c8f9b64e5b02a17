@@ -1,0 +1,113 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Map;
+import java.util.logging.Logger;
+import com.majesco.test.dm.page_objects.HomePage;
+import com.majesco.test.dm.page_objects.MassOnboardingPage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.HoverOverTarget;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.actions.Upload;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class OnboardNewLicensedProducer extends UIInteractions implements Task {
+	 private static Logger logger = Logger.getLogger(CreateNewLicensedProducer.class.getName());
+	 private HomePage homePage;
+	 private String channel;
+	 private String flag;
+	 
+	 public OnboardNewLicensedProducer(String channel, String flag) {
+	        this.channel = channel;
+	        this.flag = flag;
+	    }
+	 
+	 public static OnboardNewLicensedProducer fromUnderlineDetails(DataTable searchCriteria) {
+	        Map<String, String> searchCriteriaDetails = ConvertCucumberDataTable.toMap(searchCriteria);
+	        String channel = searchCriteriaDetails.get("Channel");
+	        String flag = searchCriteriaDetails.get("Flag");
+	        return new OnboardNewLicensedProducer(channel, flag);
+	    }
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		actor.attemptsTo(
+                WaitUntil.the(homePage.ONBOARDING_MENU, isClickable())
+                        .then(Click.on(homePage.ONBOARDING_MENU))
+        );
+		waitABit(999);
+		
+        actor.attemptsTo(HoverOverTarget.over(homePage.MASS_ONBOARDING));
+        waitABit(500);
+        
+        actor.attemptsTo(Click.on(homePage.MASS_ONBOARDING_SUBMENU));
+        waitABit(1500);
+
+        if (flag.equalsIgnoreCase("1") || flag.equalsIgnoreCase("3")) {
+        	DataHelper.generateMoFileData();
+		} else if (flag.equalsIgnoreCase("2")) {
+			DataHelper.generateInvalidMoData();
+		}else if (flag.equalsIgnoreCase("4")) {
+			DataHelper.generateADCMoData();
+		}
+                
+        waitABit(1500);
+		actor.attemptsTo(
+				 WaitUntil.the(MassOnboardingPage.SELECT_CHANNEL, isClickable())
+                 .then(Click.on(MassOnboardingPage.SELECT_CHANNEL))
+        );
+        waitABit(999);
+        
+        actor.attemptsTo(
+        		SelectFromOptions.byVisibleText(channel).from(MassOnboardingPage.CHANNEL_VALUE)
+        );
+        waitABit(2500);
+        Path filepath = null;
+        
+        if (flag.equalsIgnoreCase("1") || flag.equalsIgnoreCase("3")) {
+        	filepath = Paths.get("C:\\Serenity_PMIC_Automation\\FGL\\serene-testing\\lna-fgl-dm\\src\\test\\resources\\sources\\Mofilecsv001.csv");
+		}else if (flag.equalsIgnoreCase("2")) {
+			filepath = Paths.get("C:\\Serenity_PMIC_Automation\\FGL\\serene-testing\\lna-fgl-dm\\src\\test\\resources\\sources\\Mofilecsv002.csv");
+		}else if (flag.equalsIgnoreCase("4")) {
+			filepath = Paths.get("C:\\Serenity_PMIC_Automation\\FGL\\serene-testing\\lna-fgl-dm\\src\\test\\resources\\sources\\Mofilecsv003.csv");
+		}
+        
+        actor.attemptsTo(
+        		Upload.theFile(filepath).to(MassOnboardingPage.BROWSE_FILE)
+        );
+        waitABit(2500);
+        
+        actor.attemptsTo(Click.on(MassOnboardingPage.VALIDATE_BTN));
+        waitABit(1500);
+        
+        actor.attemptsTo(
+				 WaitUntil.the(MassOnboardingPage.UPLOAD_BTN, isClickable())
+                .then(Click.on(MassOnboardingPage.UPLOAD_BTN))
+       );
+       waitABit(3500);
+       
+       actor.attemptsTo(
+				 WaitUntil.the(MassOnboardingPage.OK_BTN, isClickable())
+              .then(Click.on(MassOnboardingPage.OK_BTN))
+     );
+     waitABit(2000);
+		
+	}
+}

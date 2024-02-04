@@ -1,0 +1,51 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.page_objects.ProfileDetailPage;
+import com.majesco.test.dm.utils.DataHelper;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class TransferRequest extends UIInteractions implements Task {
+	
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+	
+		
+	public TransferRequest() {
+		 
+	}
+	
+	public static TransferRequest fromUnderlineDetails() {
+		
+		return new TransferRequest();
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		waitABit(5000);
+		
+		actor.attemptsTo(Scroll.to(ProfileDetailPage.SELECT_OPTION).andAlignToBottom());
+		
+		waitABit(5000);
+		actor.attemptsTo(WaitUntil.the(ProfileDetailPage.SELECT_OPTION, isVisible())
+				.then(SelectFromOptions.byVisibleText("Transfer").from(ProfileDetailPage.SELECT_OPTION)));
+		waitABit(3000);
+		
+	}
+
+}

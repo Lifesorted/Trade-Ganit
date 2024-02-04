@@ -1,0 +1,81 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+
+import java.util.Map;
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.page_objects.HomePage;
+import com.majesco.test.dm.page_objects.MassOnboardingInquiryPage;
+import com.majesco.test.dm.page_objects.MassOnboardingPage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.HoverOverTarget;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class MassOnboardingInquiry extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(CreateNewLicensedProducer.class.getName());
+	private HomePage homePage;
+	private String channel;
+	private String category;
+
+	public MassOnboardingInquiry(String channel, String category) {
+		this.channel = channel;
+		this.category = category;
+	}
+
+	public static MassOnboardingInquiry fromUnderlineDetails(DataTable searchCriteria) {
+		Map<String, String> searchCriteriaDetails = ConvertCucumberDataTable.toMap(searchCriteria);
+		String channel = searchCriteriaDetails.get("Channel");
+		String category = searchCriteriaDetails.get("Category");
+		return new MassOnboardingInquiry(channel, category);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(
+				WaitUntil.the(homePage.ONBOARDING_MENU, isClickable()).then(Click.on(homePage.ONBOARDING_MENU)));
+		waitABit(999);
+
+		actor.attemptsTo(HoverOverTarget.over(homePage.MASS_ONBOARDING));
+		waitABit(500);
+
+		actor.attemptsTo(Click.on(homePage.MASS_ONBOARDING_SUBMENU_INQUIRY));
+		waitABit(500);
+
+		actor.attemptsTo(WaitUntil.the(MassOnboardingInquiryPage.SELECT_CHANNEL, isClickable())
+				.then(Click.on(MassOnboardingInquiryPage.SELECT_CHANNEL)));
+		waitABit(999);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(channel).from(MassOnboardingInquiryPage.CHANNEL_VALUE));
+		waitABit(2500);
+
+		actor.attemptsTo(Click.on(MassOnboardingInquiryPage.SEARCH_BTN));
+		waitABit(500);
+
+		actor.attemptsTo(WaitUntil.the(MassOnboardingInquiryPage.BATCH_ID, isClickable())
+				.then(Click.on(MassOnboardingInquiryPage.BATCH_ID)));
+		waitABit(1000);
+		
+		actor.attemptsTo(WaitUntil.the(MassOnboardingInquiryPage.SELECT_CATEGORY, isVisible())
+				.then(SelectFromOptions.byVisibleText(category).from(MassOnboardingInquiryPage.SELECT_CATEGORY)));
+		waitABit(1500);
+
+	}
+
+}

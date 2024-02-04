@@ -1,0 +1,103 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import java.util.Map;
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.page_objects.ProfileDetailPage;
+import com.majesco.test.dm.page_objects.TasnferPage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+public class FillTransferData extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+	private static String entityCode;
+	private static String reason;
+	private static String transfertype;
+
+	public FillTransferData(String entityCode, String reason, String transfertype) {
+		this.entityCode = entityCode;
+		this.reason = reason;
+		this.transfertype = transfertype;
+	}
+
+	public static FillTransferData fromUnderlineDetails(DataTable transferDetails) {
+		Map<String, String> transferDetail = ConvertCucumberDataTable.toMap(transferDetails);
+		entityCode = transferDetail.get("EntityCode");
+		reason = transferDetail.get("Reason");
+		transfertype = transferDetail.get("TransferType");
+		return new FillTransferData(entityCode, reason, transfertype);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		waitABit(1000);
+		actor.attemptsTo(WaitUntil.the(TasnferPage.SELECT_REASON, isVisible())
+				.then(SelectFromOptions.byVisibleText(reason).from(TasnferPage.SELECT_REASON)));
+		waitABit(1000);
+
+		actor.attemptsTo(
+				Enter.keyValues(entityCode).into(TasnferPage.TRANSFER_TO).then(Click.on(TasnferPage.CLICK_ICON)));
+		waitABit(1000);
+		
+		String backdate = "02/07/2023";
+		
+		if (transfertype.equalsIgnoreCase("BackDate")) {
+			TasnferPage.EFFECTIVE_FROM.resolveFor(actor).clear();
+			actor.attemptsTo(
+					Enter.keyValues(backdate).into(TasnferPage.EFFECTIVE_FROM));
+			waitABit(1000);
+		}
+		
+		actor.attemptsTo(WaitUntil.the(TasnferPage.PORTFOLIO_OWNERSHIP, isVisible())
+				.then(SelectFromOptions.byVisibleText(reason).from(TasnferPage.PORTFOLIO_OWNERSHIP)));
+		waitABit(1000);
+		
+		actor.attemptsTo(WaitUntil.the(TasnferPage.DOWNLINE, isVisible())
+				.then(SelectFromOptions.byVisibleText(reason).from(TasnferPage.DOWNLINE)));
+		waitABit(1000);
+		
+		actor.attemptsTo(WaitUntil.the(TasnferPage.OVERRIDES, isVisible())
+				.then(SelectFromOptions.byVisibleText(reason).from(TasnferPage.OVERRIDES)));
+		waitABit(2000);
+		
+		actor.attemptsTo(Scroll.to(TasnferPage.BTN_SAVE).andAlignToTop());
+		
+		waitABit(2000);
+				
+		actor.attemptsTo(WaitUntil.the(TasnferPage.BTN_SAVE, isClickable())
+				.then(Click.on(TasnferPage.BTN_SAVE))
+				);
+		waitABit(2000);
+		
+		actor.attemptsTo(Click.on(TasnferPage.BTN_OK));
+		
+		/*
+		 * waitABit(5000);
+		 * 
+		 * actor.attemptsTo(WaitUntil.the(TasnferPage.BTN_OK, isClickable())
+		 * .then(Click.on(TasnferPage.BTN_OK)));
+		 * 
+		 * waitABit(2000);
+		 * 
+		 * actor.attemptsTo(Click.on(TasnferPage.BTN_FORWARD));
+		 * 
+		 * waitABit(2000);
+		 */
+	}
+
+}

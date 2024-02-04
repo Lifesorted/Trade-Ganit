@@ -1,0 +1,20 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class ProfileDetailPage extends PageObject {
+	
+	public static Target NAME = Target.the("name").locatedBy("//*[@data-name='txtProfileAgencyName_label']/following::*[@data-section='data'][1]");
+	public static Target TYPE = Target.the("type").locatedBy("//*[@data-name='cmbAliasType_label']/following::*[@data-section='data'][1]");
+	public static Target LEGAL_TYPE = Target.the("legal type").locatedBy("//*[@data-name='cmbProfileLegalType_label']/following::*[@data-section='data'][1]");
+	public static Target SELECT_OPTION = Target.the("select option").locatedBy("//select[@name='dgAgentName_0_10']");
+	public static Target IS_SELECT_INTERMEDIARY= Target.the("select intermediary").locatedBy("//select[@name='cmbTransferType']");
+}

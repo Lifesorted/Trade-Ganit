@@ -1,0 +1,89 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import java.util.Map;
+import org.openqa.selenium.Keys;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.Key;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import com.majesco.test.dm.page_objects.SearchNonLicensedProducerPage;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class SearchEntity extends UIInteractions implements Task {
+	EnvironmentVariables environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
+	private static String entityCode;
+	private static String entitytype;
+	private static String entityValue;
+	private static String state;
+
+	public SearchEntity(String entityCode, String entitytype, String entityValue, String state) {
+		this.entityCode = entityCode;
+		this.entitytype = entitytype;
+		this.entityValue = entityValue;
+		this.state = state;
+	}
+
+	public static SearchEntity fromUnderlineDetails(DataTable SearchCriteria) {
+		Map<String, String> searchcriteriadetails = ConvertCucumberDataTable.toMap(SearchCriteria);
+		entityCode = searchcriteriadetails.get("EntityCode");
+		entitytype = searchcriteriadetails.get("EntityType");
+		entityValue = searchcriteriadetails.get("EntityValue");
+		state = searchcriteriadetails.get("State");
+		return new SearchEntity(entityCode, entitytype, entityValue, state);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(WaitUntil.the(SearchNonLicensedProducerPage.ENTITY_CODE, isVisible())
+				.then(SelectFromOptions.byVisibleText(entityCode).from(SearchNonLicensedProducerPage.ENTITY_CODE)));
+
+		waitABit(999);
+		actor.remember(Key.ENTITY_TYPE, entitytype);
+
+		waitABit(999);
+		if (entityCode.equalsIgnoreCase("NPN") && entitytype.equalsIgnoreCase("LBD")) {
+			actor.attemptsTo(Enter
+					.keyValues(EnvironmentSpecificConfiguration.from(environmentVariables)
+							.getProperty("dm.agencyview.direct.npn"))
+					.into(SearchNonLicensedProducerPage.ENTITY_VALUE).thenHit(Keys.ENTER));
+			waitABit(999);
+		} else if (entityCode.equalsIgnoreCase("NPN") && entitytype.equalsIgnoreCase("LBI")) {
+			actor.attemptsTo(Enter
+					.keyValues(EnvironmentSpecificConfiguration.from(environmentVariables)
+							.getProperty("dm.agencyview.intermediary.npn"))
+					.into(SearchNonLicensedProducerPage.ENTITY_VALUE).thenHit(Keys.ENTER));
+			waitABit(999);
+		} else if (entityCode.equalsIgnoreCase("Entity Code") && entitytype.equalsIgnoreCase("LBDT")) {
+			actor.attemptsTo(Enter
+					.keyValues(EnvironmentSpecificConfiguration.from(environmentVariables)
+							.getProperty("dm.transfer"))
+					.into(SearchNonLicensedProducerPage.ENTITY_VALUE).thenHit(Keys.ENTER));
+			waitABit(999);
+		} else if (entityCode.equalsIgnoreCase("Entity Code") && entitytype.equalsIgnoreCase("LBDLC")) {
+			actor.attemptsTo(Enter
+					.keyValues(EnvironmentSpecificConfiguration.from(environmentVariables)
+							.getProperty("dm.entity.levelchange"))
+					.into(SearchNonLicensedProducerPage.ENTITY_VALUE).thenHit(Keys.ENTER));
+			waitABit(999);
+		} else if (entityCode.equalsIgnoreCase("Entity Code") && entitytype.equalsIgnoreCase("LBDTC")) {
+			actor.attemptsTo(Enter
+					.keyValues(EnvironmentSpecificConfiguration.from(environmentVariables)
+							.getProperty("dm.entity.terminate"))
+					.into(SearchNonLicensedProducerPage.ENTITY_VALUE).thenHit(Keys.ENTER));
+			waitABit(999);
+		}
+	}
+}

@@ -1,0 +1,74 @@
+package com.majesco.test.dm.page_objects;
+
+import java.util.List;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 26/08/2022
+ **/
+
+public class CompensationPreferencesPage extends PageObject {
+
+    public static Target COMPENSATION_PREFERENCES_TAB = Target.the("Tab").locatedBy("//td[contains(@title,'Compensation Preferences')]//span[contains(text(),'Compensation Preferences')]");
+    public static Target CP_PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'Compensation Contract & Basis')]");
+    public static Target ACCRUAL_PREFERENCE = Target.the("Accrual Preference").locatedBy("//select[@name='cmbCommBais']");
+    public static Target ACCRUAL_BASIS = Target.the("Accrual Basis").locatedBy("//select[@name='cmbCommBasisValue']");
+    public static Target RATES_APPLICABILITY = Target.the("Contract/Rates Applicability").locatedBy("//select[@name='cmbBasicCommRates']");
+    public static Target COMP_RETAINED = Target.the("Comp Retained").locatedBy("//select[@name='cmbCommRetention']");
+    public static Target PAY_TO = Target.the("Pay To").locatedBy("//select[@name='cmbPymtEntity']");
+    public static Target PAYTO = Target.the("PayTo").locatedBy("//select[@name='cmbPymtEntity']/option");
+    public static Target MODE = Target.the("Mode").locatedBy("//select[@name='cmbPymtModeValue']");
+    public static Target SCHEDULE = Target.the("Schedule").locatedBy("//select[@name='cmbPymtFrequencyValue']");
+    public static Target RATES_MAPPING = Target.the("Rates Mapping").locatedBy("#cmbBasicCommRates_lnk");
+    public static Target SCHEDULE_MAPPING_LABEL = Target.the("Schedule Mapping Label").locatedBy("//label[contains(text(),'Schedule Mapping Details')]");
+    public static Target ADD_MAPPING_BTN = Target.the("Add Mapping Button").locatedBy("(//button[@name='btnAdd'])[2]");
+    public static Target ADD_MAPPING_BTN1 = Target.the("Add Mapping Button").locatedBy("//div[@data-label='Add']/child::button[@name='btnAdd']");
+    public static Target ADD_MAPPING_BTN2 = Target.the("Add Mapping Button").locatedBy("//button[@data-name='btnAdd_button']");
+    public static Target ADD_MAPPING_BTN3 = Target.the("Add Mapping Button").locatedBy("(//label[contains(text(),'Add')])[6]");
+    public static Target ADD_MAPPING_BTN4 = Target.the("Add Mapping Button").locatedBy("//button[@name='btnAdd']");
+    public static Target ADD_MAPPING_BTN5 = Target.the("Add Mapping Button").locatedBy("//div[@class='col-md-2']/descendant::button[@name='btnAdd']");
+    public static Target COMP_TYPE = Target.the("Comp. Type").locatedBy("//select[@name='dgCompScheduleMapReqDetail_0_1']");
+    public static Target COMP_SUBTYPE = Target.the("Comp. SubType").locatedBy("//select[@name='dgCompScheduleMapReqDetail_0_2']");
+    public static Target COMP_SCHEDULE = Target.the("Comp. Schedule").locatedBy("//select[@name='dgCompScheduleMapReqDetail_0_3']");
+    public static Target COMP_SCHEDULE1 = Target.the("Comp. Schedule").locatedBy("//select[@name='dgCompScheduleMapReqDetail_0_4']");
+    public static Target SCHEDULE_MAP_BTN = Target.the("Schedule Mapping Button").locatedBy("//a[@id='dgCompScheduleMapReqDetail_0_5_lnk']");
+    public static Target COMP_SCHEDULE_MAPPING_LABEL = Target.the("Compensation Schedule Mapping Label").locatedBy("//div[@data-headertype='headerText']/label[contains(text(),'Compensation Schedule lookup')]");
+    public static Target LOOKUP_SEARCH_BTN = Target.the("Compensation Schedule lookup Search Button").locatedBy("(//button[@name='btnSearch'])[2]");
+    public static Target COMP_CODE_RADIO = Target.the("Compensation Schedule Code").locatedBy("//tr[@name='dgSchedules_r_0']//input[@type='radio'][1]");
+    public static Target MAPPED_FROM = Target.the("Mapped From").locatedBy("//input[@name='dgCompScheduleMapReqDetail_0_10']");
+    public static Target APPLY_MAPPING_BTN = Target.the("Apply Mapping To Date").locatedBy("//button[@name='btnApplyMapToDate']");
+    public static Target SAVE_SCHEDULE_MAPPING_BTN = Target.the("Save Schedule Mapping Details").locatedBy("//button[@name='btnSave']");
+    public static Target CLOSE_SCHEDULE_MAPPING_BTN = Target.the("Close Schedule Mapping Details").locatedBy("//button[@name='btnClose']");
+    public static Target CP_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//*[@data-tagtype='ButtonBar']/following::*[@class='btn'][8]");
+    public static Target VENDOR_CODE = Target.the("Vendor Code").locatedBy("//input[@name='txtInputVendorCode']");
+    public static Target BILLING_TYPE = Target.the("Schedule").locatedBy("//select[@name='cmbBillingType']");
+    public static Target SENT_TO_ENTITY = Target.the("Schedule").locatedBy("//select[@name='cmbNewEntityTpe']");
+    public static Target STATEMENT_REQUIRED = Target.the("Schedule").locatedBy("//select[@name='cmbStateRequired']");
+    public static Target CREDIT_TERM_MONTH = Target.the("Schedule").locatedBy("//select[@name='cmbCreditTerm']");
+    public static Target MAILING_DAY = Target.the("Schedule").locatedBy("//select[@name='cmdMailingDays']");
+    public static Target CREDIT_TERM_DAYS = Target.the("Schedule").locatedBy("//select[@name='cmbDays']");
+    public static Target STATEMENT_FORMAT = Target.the("Schedule").locatedBy("//select[@name='cmbStatementFormat']");
+    public static Target NCAN_GRACE_DAYS = Target.the("Schedule").locatedBy("//select[@name='cmbNCANGraceDays']");
+    public static Target GLOBAL_SEARCH = Target.the("Global search").locatedBy("//input[@name='quickSearchValue']");
+    //Get save & continue button on compensation preference page
+    public void getButtonList() {
+    	List<WebElement> list = getDriver().findElements(By.xpath("//*[@data-stylename='mainButton']/descendant::*[@type='button']"));
+		for (int i = 0; i < list.size(); i++) {
+			
+			if (list.get(i).getText().equalsIgnoreCase("Save & Continue")) {
+				list.get(i).click();
+			}
+			
+		}
+   }
+    
+    public void refreshPage() {
+    	getDriver().navigate().refresh();
+    }
+    
+}

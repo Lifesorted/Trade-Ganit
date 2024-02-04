@@ -1,0 +1,115 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.Key;
+import io.cucumber.datatable.DataTable;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import org.joda.time.DateTime;
+import org.junit.platform.commons.util.StringUtils;
+
+import java.text.SimpleDateFormat;
+import java.util.Map;
+
+import static com.majesco.test.dm.page_objects.ProducerLicenseDetailsPage.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 25/08/2022
+ **/
+
+public class FillProducerLicenseDetails extends UIInteractions implements Task {
+
+    private String licenseNo;
+    private String state;
+    private String type;
+    private String resident;
+    private String loa;
+    private String issueDate;
+    private String expiryDate;
+
+    public FillProducerLicenseDetails(String licenseNo, String state, String type, String resident, String loa,
+                                      String issueDate, String expiryDate) {
+        this.licenseNo = licenseNo;
+        this.state = state;
+        this.type = type;
+        this.resident = resident;
+        this.loa = loa;
+        this.issueDate = issueDate;
+        this.expiryDate = expiryDate;
+    }
+
+    public static FillProducerLicenseDetails fromUnderlineDetails(DataTable licenseDetails) {
+        Map<String, String> licenseInfo = ConvertCucumberDataTable.toMap(licenseDetails);
+        String licenseNo = licenseInfo.get("LicenseNo");
+        String state = licenseInfo.get("State");
+        String type = licenseInfo.get("Type");
+        String resident = licenseInfo.get("Resident");
+        String loa = licenseInfo.get("LOA");
+        String issueDate = licenseInfo.get("IssueDate");
+        String expiryDate = licenseInfo.get("ExpiryDate");
+
+        return new FillProducerLicenseDetails(licenseNo, state, type, resident, loa, issueDate, expiryDate);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        actor.attemptsTo(WaitUntil.the(PLD_PAGE_LABEL, isVisible()));
+        waitABit(500);
+
+        if (StringUtils.isNotBlank(licenseNo)) {
+            if (licenseNo.equalsIgnoreCase("Default")) {
+                actor.attemptsTo(Click.on(ADD_BUTTON).then(WaitUntil.the(LICENSE_NO_1, isVisible())),
+                        Enter.keyValues(new SimpleDateFormat("yyMMddHHmmss").format(DateTime.now().toDate())).into(LICENSE_NO_1));
+            } else {
+                actor.attemptsTo(Click.on(ADD_BUTTON)
+                                .then(WaitUntil.the(LICENSE_NO_1, isVisible())),
+                        Enter.keyValues(licenseNo).into(LICENSE_NO_1));
+            }
+            waitABit(500);
+
+            String storeLicenseNo = LICENSE_NO_1.resolveFor(actor).getAttribute("value");
+            actor.remember(Key.ASCA_LICENSE_NUMBER, storeLicenseNo);
+        }
+
+        if (StringUtils.isNotBlank(state)) {
+            actor.attemptsTo(SelectFromOptions.byVisibleText(state).from(STATE_1));
+            waitABit(999);
+        }
+
+        if (StringUtils.isNotBlank(type)) {
+            actor.attemptsTo(SelectFromOptions.byVisibleText(type).from(TYPE_1));
+            waitABit(999);
+        }
+
+        if (StringUtils.isNotBlank(resident)) {
+            actor.attemptsTo(SelectFromOptions.byVisibleText(resident).from(RESIDENT_1));
+            waitABit(999);
+        }
+
+        if (StringUtils.isNotBlank(loa)) {
+            actor.attemptsTo(
+                    Click.on(LOA_1).then(WaitUntil.the(LOA_1_LABEL, isVisible())),
+                    Click.on(loaOption(loa)),
+                    Scroll.to(OK_BTN).andAlignToTop().then(Click.on(OK_BTN))
+            );
+            waitABit(1500);
+        }
+
+        actor.attemptsTo(Enter.keyValues(issueDate).into(ISSUE_DATE_1));
+        waitABit(500);
+
+        actor.attemptsTo(Enter.keyValues(expiryDate).into(EXPIRY_DATE_1));
+        waitABit(500);
+    }
+}

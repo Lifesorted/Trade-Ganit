@@ -1,0 +1,32 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class TerminatePage extends PageObject {
+
+	public static Target EVENT = Target.the("event").locatedBy("//select[@name='cmbTermContrEvent']");
+	public static Target REASONCONTRACT = Target.the("reason").locatedBy("//select[@name='cmbTermContrReason']");
+	public static Target REASONAPPOINTMENT = Target.the("reason").locatedBy("//select[@name='cmbReasonApptsTerm']");
+	public static Target TERMINATION = Target.the("termination").locatedBy("(//div[@class='horizontalRadioButton']/child::input)[1]");
+	public static Target TERMINATION_TYPE = Target.the("termination type").locatedBy("//select[@name='cmbTerminationType']");
+	public static Target PORTFOLIO = Target.the("portfolio").locatedBy("//select[@name='cmbPortfolio']");
+	public static Target DOWNLINE_HIERARCHY = Target.the("downline hierarchy").locatedBy("//input[@type='checkbox' and @name='cbTermEntireDwln']");
+	public static Target SAVE = Target.the("Save").locatedBy("//button[@name='btnSaveTerm']");
+	public static Target OK = Target.the("Ok").locatedBy("//button[@name='Ok']");
+	public static Target PREFERENCE_TAB = Target.the("preference").locatedBy("//a[@data-cid='Tab_4_Pref']");
+	public static Target ACCRUE_COMP = Target.the("accrue").locatedBy("//select[@name='cmbAccrueComp']");
+	public static Target ACCRUE_BASIS = Target.the("accrue basis").locatedBy("//select[@name='cmbAccrualBasis']");
+	public static Target BASE_COMP_OPTION = Target.the("base comp option").locatedBy("//select[@name='cmbBaseCompOption']");
+	public static Target PAY_THRESHOLD = Target.the("base comp option").locatedBy("//input[@name='txtPayThreshold']");
+	public static Target SAVE_BUTTON = Target.the("save button").locatedBy("//button[@name='btnSave']");
+	public static Target TERMINATION_REQ_TAB = Target.the("termination req tab").locatedBy("//a[@data-cid='Tab_1_TermReq']");
+	public static Target FORWARD = Target.the("forward").locatedBy("//button[@name='btnForwardTerm']");
+}

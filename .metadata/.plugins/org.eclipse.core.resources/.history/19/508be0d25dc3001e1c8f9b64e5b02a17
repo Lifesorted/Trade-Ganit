@@ -1,0 +1,29 @@
+package com.majesco.test.dm.questions.ui;
+
+import net.serenitybdd.screenplay.Question;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.*;
+
+/**
+ * @author dhiraj662364
+ * @created 29/08/2022
+ **/
+
+public class ApplicationEnquiryResult {
+ 
+	private static final String statusval = "Verified";
+    public static Question<String> hasApplicationNumber() {
+        return (actor) -> VERIFY_LOGIN_LABEL.resolveFor(actor).getText();
+    }
+
+    public static Question<String> hasApplicationStatus() {
+        return (actor) -> VERIFY_LOGIN_LABEL.resolveFor(actor).getText();
+    }
+    
+    public static Question<String> hasVerificationStatus() {
+        return (actor) -> statusval;
+    }
+    
+    public static Question<String> hasAddedEmail() {
+        return (actor) -> ADD_EMAIL.resolveFor(actor).getText();
+    }
+}

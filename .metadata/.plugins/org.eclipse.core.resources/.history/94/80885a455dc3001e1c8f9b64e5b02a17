@@ -1,0 +1,60 @@
+package com.majesco.test.dm.tasks.ui.common;
+
+import com.majesco.test.dm.page_objects.AppointmentDetailPage;
+import com.majesco.test.dm.page_objects.BankDetailPage;
+import com.majesco.test.dm.page_objects.BookOfBusinessPage;
+import com.majesco.test.dm.page_objects.ContactDetailPage;
+import com.majesco.test.dm.page_objects.EntityContactPage;
+import com.majesco.test.dm.page_objects.HierarchyDetailPage;
+import com.majesco.test.dm.page_objects.InGoodOrderPage;
+import com.majesco.test.dm.page_objects.IvansDownloadPage;
+import com.majesco.test.dm.page_objects.LicenseDetailPage;
+import com.majesco.test.dm.page_objects.LoginPage;
+import com.majesco.test.dm.page_objects.ManualLetterPage;
+import com.majesco.test.dm.page_objects.OtherInfoPage;
+import com.majesco.test.dm.page_objects.PersonalDetailPage;
+import com.majesco.test.dm.page_objects.ProducerAppointmentsPage;
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.Key;
+
+import net.serenitybdd.screenplay.Performable;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Open;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_ENQUIRY_SUBMENU;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_NO;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_NO_RESULT_LABEL;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_SEARCH_BTN;
+import static com.majesco.test.dm.page_objects.CompensationPreferencesPage.*;
+import static com.majesco.test.dm.page_objects.EOInsurancePage.*;
+import static com.majesco.test.dm.page_objects.ProducerAgencyAffiliationPage.*;
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.SAVE_ADDRESS;
+import static com.majesco.test.dm.page_objects.ProducerDirectDepositDetails.*;
+import static com.majesco.test.dm.page_objects.ProducerLicenseDetailsPage.*;
+import static com.majesco.test.dm.page_objects.VerifyApplication.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+
+public class NavigateTo {
+	
+    public static Performable theLoginPage() {
+        return Task.where("{0} opens the login page",
+                Open.browserOn().the(LoginPage.class));
+    }
+
+    public static Performable agencyAffiliationScreen() {
+        return Task.where("{0} opens the agency affiliation page",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(AGENCY_AFFILIATION_TAB)
+                                    .then(WaitUntil.the(PAA_PAGE_LABEL, isVisible()))
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }    
+}

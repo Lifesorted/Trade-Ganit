@@ -1,0 +1,180 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.CompensationPreferencesPage;
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.junit.platform.commons.util.StringUtils;
+import java.util.Map;
+import static com.majesco.test.dm.page_objects.ApplicationEnquiryPage.APP_NUM;
+import static com.majesco.test.dm.page_objects.CommonObjects.*;
+import static com.majesco.test.dm.page_objects.CompensationPreferencesPage.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 26/08/2022
+ **/
+
+public class FillCompensationPreferences extends UIInteractions implements Task {
+
+	CompensationPreferencesPage compensationPreferencesPage;
+	private String accrualPreference;
+	private String accrualBasis;
+	private String ratesApplicability;
+	private String compRetained;
+	private String payTo;
+	private String mode;
+	private String schedule;
+	private String compType = "Commission";
+	private String compSubType = "Standard Commission";
+
+	public FillCompensationPreferences(String accrualPreference, String accrualBasis, String ratesApplicability,
+			String compRetained, String payTo, String mode, String schedule) {
+		this.accrualPreference = accrualPreference;
+		this.accrualBasis = accrualBasis;
+		this.ratesApplicability = ratesApplicability;
+		this.compRetained = compRetained;
+		this.payTo = payTo;
+		this.mode = mode;
+		this.schedule = schedule;
+	}
+
+	public static FillCompensationPreferences fromUnderlineDetails(DataTable compensationPreferences) {
+		Map<String, String> compensationPrefInfo = ConvertCucumberDataTable.toMap(compensationPreferences);
+		String accrualPreference = compensationPrefInfo.get("AccrualPreference");
+		String accrualBasis = compensationPrefInfo.get("AccrualBasis");
+		String ratesApplicability = compensationPrefInfo.get("RatesApplicability");
+		String payTo = compensationPrefInfo.get("PayTo");
+		String compRetained = compensationPrefInfo.get("CompRetained");
+		String mode = compensationPrefInfo.get("Mode");
+		String schedule = compensationPrefInfo.get("Schedule");
+
+		return new FillCompensationPreferences(accrualPreference, accrualBasis, ratesApplicability, compRetained, payTo,
+				mode, schedule);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(WaitUntil.the(CP_PAGE_LABEL, isVisible())
+				.then(SelectFromOptions.byVisibleText(accrualPreference).from(ACCRUAL_PREFERENCE)));
+		waitABit(999);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(accrualBasis).from(ACCRUAL_BASIS));
+		waitABit(999);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(ratesApplicability).from(RATES_APPLICABILITY));
+		waitABit(999);
+
+		actor.attemptsTo(Click.on(RATES_MAPPING));
+		waitABit(8000);
+
+		actor.attemptsTo(WaitUntil.the(ADD_MAPPING_BTN5, isClickable()).then(Click.on(ADD_MAPPING_BTN5)));
+		waitABit(2000);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(compType).from(COMP_TYPE));
+		waitABit(999);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(compSubType).from(COMP_SUBTYPE));
+		waitABit(5000);
+
+		String contractType = actor.recall(Key.CONTRACT_TYPE);
+
+		if (contractType.equalsIgnoreCase("Direct")) {
+			String compschedule = DataHelper.getRecord("Compesation_Pref", 1, 0);
+			if (COMP_SCHEDULE.isVisibleFor(actor)) {
+				actor.attemptsTo(WaitUntil.the(COMP_SCHEDULE, isVisible())
+						.then(SelectFromOptions.byVisibleText(compschedule).from(COMP_SCHEDULE)));
+				waitABit(5000);
+			} else {
+				actor.attemptsTo(WaitUntil.the(COMP_SCHEDULE1, isVisible())
+						.then(SelectFromOptions.byVisibleText(compschedule).from(COMP_SCHEDULE1)));
+				waitABit(2000);
+			}
+		} else {
+			String compschedule = DataHelper.getRecord("Compesation_Pref", 1, 1);
+			if (COMP_SCHEDULE.isVisibleFor(actor)) {
+				actor.attemptsTo(WaitUntil.the(COMP_SCHEDULE, isVisible())
+						.then(SelectFromOptions.byVisibleText(compschedule).from(COMP_SCHEDULE)));
+				waitABit(5000);
+			} else {
+				actor.attemptsTo(WaitUntil.the(COMP_SCHEDULE1, isVisible())
+						.then(SelectFromOptions.byVisibleText(compschedule).from(COMP_SCHEDULE1)));
+				waitABit(2000);
+			}
+		}
+
+		String mappedFrom = actor.recall(Key.APPLICATION_DATE);
+		actor.attemptsTo(Enter.keyValues(mappedFrom).into(MAPPED_FROM));
+		
+		waitABit(2500);
+
+		actor.attemptsTo(Click.on(SAVE_SCHEDULE_MAPPING_BTN).then(WaitUntil.the(OK_BTN, isVisible())));
+		waitABit(999);
+
+		actor.attemptsTo(Click.on(OK_BTN));
+		waitABit(1500);
+
+		actor.attemptsTo(Click.on(CLOSE_SCHEDULE_MAPPING_BTN));
+
+		if (StringUtils.isNotBlank(compRetained)) {
+			actor.attemptsTo(SelectFromOptions.byVisibleText(compRetained).from(COMP_RETAINED));
+			waitABit(999);
+		}
+
+		// Validate Payto options
+		actor.attemptsTo(WaitUntil.the(PAY_TO, isVisible())
+				.then(Ensure.that(PAYTO).textValues().contains("Select", "Self", "Other")));
+
+		waitABit(999);
+		actor.attemptsTo(Scroll.to(MODE).andAlignToTop());
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(payTo).from(PAY_TO));
+		waitABit(2000);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(mode).from(MODE));
+		waitABit(2000);
+
+		actor.attemptsTo(
+				Enter.theValue(CommonUtil.generateNineDigitNumber()).into(CompensationPreferencesPage.VENDOR_CODE));
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText("MonthlyPaymentSch25").from(SCHEDULE));
+		
+		actor.attemptsTo(Scroll.to(MAILING_DAY).andAlignToTop());
+
+		// Billing Information
+		actor.attemptsTo(SelectFromOptions.byVisibleText("Statement").from(BILLING_TYPE));
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText("Self").from(SENT_TO_ENTITY));
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText("Yes").from(STATEMENT_REQUIRED));
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText("5").from(CREDIT_TERM_MONTH));
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText("4").from(MAILING_DAY));
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText("7").from(CREDIT_TERM_DAYS));
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText("PDF").from(STATEMENT_FORMAT));
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText("15").from(NCAN_GRACE_DAYS));
+
+		String storeApplicationNo = APP_NUM.resolveFor(actor).getText();
+		actor.remember(Key.APPLICATION_NUMBER, storeApplicationNo);
+
+		waitABit(1000);
+		compensationPreferencesPage.getButtonList();
+	}
+}

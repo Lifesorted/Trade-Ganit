@@ -1,0 +1,83 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import com.majesco.test.dm.page_objects.ApplicationTaskPage;
+import com.majesco.test.dm.page_objects.VerifyApplication;
+import com.majesco.test.dm.utils.Key;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class ApplicationTask extends UIInteractions implements Task {
+
+	ApplicationTaskPage applicationTaskPage;
+	
+	public ApplicationTask() {
+		
+	}
+	
+	public static ApplicationTask fromUnderlineDetails() {
+		return new ApplicationTask();
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(WaitUntil.the(ApplicationTaskPage.OFFERED_TAB, isVisible()));
+		waitABit(999);
+
+		actor.attemptsTo(Click.on(ApplicationTaskPage.LAST_PAGE)
+				.then(WaitUntil.the(ApplicationTaskPage.ACCEPT_START, isVisible())));
+		waitABit(999);
+
+		String appNo = actor.recall(Key.SAVE_FLAG);
+
+		applicationTaskPage.listOfTasks(appNo);
+
+		actor.attemptsTo(Click.on(ApplicationTaskPage.ACCEPT_START));
+		waitABit(999);
+
+		actor.attemptsTo(WaitUntil.the(ApplicationTaskPage.OK, isVisible()).then(Click.on(ApplicationTaskPage.OK)));
+		waitABit(999);
+
+		actor.attemptsTo(Click.on(ApplicationTaskPage.LAST_PAGE)
+				.then(WaitUntil.the(ApplicationTaskPage.ACCEPT_START, isVisible())));
+		waitABit(999);
+
+		applicationTaskPage.listOfTasksLink(appNo);
+
+		waitABit(5000);
+
+		actor.attemptsTo(Click.on(ApplicationTaskPage.CONTINUE_BUTTON));
+		waitABit(4000);
+
+		actor.attemptsTo(Scroll.to(VerifyApplication.VA_TAB).andAlignToTop());
+
+		actor.attemptsTo(Click.on(VerifyApplication.VA_TAB));
+		waitABit(999);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText("Approve").from(ApplicationTaskPage.SELECT_DECISION));
+		waitABit(999);
+
+		actor.attemptsTo(
+				Click.on(VerifyApplication.VERIFY_BTN).then(WaitUntil.the(ApplicationTaskPage.SAVE_BUTTON, isVisible()))
+						.then(Click.on(ApplicationTaskPage.SAVE_BUTTON)));
+		waitABit(10000);
+		
+		actor.attemptsTo(WaitUntil.the(ApplicationTaskPage.YES, isVisible()).then(Click.on(ApplicationTaskPage.YES)));
+		waitABit(1200);
+		
+		actor.attemptsTo(WaitUntil.the(ApplicationTaskPage.FOR_ALL_PRODUCT, isVisible()).then(Click.on(ApplicationTaskPage.FOR_ALL_PRODUCT)));
+		waitABit(1200);
+		
+		actor.attemptsTo(WaitUntil.the(ApplicationTaskPage.OK, isVisible()).then(Click.on(ApplicationTaskPage.OK)));
+		waitABit(999);
+	}
+
+}

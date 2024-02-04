@@ -1,0 +1,80 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import org.openqa.selenium.Keys;
+
+import java.util.Map;
+
+import static com.majesco.test.dm.page_objects.WorkExperience.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 30/08/2022
+ **/
+
+public class FillWorkExperience extends UIInteractions implements Task {
+
+    private String employer;
+    private String jobTitle;
+    private String manager;
+    private String addressContact;
+    private String from;
+    private String to;
+
+    public FillWorkExperience(String employer, String jobTitle, String manager, String addressContact, String from, String to) {
+        this.employer = employer;
+        this.jobTitle = jobTitle;
+        this.manager = manager;
+        this.addressContact = addressContact;
+        this.from = from;
+        this.to = to;
+    }
+
+    public static FillWorkExperience fromUnderlineDetails(DataTable workExperience) {
+        Map<String, String> workExperienceInfo = ConvertCucumberDataTable.toMap(workExperience);
+        String employer = workExperienceInfo.get("Employer");
+        String jobTitle = workExperienceInfo.get("JobTitle");
+        String manager = workExperienceInfo.get("Manager");
+        String addressContact = workExperienceInfo.get("AddressContact");
+        String from = workExperienceInfo.get("From");
+        String to = workExperienceInfo.get("To");
+
+        return new FillWorkExperience(employer, jobTitle, manager, addressContact, from, to);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        actor.attemptsTo(WaitUntil.the(WE_PAGE_LABEL, isVisible())
+                .then(Click.on(ADD_BUTTON)));
+        waitABit(2000);
+
+        actor.attemptsTo(WaitUntil.the(EMPLOYER, isVisible())
+                .then(Enter.keyValues(employer).into(EMPLOYER)));
+        waitABit(500);
+
+        actor.attemptsTo(SelectFromOptions.byVisibleText(jobTitle).from(JOB_TITLE));
+        waitABit(999);
+
+        actor.attemptsTo(Enter.keyValues(manager).into(MANAGER));
+        waitABit(500);
+
+        actor.attemptsTo(Enter.keyValues(addressContact).into(ADDRESS_CONTACT));
+        waitABit(500);
+
+        actor.attemptsTo(Enter.keyValues(from).into(FROM).thenHit(Keys.TAB));
+        waitABit(500);
+
+        actor.attemptsTo(Enter.keyValues(to).into(TO).thenHit(Keys.TAB));
+        waitABit(500);
+    }
+}

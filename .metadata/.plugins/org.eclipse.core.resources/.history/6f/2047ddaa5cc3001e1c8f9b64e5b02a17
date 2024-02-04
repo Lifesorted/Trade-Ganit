@@ -1,0 +1,22 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class EntityContactPage extends PageObject {
+
+	public static Target ENTITY_CONTACT_TAB = Target.the("Entity Contact tab").locatedBy("//a[@data-labelkey='mm.icd.dm.AppEntityContactDetails.ViewAgencyContactLabel']");
+	public static Target ADD_ENTITY = Target.the("add entity").locatedBy("//button[@name='btnAddNewEntityContact']");
+	public static Target FIRST_NAME = Target.the("first name").locatedBy("//input[@name='dgAgencyContactDetails_0_1']");
+	public static Target LAST_NAME = Target.the("last name").locatedBy("//input[@name='dgAgencyContactDetails_0_2']");
+	public static Target SELECT_ROLE = Target.the("select role").locatedBy("//select[@name='dgAgencyContactDetails_0_3']");
+	public static Target SAVE_CONTACT = Target.the("save contact").locatedBy("//button[@name='btnSaveContact']");
+	public static Target OK_BTN = Target.the("OK button").locatedBy("//button[@name='Ok']");
+}

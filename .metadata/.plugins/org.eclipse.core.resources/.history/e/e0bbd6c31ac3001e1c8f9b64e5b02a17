@@ -1,0 +1,21 @@
+package com.majesco.test.dm.runners;
+
+import io.cucumber.junit.CucumberOptions;
+import net.serenitybdd.cucumber.CucumberWithSerenity;
+import org.junit.runner.RunWith;
+
+/**
+ * @author dhiraj662364
+ * @created 06/09/2022
+ **/
+
+@RunWith(CucumberWithSerenity.class)
+@CucumberOptions(
+        features = {"src/test/resources/features/Producer_onboarding/new_contract_business_producer/new_business_additional_contract.feature"},
+        plugin = {"pretty"},
+        glue = {"com.majesco.test.dm"},
+        tags = "@SmokeTest",
+        dryRun = false)
+public class OnboardingRunner {
+    
+}

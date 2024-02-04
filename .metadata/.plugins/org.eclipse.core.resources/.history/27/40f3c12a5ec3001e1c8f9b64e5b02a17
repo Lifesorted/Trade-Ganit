@@ -1,0 +1,62 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import java.util.Map;
+
+import static com.majesco.test.dm.page_objects.AgencyContactsPage.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 02/09/2022
+ **/
+
+public class FillAgencyContactsInfo extends UIInteractions implements Task {
+
+    private String firstName;
+    private String lastName;
+    private String role;
+
+    public FillAgencyContactsInfo(String firstName, String lastName, String role) {
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.role = role;
+    }
+
+    public static FillAgencyContactsInfo fromUnderlineDetails(DataTable agencyContacts) {
+
+        Map<String, String> contactInfo = ConvertCucumberDataTable.toMap(agencyContacts);
+        String firstName = contactInfo.get("FirstName");
+        String lastName = contactInfo.get("LastName");
+        String role = contactInfo.get("Role");
+
+        return new FillAgencyContactsInfo(firstName, lastName, role);
+
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        actor.attemptsTo(WaitUntil.the(ACI_PAGE_LABEL, isVisible())
+                .then(Click.on(ADD_BTN)).then(WaitUntil.the(FIRST_NAME_1,isVisible())));
+        waitABit(1500);
+
+        actor.attemptsTo(Enter.keyValues(firstName).into(FIRST_NAME_1));
+        waitABit(500);
+
+        actor.attemptsTo(Enter.keyValues(lastName).into(LAST_NAME_1));
+        waitABit(500);
+
+        actor.attemptsTo(SelectFromOptions.byVisibleText(role).from(ROLE_1));
+        waitABit(999);
+    }
+}

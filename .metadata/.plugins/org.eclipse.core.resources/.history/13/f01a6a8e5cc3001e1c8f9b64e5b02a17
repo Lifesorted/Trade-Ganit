@@ -1,0 +1,24 @@
+package com.majesco.test.dm.utils;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class FTP {
+		    
+    public static void main(String args[]) throws IOException {
+                String row1 = "20230525,Shaile908568,Shaile908568@majesco.com,,IBD,1";
+                String row21 = CommonUtil.generateNineDigitNumber()+",";
+                String row22 = CommonUtil.generateNineDigitNumber()+",";
+                String row23 = "EO"+CommonUtil.generateNineDigitNumber()+",";
+                String row24 = "ALDM"+CommonUtil.generateNineDigitNumber()+",";
+    		    String row2 = row21+row22+"Josh,,Taylor,19890119,19890119,01,12,,,,LEGAL,AL,,M,US,801 Tom Martin Dr,,Alabaster,AL,8896.0,,Shaile908568@majesco.com,20200101,NA,Josh Taylor,12020333,SAV,325081623,CHUBB,"+row23+"20210330,20240330,5000,AL,"+row24+"3,16,20200101,20251011,,,,,,,,,,,,,Q1,YES,Q2,YES,Q3,NO,Q4,NO,Q5,NO,Q6,YES,Q7,YES,Q8,YES,Q9,YES,PAID,INSTL,,COMMSCH001,SELF,EFT,MPSLD,LIFE,IBD,N3423478,200,20240524";
+    		    System.out.println(row1);
+    		    System.out.println(row2);
+    		    PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter(System.getProperty("user.dir") + "/src/test/resources/sources/Mofilecsv002.csv")));
+    		    out.println(row1);
+    		    out.println(row2);
+    		    out.close();
+    		}
+}

@@ -1,0 +1,27 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class HierarchyDetailPage extends PageObject {
+	
+	public static Target HIERARCHY_TAB = Target.the("Hierarchy tab").locatedBy("//a[@data-labelkey='mm.icd.MenuChange.Hierarchy']");
+	public static Target AGENT_NO = Target.the("Entity name").locatedBy("//tr[@name='dgHierarchyDetails_r_0']//td[@data-colid='Col_1']");
+	public static Target ENTITY_NAME = Target.the("Entity name").locatedBy("//tr[@name='dgHierarchyDetails_r_0']//td[@data-colid='Col_2']");
+	public static Target ENTITY_ROLE = Target.the("Entity name").locatedBy("//tr[@name='dgHierarchyDetails_r_0']//td[@data-colid='Col_8']");
+	public static Target ENTITY_LEVEL = Target.the("Entity name").locatedBy("//tr[@name='dgHierarchyDetails_r_0']//td[@data-colid='Col_9']");
+	public static Target CHANNEL = Target.the("Entity name").locatedBy("//tr[@name='dgHierarchyDetails_r_0']//td[@data-colid='Col_4']");
+	public static Target ENTITY_TYPE = Target.the("Entity name").locatedBy("//tr[@name='dgHierarchyDetails_r_0']//td[@data-colid='Col_5']");
+	public static Target CONTRACT_STATUS = Target.the("Entity name").locatedBy("//tr[@name='dgHierarchyDetails_r_0']//td[@data-colid='Col_6']");
+	public static Target BROKER_NO = Target.the("Broker number").locatedBy("//tr[@name='dgAgentName_r_0']/child::td[@data-colid='Col_11']");
+	public static Target CED = Target.the("conract effective date").locatedBy("//tr[@name='dgHierarchyDetails_r_0']/td[@data-colid='Col_7']");
+	public static Target SLIDE_RIGHT_ICON = Target.the("Slide right icon").locatedBy("//span[@class='glyphicon glyphicon-chevron-right']");
+	
+}

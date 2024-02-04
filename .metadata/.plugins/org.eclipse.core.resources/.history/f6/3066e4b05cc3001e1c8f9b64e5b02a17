@@ -1,0 +1,46 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 25/08/2022
+ **/
+
+public class ProducerAppointmentsPage extends PageObject {
+
+    public static Target PAD_PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'Appointments Requested >>')]");
+
+    public static Target APPOINTMENT_TAB = Target.the("Tab").locatedBy("(//td[contains(@title,'Appointments')]//span[contains(text(),'Appointments')])[1]");
+    public static Target appointmentState(String value) {
+        return Target.the("Appointment State").locatedBy("(//span[contains(text(),'"+value+"')])[2]");
+    }
+
+    public static Target APPOINTER_COMPANY_TABLE = Target.the("Appointer Company Table").locatedBy("//table[@id='dgAppointerCompany']/tbody");
+    
+    public static Target NEXT_APPOINTER_COM = Target.the("Next appointer company").locatedBy("//input[@name='dgStatesAppts_5_0' and contains(@value,'N')]");
+
+    public static Target appointerCompany(String value) {
+        return Target.the("Appointer Company").locatedBy("//td[@title='"+value+"']/preceding::input[@type='checkbox'][1]");
+    }
+
+    public static Target LOA_TABLE_FOR_APPOINTER_COMPANY = Target.the("LOA Table for Appointer Company").locatedBy("//table[@id='dgStatesAppts']/tbody");
+
+    public static Target loaForAppointedCompany() {
+        return Target.the("LOA for Appointed Company").locatedBy("//input[@name='dgStatesAppts_0_0']");
+    }
+
+    public static Target APPOINTMENT_MENU = Target.the("Appointment menu").locatedBy("//a[@id='dgAppointmentsFlow_2_0_lnk']");
+    public static Target PAD_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveAndContinue']");
+    public static Target CONTRACT_SAVE_CONTINUE = Target.the("Save and Continue button").locatedBy("//button[@name='btnSaveandContinue']");
+    public static Target CUSTOM_APPOINTMENT = Target.the("Custom Appointment").locatedBy("//input[@data-inputid='radioApptsType_radio3']");
+    public static Target CUSTOM_APPOINTMENT_STATE = Target.the("Custom Appointment State").locatedBy("//a[@id='dgStatesAppts_0_1_lnk']");
+    public static Target CUSTOM_APPOINTER_CO = Target.the("Custom Appointment State").locatedBy("//a[@id='dgAppointerCompany_1_1_lnk']");
+    public static Target CUSTOM_APPOINTER_LOA = Target.the("Custom Appointment Loa").locatedBy("//input[@name='dgAppLOA_0_0']");
+    public static Target RES_STATE = Target.the("Custom Appointment Loa").locatedBy("//a[@id='dgStatesAppts_0_1_lnk']//span[@data-section='displayvalue']");
+    public static Target SELECT_ALL_STATE = Target.the("Custom Appointment Loa").locatedBy("//input[@name='dgStatesAppts_-1_5']");
+    public static Target SELECT_ALL_COMPANY = Target.the("Custom Appointment Loa").locatedBy("//input[@name='dgAppointerCompany_-1_2']");
+
+    
+}

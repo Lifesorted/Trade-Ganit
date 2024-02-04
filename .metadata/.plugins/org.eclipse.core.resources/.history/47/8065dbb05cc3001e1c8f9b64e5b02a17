@@ -1,0 +1,9 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class InGoodOrderPage extends PageObject {
+	public static Target INGOODORDER_TAB = Target.the("In good order tab").locatedBy("//a[@data-labelkey='mm.icd.dm.AgentStatusIGO.InGoodOrder']");
+	public static Target SUCCESS_TEXT = Target.the("lob").locatedBy("//label[@data-name='panelTitle']");
+}

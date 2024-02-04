@@ -1,0 +1,46 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import java.util.logging.Logger;
+import com.majesco.test.dm.page_objects.HomePage;
+import com.majesco.test.dm.page_objects.PolicyDetailPage;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.HoverOverTarget;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+public class VerifyPolicySummary extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(VerifyPolicySummary.class.getName());
+	private HomePage homePage;
+	public VerifyPolicySummary() {
+
+	}
+
+	public static VerifyPolicySummary fromUnderlineDetails() {
+		return new VerifyPolicySummary();
+	}
+	
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		   actor.attemptsTo(WaitUntil.the(homePage.COMPENSATION_MANAGEMENT, isClickable())
+	                .then(Click.on(homePage.COMPENSATION_MANAGEMENT)));
+	        waitABit(999);
+
+	        actor.attemptsTo(HoverOverTarget.over(homePage.BASE_COMPENSATION));
+	        waitABit(500);
+	        actor.attemptsTo(Click.on(homePage.POLICY_SUMMARY));
+	        waitABit(999);
+	        
+	        actor.attemptsTo(Enter.keyValues("Policy4004").into(PolicyDetailPage.POLICY_NUMBER));
+	        waitABit(999);
+	        
+	        actor.attemptsTo(Click.on(PolicyDetailPage.POLICY_LOOKUP_LINK));
+	        waitABit(999);
+
+	}
+}

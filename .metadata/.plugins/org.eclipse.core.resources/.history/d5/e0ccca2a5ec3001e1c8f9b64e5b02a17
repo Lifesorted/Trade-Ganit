@@ -1,0 +1,96 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.HomePage;
+import com.majesco.test.dm.page_objects.SearchLicensedProducerPage;
+import com.majesco.test.dm.utils.CommonUIInteractions;
+import com.majesco.test.dm.utils.Key;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Clear;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import net.serenitybdd.annotations.Steps;
+
+import org.fluentlenium.core.annotation.Page;
+import org.junit.platform.commons.util.StringUtils;
+import org.openqa.selenium.Keys;
+
+import java.util.logging.Logger;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+/**
+ * @author dhiraj662364
+ * @created 07/09/2022
+ **/
+
+public class CreateNewBusinessEntity extends UIInteractions implements Task {
+
+    private static Logger logger = Logger.getLogger(CreateNewBusinessEntity.class.getName());
+    private String npn;
+    private String applicationDate;
+    @Page
+    private HomePage homePage;
+    @Page
+    private SearchLicensedProducerPage searchProducerPage;
+    @Steps
+    private CommonUIInteractions commonUIInteractions;
+
+    public CreateNewBusinessEntity(String npn, String applicationDate) {
+        this.npn = npn;
+        this.applicationDate = applicationDate;
+    }
+
+    public static CreateNewBusinessEntity withDefaultNPN() {
+        String npn = String.valueOf(System.currentTimeMillis() / 100000);
+        return new CreateNewBusinessEntity(npn, null);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        actor.attemptsTo(
+                WaitUntil.the(homePage.ONBOARDING_MENU, isClickable())
+                        .then(Click.on(homePage.ONBOARDING_MENU))
+        );
+        waitABit(999);
+
+        actor.attemptsTo(
+                Click.on(homePage.REG_BUSINESS_ENTITY_SUBMENU)
+                        .then(WaitUntil.the(searchProducerPage.NPN, isVisible()))
+        );
+        waitABit(999);
+
+        actor.attemptsTo(WaitUntil.the(searchProducerPage.NPN, isClickable())
+                        .then(Click.on(searchProducerPage.NPN_RADIO))
+                        .then(Enter.keyValues(npn).into(searchProducerPage.NPN)));
+        waitABit(999);
+
+        actor.attemptsTo(
+                Click.on(searchProducerPage.SEARCH_BTN_1)
+                        .then(WaitUntil.the(searchProducerPage.APPLICATION_DATE, isVisible()))
+        );
+        waitABit(999);
+
+        if (StringUtils.isNotBlank(applicationDate)) {
+            actor.attemptsTo(
+                    Clear.field(searchProducerPage.APPLICATION_DATE),
+                    Enter.keyValues(applicationDate).into(searchProducerPage.APPLICATION_DATE).thenHit(Keys.TAB)
+            );
+            waitABit(999);
+        }
+
+        String storeApplicationDate = searchProducerPage.APPLICATION_DATE.resolveFor(actor).getAttribute("value");
+        actor.remember(Key.APPLICATION_DATE, storeApplicationDate);
+
+        actor.attemptsTo(Click.on(searchProducerPage.CONTINUE_BTN));
+
+        commonUIInteractions.isLandingComplete(actor);
+        waitABit(1000);
+    }
+}

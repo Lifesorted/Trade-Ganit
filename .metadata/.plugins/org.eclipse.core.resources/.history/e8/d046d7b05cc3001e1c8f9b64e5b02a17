@@ -1,0 +1,27 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class SchedulePage extends PageObject {
+
+	public static Target NEW = Target.the("New Button").locatedBy("//button[@name='btnNewReq']");
+	public static Target LOB_CLASS = Target.the("Lob Class").locatedBy("//select[@name='cmbLobClasses']");
+	public static Target CODE = Target.the("code").locatedBy("//input[@name='txtScheduleCode']");
+	public static Target NAME = Target.the("name").locatedBy("//input[@name='txtName']");
+	public static Target EFF_FROM = Target.the("eff from").locatedBy("//input[@name='dtEffFrom']");
+	public static Target TYPE = Target.the("type").locatedBy("//select[@name='cmbType']");
+	public static Target SUB_TYPE = Target.the("sub type").locatedBy("/html/body/div[2]/div[2]/div/div/div[2]/div/div/div/div/div[2]/div[1]/div[5]/div/div/div/div[2]/div/div/div[2]/select");
+	public static Target ACCRUAL_BASIS = Target.the("accrual basis").locatedBy("//select[@name='cmbAccrualBasis1']");
+	public static Target BILL_TYPE = Target.the("bill type").locatedBy("//select[@name='cmbBillType']");
+	public static Target ADD_RULE_BTN = Target.the("add rule button").locatedBy("//button[@name='btnAddRuleSet']");
+	public static Target SELECT_RULE = Target.the("select rule").locatedBy("//select[@name='dgRuleSet_0_1']");
+	public static Target RULE_EFFECTIVE_FROM = Target.the("rule effective from").locatedBy("//input[@name='dgRuleSet_0_2']");
+	public static Target SAVE = Target.the("save").locatedBy("//button[@name='btnSave']");
+	public static Target FORWARD = Target.the("forward").locatedBy("//button[@name='btnForward']");
+	public static Target OK = Target.the("ok").locatedBy("//button[@name='Ok']");
+	public static Target SCHEDULE_NAME = Target.the("schedule name").locatedBy("//input[@name='txtScheduleName']");
+	public static Target SEARCH = Target.the("search").locatedBy("//button[@name='btnSearchScheduleInquiry']");
+	public static Target SELECT_LOB_CLASS = Target.the("Lob Class").locatedBy("//select[@name='cmbLOBClass']");
+	public static Target SEARCHED_SCHEDULE_NAME = Target.the("Search schedule name").locatedBy("//td[@title='COMM1' and @data-colid='Col_2']");
+}

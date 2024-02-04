@@ -1,0 +1,40 @@
+package com.majesco.test.dm.questions.db;
+
+import com.majesco.test.dm.utils.Key;
+import net.serenitybdd.screenplay.Question;
+
+
+/**
+ * @author dhiraj662364
+ * @created 13/09/2022
+ **/
+
+public class AdditionalContractInfo {
+    public static final String STATUS_ACTIVE = "Active";
+    public static final String APPLICATION_STATUS = "Approved";
+
+    public static Question<String> hasAdditionalContractRecord() {
+
+        Question<String> status = (actor) -> {
+            String entityStatus =  actor.recall(Key.ENTITY_STATUS);
+            if (!entityStatus.isEmpty() && entityStatus.equals("ACT")){
+                entityStatus = STATUS_ACTIVE;
+            }
+            return entityStatus;
+        };
+        return status;
+    }
+
+    public static Question<String> hasAdditionalStateAppointmentRecord() {
+
+        Question<String> status = (actor) -> {
+            String appStatus =  actor.recall(Key.APPLICATION_STATUS);
+            if (!appStatus.isEmpty() && appStatus.equals("APPD")){
+                appStatus = APPLICATION_STATUS;
+            }
+            return appStatus;
+        };
+        return status;
+    }
+    
+}

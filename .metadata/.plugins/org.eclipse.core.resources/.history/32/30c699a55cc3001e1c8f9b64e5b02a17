@@ -1,0 +1,35 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class BookOfBusinessPage extends PageObject{
+
+	public static Target COMMERCIAL_LINE_PERCENTAGE = Target.the("Commercial line").locatedBy("//input[@name='txtintCommLinesPercent']");
+	public static Target PERSONAL_LINE_PERCENTAGE = Target.the("Personal lines").locatedBy("//input[@name='txtintPersLinesPercent']");
+	public static Target LINE_OF_BUSINESS = Target.the("line of business").locatedBy("//select[@name='dgBookOfBusiness_0_1']");
+	public static Target MGAINSURER = Target.the("MGA insurer").locatedBy("//select[@name='dgBookOfBusiness_0_2']");
+	public static Target ADMITTED_SURPLUS = Target.the("Admitted surplus").locatedBy("//select[@name='dgBookOfBusiness_0_4']");
+	public static Target TOTAL_INFORCE_PREMIUM = Target.the("Total inforce premium").locatedBy("//input[@name='dgBookOfBusiness_0_5']");
+	public static Target INDUSTRY_SEGMENT = Target.the("Industry segment").locatedBy("//select[@name='dgBookOfBusiness_0_6']");
+	public static Target COMMISSION_PERCENTAGE = Target.the("Commission percentage").locatedBy("//input[@name='dgBookOfBusiness_0_8']");
+	public static Target CONTINGENCY_PROGRAM = Target.the("Contingency program").locatedBy("//select[@name='dgBookOfBusiness_0_9']");
+	public static Target BOB_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveAndContinue']");
+	public static Target BOB_ADD = Target.the("add row").locatedBy("//div[@data-labelkey='mm.icd.add']//descendant::button");
+	public static Target BOB_TAB = Target.the("bob tab").locatedBy("//a[@data-labelkey='mm.icd.stgdm.agency.view.bookofbusiness']");
+	public static Target LOB_VAL = Target.the("bob tab").locatedBy("//select[@name='dgBookOfBusiness_0_1']//option[@value='CG']");
+	public static Target MGA_VAL = Target.the("bob tab").locatedBy("//select[@name='dgBookOfBusiness_0_2']//option[@value='ALLIED']");
+	public static Target ADMITTED_VAL = Target.the("bob tab").locatedBy("//select[@name='dgBookOfBusiness_0_4']//option[@value='SURPLUS']");
+	public static Target TOTAL_INFORCE_PREMIUM_VAL = Target.the("bob tab").locatedBy("//input[@name='dgBookOfBusiness_0_5']");
+	public static Target INDUSTRY_SEGMENT_VAL = Target.the("bob tab").locatedBy("//select[@name='dgBookOfBusiness_0_6']//option[@value='RETAIL']");
+	public static Target COMMISSION_PERCENTAGE_VAL = Target.the("bob tab").locatedBy("//input[@name='dgBookOfBusiness_0_8']");
+	public static Target CONTINGENCY_VAL = Target.the("bob tab").locatedBy("//select[@name='dgBookOfBusiness_0_9']//option[@value='Y']");
+	
+	public static Target selectOption(String val) {
+	        return Target.the("selectLob").locatedBy("//*[contains(@name, '"+val+"')]");
+	    }
+	 
+	 public static Target inputValue(String val) {
+	        return Target.the("selectMgaInsurer").locatedBy("//*[contains(@name, '"+val+"')]");
+	    }
+}

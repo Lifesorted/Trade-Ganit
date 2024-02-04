@@ -1,0 +1,29 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+public class SalesStaffMgmtPage extends PageObject {
+	
+    public static Target SALES_LABEL = Target.the("Label").locatedBy("//label[contains(text(),'Sales Staff Hierarchy')]");
+    public static Target SELECT_HIERARCHY = Target.the("Select Hierarchy").locatedBy("//select[@name='cmbHierarchyView']");
+    public static Target PARENT_TYPE = Target.the("Parent Type").locatedBy("//select[@name='cmbParentType']");
+    public static Target NODE_TYPE = Target.the("Node Type").locatedBy("//select[@name='cmbNodeType']");
+    public static Target OFFICE_ID = Target.the("Select Id").locatedBy("//input[@name='txtOfficeID']");
+    public static Target OFFICE_NAME = Target.the("Office Name").locatedBy("//input[@name='txtOfficeName']");
+    public static Target ROLE = Target.the("Role").locatedBy("//select[@name='cmbDesignationMaster']");
+    public static Target BUSINESS_AREA = Target.the("Business Area").locatedBy("//select[@name='cmbBusinessArea']");
+    public static Target SAVE = Target.the("Save").locatedBy("//button[@name='btnSave']");
+    public static Target SUCCESS_MESSAGE = Target.the("OK").locatedBy("//label[contains(text(),'Data Saved Successfully')]");
+    public static Target BTN_OK = Target.the("OK").locatedBy("//button[@name='Ok']");
+    public static Target REFRESH_ICON = Target.the("Refresh").locatedBy("//img[@title='Refresh']");
+    public static Target EXPAND_ICON = Target.the("Expand").locatedBy("(//i[@class='jstree-icon jstree-ocl'])[5]");
+    public static Target PARENT = Target.the("Parent").locatedBy("//input[@name='txtParentNodeID']");
+    public static Target STAFF_ID = Target.the("Satff Id").locatedBy("//input[@name='txtStaffID']");
+    public static Target FIRST_NAME = Target.the("First name").locatedBy("//input[@name='txtFirstName']");
+    public static Target MID_NAME = Target.the("Middle name").locatedBy("//input[@name='txtMiddelName']");
+    public static Target LAST_NAME = Target.the("Last name").locatedBy("//input[@name='txtLastName']");
+    public static Target LOOKUP_ICON = Target.the("Lookup").locatedBy("(//a[@id='txtParentNodeID_lnk'])[1]");
+    public static Target OFFICE_ID_IN_STAFF = Target.the("Select Id").locatedBy("//input[@name='txtOfficeID_New']");
+
+}

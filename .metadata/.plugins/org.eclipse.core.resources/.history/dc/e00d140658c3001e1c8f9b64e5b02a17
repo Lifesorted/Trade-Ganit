@@ -1,0 +1,32 @@
+package com.majesco.test.dm.steps.ui;
+
+import java.sql.Connection;
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.page_objects.HomePage;
+
+import io.cucumber.java.Before;
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.core.steps.UIInteractionSteps;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.actors.OnStage;
+import net.thucydides.model.util.EnvironmentVariables;
+
+public class TradeUserSteps extends UIInteractionSteps{
+
+	private static Logger logger = Logger.getLogger(LicensedProducerSteps.class.getName());
+	static EnvironmentVariables environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
+
+	private Actor appAdmin;
+	private Connection connection;
+	private HomePage homepage;
+	
+	@Before(order = 2)
+	public void setup() {
+		appAdmin = OnStage.theActor("AA");
+		
+	}
+	
+	
+	
+}

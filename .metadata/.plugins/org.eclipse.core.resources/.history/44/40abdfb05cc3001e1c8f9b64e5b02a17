@@ -1,0 +1,30 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 24/08/2022
+ **/
+
+public class ProducerAgencyAffiliationPage extends PageObject {
+    public static Target AGENCY_AFFILIATION_TAB = Target.the("Tab").locatedBy("//td[contains(@title,'Agency Affiliation')]//span[contains(text(),'Agency Affiliation')]");
+    public static Target PAA_PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'Channel / Entity Affiliation >>')]");
+    public static Target MARKETING_CHANNEL = Target.the("Marketing Channel").locatedBy("//select[@name='cmbMarketingChnl']");
+    public static Target ENTITY_CODE = Target.the("Entity Code").locatedBy("//input[@name='txtEntityCode']");
+    public static Target COMPANY_CODE = Target.the("Company Code").locatedBy("//select[@name='cmbCompanyCode']");
+    public static Target ROLE_LEVEL = Target.the("Role Level").locatedBy("//select[@name='cmbLevel']");
+    public static Target SEARCH_ENTITY = Target.the("Search Entity").locatedBy("//button[@name='btnSearch']");
+    public static Target ENTITY_RECORD = Target.the("Entity Record").locatedBy("//table[@id='dgEntityResult']//input[@type='radio'][1]");
+    public static Target AA_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveContinue']");
+    public static Target CONTRACT_EFF_DATE = Target.the("Contract Effective Date").locatedBy("//input[@name='dtContractEffectiveDate']");
+    public static Target BROKER_NUMBER= Target.the("Broker number").locatedBy("//input[@name='txtImplBrkId']");
+    public static Target PRIMARY_LOB= Target.the("primary lob option").locatedBy("//select[@name='cmbImplPrimarylob']/option[@value]");
+    public static Target PRIMARY_LOB_SELECT= Target.the("primary lob select").locatedBy("//select[@name='cmbImplPrimarylob']");
+    public static Target ENTITY_COD= Target.the("Broker number").locatedBy("//label[@data-name='txtEntityCd_label']/following::input[1]");
+    public static Target CED_VALIDATION_MESSAGE= Target.the("ced validation").locatedBy("//label[@class='modal-message']");
+    public static Target BUTTON_OK= Target.the("Button Ok").locatedBy("//button[@name='Ok']");
+    public static Target CONTRACT_TYPE = Target.the("application for").locatedBy("//*[@data-name='dtContractType_label']/following::*[@data-section='displayvalue'][1]");
+
+}

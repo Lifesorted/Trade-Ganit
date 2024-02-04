@@ -1,0 +1,48 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+import java.util.Map;
+import com.majesco.test.dm.page_objects.ProfileDetailPage;
+import com.majesco.test.dm.page_objects.TerminatePage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.Key;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class AgentOperation extends UIInteractions implements Task {
+
+	private static String action;
+
+	public AgentOperation(String action) {
+		this.action = action;
+	}
+
+	public static AgentOperation fromUnderlineDetails(DataTable actionoption) {
+		Map<String, String> actionoptions = ConvertCucumberDataTable.toMap(actionoption);
+		action = actionoptions.get("Action");
+		return new AgentOperation(action);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		waitABit(5000);
+
+		actor.attemptsTo(WaitUntil.the(ProfileDetailPage.SELECT_OPTION, isVisible())
+				.then(SelectFromOptions.byVisibleText(action).from(ProfileDetailPage.SELECT_OPTION)));
+		waitABit(3000);
+		
+		if (action.equalsIgnoreCase("Terminate Contract")) {
+			actor.attemptsTo(WaitUntil.the(TerminatePage.OK, isVisible()).then(Click.on(TerminatePage.OK)));
+		}
+		
+		waitABit(3000);
+	}
+
+}

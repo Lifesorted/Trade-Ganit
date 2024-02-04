@@ -1,0 +1,97 @@
+package com.majesco.test.dm.tasks.ui.dm;
+import static com.majesco.test.dm.page_objects.ProducerLicenseDetailsPage.OK_BTN;
+import static com.majesco.test.dm.page_objects.ProducerLicenseDetailsPage.PLD_PAGE_LABEL;
+import static com.majesco.test.dm.page_objects.ProducerLicenseDetailsPage.loaOption;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+import java.util.Map;
+
+import org.openqa.selenium.Keys;
+
+import com.majesco.test.dm.page_objects.LicenseDetailPage;
+import com.majesco.test.dm.utils.CommonUtil;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.Key;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class AddLicenseDetails extends UIInteractions implements Task  {
+
+    private String licenseNo;
+    private String state;
+    private String type;
+    private String resident;
+    private String loa;
+    private String issueDate;
+    private String expiryDate;
+    
+    public AddLicenseDetails(String licenseNo, String state, String type, String resident, String loa,
+            String issueDate, String expiryDate) {
+     this.licenseNo = licenseNo;
+     this.state = state;
+     this.type = type;
+     this.resident = resident;
+     this.loa = loa;
+     this.issueDate = issueDate;
+     this.expiryDate = expiryDate;
+    }
+    
+    public static AddLicenseDetails fromUnderlineDetails(DataTable licenseDetails) {
+        Map<String, String> licenseInfo = ConvertCucumberDataTable.toMap(licenseDetails);
+        String licenseNo = licenseInfo.get("LicenseNo");
+        String state = licenseInfo.get("State");
+        String type = licenseInfo.get("Type");
+        String resident = licenseInfo.get("Resident");
+        String loa = licenseInfo.get("LOA");
+        String issueDate = licenseInfo.get("IssueDate");
+        String expiryDate = licenseInfo.get("ExpiryDate");
+
+        return new AddLicenseDetails(licenseNo, state, type, resident, loa, issueDate, expiryDate);
+    }
+    
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		actor.attemptsTo(WaitUntil.the(PLD_PAGE_LABEL, isVisible()));
+        waitABit(500);
+        
+        actor.attemptsTo(Click.on(LicenseDetailPage.ADD_LICENSE));
+        waitABit(500);
+        
+        licenseNo = "FW"+CommonUtil.generateRandomNumber();
+        actor.attemptsTo(Enter.keyValues(licenseNo).into(LicenseDetailPage.LICENSE_INPUT));
+        waitABit(500);
+        
+        actor.attemptsTo(SelectFromOptions.byVisibleText(state).from(LicenseDetailPage.SELECT_STATE));
+        waitABit(999);
+        
+        actor.attemptsTo(SelectFromOptions.byVisibleText(type).from(LicenseDetailPage.SELECT_TYPE));
+        waitABit(999);
+        
+        actor.attemptsTo(SelectFromOptions.byVisibleText(resident).from(LicenseDetailPage.IS_RESIDENT));
+        waitABit(999);
+        
+        actor.attemptsTo(Click.on(LicenseDetailPage.LOA_LINK));
+        waitABit(999);
+        
+        actor.attemptsTo(
+                Click.on(loaOption(loa)),
+                Scroll.to(OK_BTN).andAlignToTop().then(Click.on(OK_BTN))
+        );
+        waitABit(1500);
+        
+        actor.attemptsTo(Enter.keyValues(issueDate).into(LicenseDetailPage.ISSUE_DATE));
+        waitABit(999);
+        
+        actor.attemptsTo(Enter.keyValues(expiryDate).into(LicenseDetailPage.EXPIRY_DATE).thenHit(Keys.TAB));
+        waitABit(999);
+	}
+
+}

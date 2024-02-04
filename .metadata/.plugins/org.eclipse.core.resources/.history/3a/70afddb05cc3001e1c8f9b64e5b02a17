@@ -1,0 +1,57 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 22/08/2022
+ **/
+
+public class SearchLicensedProducerPage extends PageObject {
+    public static Target NPN = Target.the("NPN No").locatedBy("//input[@name='txtInputNPN']");
+    public static Target NPN_RADIO = Target.the("NPN Radio").locatedBy("//input[@value='BYNPN']");
+    public static Target SEARCH_BTN = Target.the("Search Button").locatedBy("//button[@name='butSearch']");
+    public static Target SEARCH_BTN_1 = Target.the("Search Button").locatedBy("//button[@name='btnSearch']");
+    public static Target LABEL_NO_MATCHING_RECORD = Target.the("Search Button").locatedBy("//label[contains(text(),'No matching results found')]");
+    public static Target APPLICATION_DATE = Target.the("Application Date").locatedBy("//input[@name='dateApplicationDate']");
+    public static Target OPEN_ENTITY_TYPE = Target.the("Open Entity Type").locatedBy("//label[contains(text(),'Entity Type')]/following::span[@role='combobox'][1]/span[2]");
+
+    public static Target SELECT_ENTITY = Target.the("select entity").locatedBy("(//tr[@name='dgEntitySearchDetails_r_0'])[1]//descendant::input");
+    
+    public static Target entityType(String value) {
+        return Target.the("Entity Type").locatedBy("//option[text()='" + value + "']");
+    }
+
+    public static Target OPEN_ENTITY_SUBTYPE = Target.the("Open Entity SubType").locatedBy("//label[contains(text(),'Entity SubType')]/following::span[@role='combobox'][1]/span[2]");
+
+    public static Target entitySubType(String value) {
+        return Target.the("Entity SubType").locatedBy("//li[text()='" + value + "']");
+    }
+    public static Target ENTITY_SUBTYPE = Target.the("Entity SubType").locatedBy("//select[contains(@name,'comboxEntitySubType')]");
+
+    public static Target ROLE = Target.the("Role").locatedBy("//select[@name='comboxRole2']");
+    
+    public static Target ROLE_OPTION = Target.the("Role Option").locatedBy("//select[@name='comboxRole2']/option");
+
+    public static Target getContractType(String value) {
+        if (value.equalsIgnoreCase("Intermediary")) {
+            return Target.the("Intermediary").locatedBy("//input[@value='INT']");
+        } else {
+            return Target.the("Direct").locatedBy("//input[@value='DIR']");
+        }
+    }
+
+    public static Target selectEntityCode(String value) {
+        return Target.the("Select Entity Code").locatedBy("//span[text()='"+value+"']/preceding::input[1]");
+    }
+
+    public static Target CONTINUE_BTN = Target.the("Continue Button").locatedBy("//button[@name='btnContinue']");
+       
+    public static Target SELECT_CONTRACT = Target.the("Save & Continue Button").locatedBy("//input[@name='dgProducerSearchDetails_0_1']");
+    
+    public static Target NPN_NUM = Target.the("Npn no").locatedBy("//div[@id='dtNPN']//span[@data-section='displayvalue']");
+    
+    public static Target APP_FOR = Target.the("App for").locatedBy("//span[@title='Licensed Producer (Additional Contract) ']");
+   
+}

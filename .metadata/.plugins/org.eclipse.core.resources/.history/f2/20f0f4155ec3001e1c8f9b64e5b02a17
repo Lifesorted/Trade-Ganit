@@ -1,0 +1,59 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+import java.util.Map;
+import org.openqa.selenium.Keys;
+import com.majesco.test.dm.page_objects.IvansDownloadPage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class FillIvansDownloadInfo extends UIInteractions implements Task {
+
+	private static String ycode;
+	private static String agencymailbox;
+	private static String primarycontact;
+	private static String primarymail;
+	
+	public FillIvansDownloadInfo(String ycode, String agencymailbox, String primarycontact, String primarymail) {
+		this.ycode = ycode;
+		this.agencymailbox = agencymailbox;
+		this.primarycontact = primarycontact;
+		this.primarymail = primarymail;
+	}
+
+	public static FillIvansDownloadInfo fromUnderlineDetails(DataTable ivansdownload) {
+		Map<String, String> agencyAffiliation = ConvertCucumberDataTable.toMap(ivansdownload);
+		ycode = agencyAffiliation.get("YCode");
+		agencymailbox = agencyAffiliation.get("AgencyMailbox");
+		primarycontact = agencyAffiliation.get("PrimaryContact");
+		primarymail = agencyAffiliation.get("PrimaryEmail");
+		return new FillIvansDownloadInfo(ycode, agencymailbox, primarycontact, primarymail);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(Click.on(IvansDownloadPage.CHECK_RECEIVE_DOWNLOADS));
+
+		waitABit(999);
+		actor.attemptsTo(WaitUntil.the(IvansDownloadPage.YCODE, isClickable())
+				.then(Enter.theValue(ycode).into(IvansDownloadPage.YCODE)));
+
+		actor.attemptsTo(WaitUntil.the(IvansDownloadPage.AGENCY_MAILBOX, isClickable())
+				.then(Enter.theValue(agencymailbox).into(IvansDownloadPage.AGENCY_MAILBOX)));
+
+		actor.attemptsTo(WaitUntil.the(IvansDownloadPage.PRIMARY_CONTACT, isClickable())
+				.then(Enter.theValue(primarycontact).into(IvansDownloadPage.PRIMARY_CONTACT)));
+
+		actor.attemptsTo(WaitUntil.the(IvansDownloadPage.PRIMARY_EMAIL, isClickable())
+				.then(Enter.theValue(primarymail).into(IvansDownloadPage.PRIMARY_EMAIL)
+				.thenHit(Keys.ENTER)));
+	}
+
+}

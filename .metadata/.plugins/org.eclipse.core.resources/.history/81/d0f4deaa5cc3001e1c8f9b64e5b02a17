@@ -1,0 +1,28 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 26/08/2022
+ **/
+
+public class EOInsurancePage extends PageObject {
+
+    public static Target EO_INSURANCE_TAB = Target.the("Tab").locatedBy("//td[contains(@title,'E&O Insurance')]//span[contains(text(),'E&O Insurance')]");
+    public static Target EO_PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'Errors & Omission Insurance >>')]");
+    public static Target CARRIER = Target.the("Carrier").locatedBy("//select[@name='appEAOCarrierCode1']");
+    public static Target CARRIER_OPTIONS = Target.the("Carrier").locatedBy("//select[@name='appEAOCarrierCode1']/option[@value]");
+    public static Target POLICY_NO = Target.the("Policy No").locatedBy("//input[@name='appEAOPolicyNo']");
+    public static Target EFFECTIVE_FROM = Target.the("Effective From").locatedBy("//input[@name='AppEAOIssuedDate1']");
+    public static Target EXPIRY_DATE = Target.the("Expiry Date").locatedBy("//input[@name='AppEAOEffectiveToDate1']");
+    public static Target COVERAGE_AMOUNT = Target.the("Coverage Amount").locatedBy("//input[@name='AppEAOCoverAmount']");
+    public static Target CASCADE_POLICY = Target.the("Cascade EO Policy").locatedBy("//select[@name='cmbCascadePolicy']");
+
+    public static Target EO_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//*[@class='buttonbar']/following::*[@name='btnSavenContinue']");
+    public static Target EO_SAVE_CONTINUE1 = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSavenContinue']");
+    public static Target EO_PARENT = Target.the("EO parent policy").locatedBy("//select[@name='cmbInheritParent']");
+    public static Target EO_NEXT = Target.the("EO parent policy").locatedBy("//button[@name='btnAEONext']");
+
+}

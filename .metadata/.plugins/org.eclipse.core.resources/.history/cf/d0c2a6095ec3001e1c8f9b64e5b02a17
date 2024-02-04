@@ -1,0 +1,52 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+import com.majesco.test.dm.page_objects.EntityContactPage;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class VerifyEntityContact extends UIInteractions implements Task {
+	
+	public VerifyEntityContact() {
+		
+	}
+	
+	public static VerifyEntityContact fromUnderlineDetails() {
+
+		return new VerifyEntityContact();
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		waitABit(3000);
+		actor.attemptsTo(Click.on(EntityContactPage.ADD_ENTITY));
+		waitABit(1200);
+
+		actor.attemptsTo(Enter.keyValues("Josh").into(EntityContactPage.FIRST_NAME));
+		waitABit(1200);
+
+		actor.attemptsTo(Enter.keyValues("Butler").into(EntityContactPage.LAST_NAME));
+		waitABit(1200);
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText("Principal").from(EntityContactPage.SELECT_ROLE));
+		waitABit(1200);
+
+		actor.attemptsTo(Click.on(EntityContactPage.SAVE_CONTACT));
+		waitABit(1200);
+		
+		actor.attemptsTo(Click.on(EntityContactPage.OK_BTN));
+		waitABit(1200);
+
+	}
+
+}

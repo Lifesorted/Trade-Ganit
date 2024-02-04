@@ -1,0 +1,90 @@
+/**
+ * 
+ */
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.page_objects.PersonalDetailPage;
+import com.majesco.test.dm.tasks.db.dbtest;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.ensure.*;
+import net.serenitybdd.screenplay.questions.Text;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+
+/**
+ * @author Shaile908568
+ *
+ */
+public class VerifyPersonalDetails extends UIInteractions implements Task {
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+	private static String type;
+	private static String firstname;
+	private static String lastname;
+	private static String dob;
+	private static String gender;
+
+	public VerifyPersonalDetails(String type, String firstname, String lastname, String dob, String gender) {
+		this.type = type;
+		this.firstname = firstname;
+		this.lastname = lastname;
+		this.dob = dob;
+		this.gender = gender;
+	}
+
+	public static VerifyPersonalDetails fromUnderlineDetails() {
+		type = DataHelper.getRecord("NPersonal_Details", 1, 0);
+		firstname = DataHelper.getRecord("NPersonal_Details", 1, 1);
+		lastname = DataHelper.getRecord("NPersonal_Details", 1, 2);
+		gender = DataHelper.getRecord("NPersonal_Details", 1, 3);
+		dob = DataHelper.getRecord("NPersonal_Details", 1, 4);
+
+		return new VerifyPersonalDetails(type, firstname, lastname, dob, gender);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(WaitUntil.the(PersonalDetailPage.GENDER, isVisible()));
+		waitABit(8000);
+		String dataString = PersonalDetailPage.GENDER.resolveFor(actor).getText();
+		
+		waitABit(1200);
+		String dagentno = PersonalDetailPage.AGENT_NO.resolveFor(actor).getText();
+		actor.remember(Key.AGENT_NO, dagentno);
+		
+		waitABit(1200);
+		String countrycode = PersonalDetailPage.COUNTRY_CODE.resolveFor(actor).getText();
+		
+		actor.attemptsTo(WaitUntil.the(PersonalDetailPage.FIRST_NAME, isVisible())
+				.then(Ensure.that(actor.asksFor(Text.of(PersonalDetailPage.FIRST_NAME))).isEqualTo(firstname)));
+		
+		actor.attemptsTo(WaitUntil.the(PersonalDetailPage.LAST_NAME, isVisible())
+				.then(Ensure.that(actor.asksFor(Text.of(PersonalDetailPage.LAST_NAME))).isEqualTo(lastname)));
+		
+		actor.attemptsTo(WaitUntil.the(PersonalDetailPage.TYPE, isVisible())
+				.then(Ensure.that(actor.asksFor(Text.of(PersonalDetailPage.TYPE))).isEqualTo(type)));
+
+		actor.attemptsTo(WaitUntil.the(PersonalDetailPage.GENDER, isVisible())
+				.then(Ensure.that(actor.asksFor(Text.of(PersonalDetailPage.GENDER))).isEqualTo(gender)));
+		waitABit(1200);
+		
+		//Validate CED and Role level at agent relation grid
+		String entitytype = actor.recall(Key.ENTITY_TYPE);
+		if (entitytype.equalsIgnoreCase("MOLID")) {
+			Ensure.that(actor.asksFor(Text.of(PersonalDetailPage.COUNTRY_CODE))).isEqualTo("200");
+			Ensure.that(PersonalDetailPage.EXPERIENCE_TAB).isNotDisplayed();
+		} else {
+			actor.attemptsTo(WaitUntil.the(PersonalDetailPage.CONTRACT_EFFECTVE_DATE, isVisible())
+					.then(Ensure.that(actor.asksFor(Text.of(PersonalDetailPage.CONTRACT_EFFECTVE_DATE))).isEqualTo(dbtest.getContractEffectiveDate(dagentno))));
+			        Ensure.that(actor.asksFor(Text.of(PersonalDetailPage.ROLE_LEVEL))).isEqualTo(DataHelper.getRecord("Appointment_Details", 1, 1));
+			waitABit(999);
+		}
+	}
+}

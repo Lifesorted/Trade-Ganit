@@ -1,0 +1,86 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.LicenseDetailPage;
+import com.majesco.test.dm.tasks.db.dbtest;
+import com.majesco.test.dm.utils.CommonUIInteractions;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import net.thucydides.core.annotations.*;
+
+import static com.majesco.test.dm.page_objects.CommonObjects.*;
+import static com.majesco.test.dm.page_objects.VerifyApplication.*;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+import net.serenitybdd.annotations.Steps;
+import java.util.Map;
+import java.util.Set;
+
+/**
+ * @author dhiraj662364
+ * @created 29/08/2022
+ **/
+
+public class VerifyOnBoardingApplication extends UIInteractions implements Task {
+	private String remarks = "TAF Automation Remark";
+	@Steps
+	private CommonUIInteractions commonUIInteractions;
+
+	public VerifyOnBoardingApplication() {
+	}
+
+	public static VerifyOnBoardingApplication forProducer() {
+		return new VerifyOnBoardingApplication();
+	}
+
+	public static VerifyOnBoardingApplication forBusinessEntity() {
+		return new VerifyOnBoardingApplication();
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(WaitUntil.the(VA_PAGE_LABEL, isVisible()));
+		waitABit(2000);
+
+		actor.attemptsTo(Enter.keyValues(remarks).into(REMARKS));
+		waitABit(1500);
+
+		String applicationNo = LicenseDetailPage.APPLICATION_NO.resolveFor(actor).getText();
+		actor.remember(Key.APPLICATION_NUMBER, applicationNo);
+		waitABit(999);
+			
+		actor.attemptsTo(Click.on(VERIFY_BTN));
+		waitABit(3000);
+
+		if (OVERRIDE_WARNINGS.resolveFor(actor).isDisabled()) {
+			waitABit(2000);
+			actor.attemptsTo(Click.on(OK_BTN));
+			waitABit(5200);
+		} else {
+			actor.attemptsTo(Click.on(OVERRIDE_WARNINGS));
+			waitABit(5200);
+
+			actor.attemptsTo(Click.on(VERIFY_BTN).then(WaitUntil.the(FORWARD_BTN, isVisible())));
+			waitABit(3000);
+		}
+
+		actor.attemptsTo(Click.on(FORWARD_BTN));
+		
+		waitABit(60000);
+		
+		actor.attemptsTo(WaitUntil.the(OK_BTN, isClickable()));
+		actor.attemptsTo(Click.on(OK_BTN));
+		waitABit(5000);
+	
+		commonUIInteractions.isLandingComplete(actor);
+	}
+}

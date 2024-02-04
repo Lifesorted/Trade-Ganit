@@ -1,0 +1,113 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.HomePage;
+import com.majesco.test.dm.utils.CommonUIInteractions;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+
+import com.majesco.test.dm.utils.Key;
+import io.cucumber.datatable.DataTable;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Clear;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import org.junit.platform.commons.util.StringUtils;
+import org.openqa.selenium.Keys;
+
+import java.util.Map;
+
+import static com.majesco.test.dm.page_objects.SearchNonLicensedProducerPage.*;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 06/09/2022
+ **/
+
+public class CreateNewNonLicensedProducer extends UIInteractions implements Task {
+	private HomePage homePage;
+	private CommonUIInteractions commonUIInteractions;
+	private String applicationDate;
+
+	private String type;
+
+	private String subType;
+
+	private String role;
+
+	private String contractType;
+
+	private String saveFlag;
+
+	private String eventTest;
+
+	public CreateNewNonLicensedProducer(String applicationDate, String type, String subType, String role,
+			String contractType, String saveFlag, String eventTest) {
+		this.applicationDate = applicationDate;
+		this.type = type;
+		this.subType = subType;
+		this.role = role;
+		this.contractType = contractType;
+		this.saveFlag = saveFlag;
+		this.eventTest = eventTest;
+	}
+
+	public static CreateNewNonLicensedProducer fromUnderlineDetails(DataTable searchCriteria) {
+		Map<String, String> searchCriteriaDetails = ConvertCucumberDataTable.toMap(searchCriteria);
+		String type = searchCriteriaDetails.get("Type");
+		String subType = searchCriteriaDetails.get("SubType");
+		String role = searchCriteriaDetails.get("Role");
+		String contractType = searchCriteriaDetails.get("ContractType");
+		String saveFlag = searchCriteriaDetails.get("SaveFlag");
+		String eventTest = searchCriteriaDetails.get("EventTest");
+		return new CreateNewNonLicensedProducer(null, type, subType, role, contractType, saveFlag, eventTest);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(
+				WaitUntil.the(homePage.ONBOARDING_MENU, isClickable()).then(Click.on(homePage.ONBOARDING_MENU)));
+		waitABit(999);
+
+		actor.attemptsTo(
+				Click.on(homePage.NON_LICENSED_PRODUCER_SUBMENU).then(WaitUntil.the(ENTITY_TYPE, isVisible())));
+		waitABit(999);
+
+		if (StringUtils.isNotBlank(applicationDate)) {
+			actor.attemptsTo(Clear.field(APPLICATION_DATE),
+					Enter.keyValues(applicationDate).into(APPLICATION_DATE).thenHit(Keys.TAB));
+			waitABit(999);
+		}
+
+		if (contractType.equalsIgnoreCase("Intermediary")) {
+			actor.attemptsTo(Click.on(getContractType(contractType)));
+			waitABit(999);
+		}
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(type).from(ENTITY_TYPE));
+		waitABit(999);
+
+		//actor.attemptsTo(SelectFromOptions.byVisibleText(subType).from(ENTITY_SUBTYPE));
+		//waitABit(999);
+
+		//actor.attemptsTo(SelectFromOptions.byVisibleText(role).from(ROLE));
+		waitABit(999);
+
+		String storeApplicationDate = APPLICATION_DATE.resolveFor(actor).getAttribute("value");
+		actor.remember(Key.APPLICATION_DATE, storeApplicationDate);
+
+		actor.remember(Key.SAVE_FLAG, saveFlag);
+		actor.remember(Key.EVENT_JSON, eventTest);
+		actor.attemptsTo(Click.on(CONTINUE_BTN));
+
+		commonUIInteractions.isLandingComplete(actor);
+		waitABit(1000);
+	}
+}

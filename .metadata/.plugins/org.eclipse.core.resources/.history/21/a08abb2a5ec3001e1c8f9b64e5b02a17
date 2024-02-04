@@ -1,0 +1,224 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+import java.util.Map;
+import java.util.logging.Logger;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import io.cucumber.datatable.DataTable;
+import com.majesco.test.dm.page_objects.ProfileDetailPage;
+import com.majesco.test.dm.page_objects.TasnferPage;
+import com.majesco.test.dm.page_objects.TerminatePage;
+import net.serenitybdd.screenplay.actions.Scroll;
+import net.serenitybdd.core.di.SerenityInfrastructure;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+import net.serenitybdd.screenplay.questions.Displayed;
+import net.serenitybdd.model.environment.EnvironmentSpecificConfiguration;
+import net.thucydides.model.util.EnvironmentVariables;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+public class EntityOperation extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(EntityOperation.class.getName());
+	EnvironmentVariables environmentVariables = SerenityInfrastructure.getEnvironmentVariables();
+	private static String action;
+
+	public EntityOperation(String action) {
+		this.action = action;
+	}
+
+	public static EntityOperation fromUnderlineDetails(DataTable actionvalue) {
+		Map<String, String> actionval = ConvertCucumberDataTable.toMap(actionvalue);
+		action = actionval.get("Action");
+		return new EntityOperation(action);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		waitABit(5000);
+
+		actor.attemptsTo(Scroll.to(ProfileDetailPage.SELECT_OPTION).andAlignToBottom());
+
+		waitABit(5000);
+
+		actor.attemptsTo(WaitUntil.the(ProfileDetailPage.SELECT_OPTION, isVisible())
+				.then(SelectFromOptions.byVisibleText(action).from(ProfileDetailPage.SELECT_OPTION)));
+		waitABit(4000);
+
+		if (action.equalsIgnoreCase("Transfer")) {
+			actor.attemptsTo(WaitUntil.the(TasnferPage.SELECT_REASON, isVisible())
+					.then(SelectFromOptions.byVisibleText("Transfer").from(TasnferPage.SELECT_REASON)));
+			waitABit(999);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.SELECT_REASON, isVisible())
+					.then(SelectFromOptions.byVisibleText("Intermediary").from(TasnferPage.TRANSFER_TYPE)));
+			waitABit(999);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.TRANSFER_TO, isVisible()).then(Enter.keyValues(
+					EnvironmentSpecificConfiguration.from(environmentVariables).getProperty("dm.entity.transfer.to"))
+					.into(TasnferPage.TRANSFER_TO)));
+			waitABit(999);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.CLICK_ICON, isVisible()).then(Click.on(TasnferPage.CLICK_ICON)));
+			waitABit(3000);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.PORTFOLIO_OWNERSHIP, isVisible())
+					.then(SelectFromOptions.byVisibleText("Retain").from(TasnferPage.PORTFOLIO_OWNERSHIP)));
+			waitABit(999);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.DOWNLINE, isVisible())
+					.then(SelectFromOptions.byVisibleText("Retain").from(TasnferPage.DOWNLINE)));
+			waitABit(999);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.OVERRIDES, isVisible())
+					.then(SelectFromOptions.byVisibleText("Retain with old parent").from(TasnferPage.OVERRIDES)));
+			waitABit(999);
+
+			actor.attemptsTo(Scroll.to(TasnferPage.BTN_SAVE).andAlignToTop());
+
+			actor.attemptsTo(Scroll.to(TasnferPage.BTN_SAVE).andAlignToTop());
+
+			actor.attemptsTo(Click.on(TasnferPage.BTN_SAVE));
+			waitABit(3000);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.BTN_OK, isVisible()).then(Click.on(TasnferPage.BTN_OK)));
+			waitABit(3000);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.EO_TAB, isVisible()).then(Click.on(TasnferPage.EO_TAB)));
+			waitABit(4000);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.CASCADE_DOWNLINES, isVisible())
+					.then(SelectFromOptions.byVisibleText("Yes").from(TasnferPage.CASCADE_DOWNLINES)));
+			waitABit(4000);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.BTN_SAVE1, isClickable()).then(Click.on(TasnferPage.BTN_SAVE1)));
+			waitABit(3000);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.BTN_OK, isVisible()).then(Click.on(TasnferPage.BTN_OK)));
+			waitABit(3000);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.PAYMENT_PREFERENCE, isVisible())
+					.then(Click.on(TasnferPage.PAYMENT_PREFERENCE)));
+			waitABit(4000);
+
+			actor.attemptsTo(Click.on(TasnferPage.BTN_SAVE2));
+			waitABit(3000);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.BTN_OK, isVisible()).then(Click.on(TasnferPage.BTN_OK)));
+			waitABit(3000);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.TRANSFER_REQUEST, isVisible()).then(Click.on(TasnferPage.TRANSFER_REQUEST)));
+			waitABit(4000);
+			
+			actor.attemptsTo(Scroll.to(TasnferPage.BTN_FORWARD).andAlignToTop());
+			
+			actor.attemptsTo(Click.on(TasnferPage.BTN_FORWARD));
+			waitABit(1500);
+			
+			actor.attemptsTo(WaitUntil.the(TasnferPage.BTN_OK, isVisible()).then(Click.on(TasnferPage.BTN_OK)));
+
+		} else if (action.equalsIgnoreCase("Level Change")) {
+			actor.attemptsTo(WaitUntil.the(TasnferPage.LEVEL_CHANGE_REASON, isVisible())
+					.then(SelectFromOptions.byVisibleText("Reason 1").from(TasnferPage.LEVEL_CHANGE_REASON)));
+			waitABit(999);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.NEW_LEVEL, isVisible())
+					.then(SelectFromOptions.byVisibleText("Level 20").from(TasnferPage.NEW_LEVEL)));
+			waitABit(999);
+
+			actor.attemptsTo(Click.on(TasnferPage.BTN_SAVE));
+			waitABit(3000);
+
+			actor.attemptsTo(WaitUntil.the(TasnferPage.BTN_OK, isVisible()).then(Click.on(TasnferPage.BTN_OK)));
+			waitABit(999);
+
+			actor.attemptsTo(Click.on(TasnferPage.BTN_FORWARD));
+			waitABit(1500);
+		} else if (action.equalsIgnoreCase("Terminate Contract")) {
+			boolean isDisplayed = actor.asksFor(Displayed.of(TerminatePage.OK));
+
+			if (isDisplayed) {
+				actor.attemptsTo(WaitUntil.the(TerminatePage.OK, isVisible()).then(Click.on(TerminatePage.OK)));
+				waitABit(5000);
+			}
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.EVENT, isVisible())
+					.then(SelectFromOptions.byVisibleText("Not for Cause").from(TerminatePage.EVENT)));
+			waitABit(1000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.REASONCONTRACT, isVisible())
+					.then(SelectFromOptions.byVisibleText("Error").from(TerminatePage.REASONCONTRACT)));
+			waitABit(1000);
+
+			actor.attemptsTo(
+					WaitUntil.the(TerminatePage.TERMINATION, isVisible()).then(Click.on(TerminatePage.TERMINATION)));
+			waitABit(1000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.TERMINATION_TYPE, isVisible())
+					.then(SelectFromOptions.byVisibleText("Immediate").from(TerminatePage.TERMINATION_TYPE)));
+			waitABit(1000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.PORTFOLIO, isVisible())
+					.then(SelectFromOptions.byVisibleText("Retain").from(TerminatePage.PORTFOLIO)));
+			waitABit(1000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.DOWNLINE_HIERARCHY, isVisible())
+					.then(Click.on(TerminatePage.DOWNLINE_HIERARCHY)));
+			waitABit(1000);
+
+			actor.attemptsTo(Scroll.to(TerminatePage.SAVE).andAlignToTop());
+			waitABit(1000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.SAVE, isVisible()).then(Click.on(TerminatePage.SAVE)));
+			waitABit(2000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.OK, isVisible()).then(Click.on(TerminatePage.OK)));
+			waitABit(2000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.PREFERENCE_TAB, isVisible())
+					.then(Click.on(TerminatePage.PREFERENCE_TAB)));
+			waitABit(3000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.ACCRUE_COMP, isVisible())
+					.then(SelectFromOptions.byVisibleText("No").from(TerminatePage.ACCRUE_COMP)));
+			waitABit(1000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.PAY_THRESHOLD, isVisible())
+					.then(Enter.theValue("1").into(TerminatePage.PAY_THRESHOLD)));
+			waitABit(1000);
+
+			actor.attemptsTo(
+					WaitUntil.the(TerminatePage.SAVE_BUTTON, isVisible()).then(Click.on(TerminatePage.SAVE_BUTTON)));
+			waitABit(3000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.OK, isVisible()).then(Click.on(TerminatePage.OK)));
+			waitABit(3000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.TERMINATION_REQ_TAB, isVisible())
+					.then(Click.on(TerminatePage.TERMINATION_REQ_TAB)));
+			waitABit(4000);
+
+			actor.attemptsTo(Scroll.to(TerminatePage.SAVE).andAlignToTop());
+			waitABit(1000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.SAVE, isVisible()).then(Click.on(TerminatePage.SAVE)));
+			waitABit(2000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.OK, isVisible()).then(Click.on(TerminatePage.OK)));
+			waitABit(2000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.FORWARD, isVisible()).then(Click.on(TerminatePage.FORWARD)));
+			waitABit(12000);
+
+			actor.attemptsTo(WaitUntil.the(TerminatePage.OK, isClickable()).then(Click.on(TerminatePage.OK)));
+			waitABit(2000);
+		}
+
+	}
+
+}

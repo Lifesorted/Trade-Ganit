@@ -1,0 +1,24 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 30/08/2022
+ **/
+
+public class WorkExperience extends PageObject {
+
+    public static Target WE_PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'Work Experience >>')]");
+    public static Target ADD_BUTTON = Target.the("Add Button").locatedBy("//button[@name='btnAddExperienceDetails']");
+    public static Target EMPLOYER = Target.the("Employer").locatedBy("//input[@name='dgExpTabWorkExp_0_1']");
+    public static Target JOB_TITLE = Target.the("Job Title").locatedBy("//select[@name='dgExpTabWorkExp_0_2']");
+    public static Target MANAGER = Target.the("Manager").locatedBy("//input[@name='dgExpTabWorkExp_0_3']");
+    public static Target ADDRESS_CONTACT = Target.the("Address and Contact").locatedBy("//input[@name='dgExpTabWorkExp_0_4']");
+    public static Target FROM = Target.the("From Date").locatedBy("//input[@name='dgExpTabWorkExp_0_5']");
+    public static Target TO = Target.the("To Date").locatedBy("//input[@name='dgExpTabWorkExp_0_6']");
+
+    public static Target WE_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//button[@name='btnSaveExperienceDetails']");
+
+}

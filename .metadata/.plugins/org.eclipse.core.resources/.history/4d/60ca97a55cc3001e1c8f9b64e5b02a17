@@ -1,0 +1,20 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 02/09/2022
+ **/
+
+public class AgencyContactsPage extends PageObject {
+
+    public static Target ACI_PAGE_LABEL = Target.the("Page Label").locatedBy("//label[contains(text(),'Agency Contacts >>')]");
+    public static Target ADD_BTN = Target.the("Add Button").locatedBy("(//button[@name='btnAdd'])[2]");
+    public static Target FIRST_NAME_1 = Target.the("First Name 1").locatedBy("//input[@name='dgAppAgencyContactDtls_0_1']");
+    public static Target LAST_NAME_1 = Target.the("Last Name 1").locatedBy("//input[@name='dgAppAgencyContactDtls_0_2']");
+    public static Target ROLE_1 = Target.the("Role 1").locatedBy("//select[@name='dgAppAgencyContactDtls_0_3']");
+    public static Target ACI_SAVE_CONTINUE = Target.the("Save & Continue").locatedBy("//button[@name='btnSaveAndContinue']");
+
+}

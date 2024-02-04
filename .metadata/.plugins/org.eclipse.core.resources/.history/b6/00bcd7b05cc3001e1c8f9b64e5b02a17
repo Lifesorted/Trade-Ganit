@@ -1,0 +1,37 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 26/08/2022
+ **/
+
+public class ProducerDirectDepositDetails extends PageObject {
+
+    public static Target DIRECT_DEPOSIT_DETAILS_TAB = Target.the("Tab").locatedBy("//td[contains(@title,'Direct Deposit Details')]//span[contains(text(),'Direct Deposit Details')]");
+
+    public static Target DIRECT_DEPOSIT_DETAIL_TAB = Target.the("Tab").locatedBy("//a[@id='dgAppointmentsFlow_3_0_lnk']");
+    
+    public static Target DDD_PAGE_LABEL = Target.the("Page Label").locatedBy("//div[@class='panel-heading']/child::label[contains(text(),'Direct Deposit Details >>')]");
+
+    public static Target FINANCIAL_INSTITUTION = Target.the("Financial Institution").locatedBy("//select[@name='comboBankName']");
+
+    public static Target ACC_NAME = Target.the("Account Name").locatedBy("//input[@name='textInputAccntName']");
+
+    public static Target ACC_NO = Target.the("Account Number").locatedBy("//input[@name='txtInputAccountNo']");
+
+    public static Target ACC_TYPE = Target.the("Account Type").locatedBy("//select[@name='comboAccountType']");
+
+    public static Target ROUTING_NO = Target.the("Routing Number").locatedBy("//input[@name='txtInputRoutingNo']");
+    
+    public static Target VENDOR_CODE = Target.the("Vendor code").locatedBy("//input[@name='txtInputVendorCode']");
+
+    public static Target ADD_BTN = Target.the("Add Button").locatedBy("//button[@name='btnAddAppbankDetails']");
+
+    public static Target DDD_SAVE_CONTINUE = Target.the("Save & Continue Button").locatedBy("//button[@name='btnNext1']");
+
+    public static Target V_ACC_NO = Target.the("Verify Account No").locatedBy("//a[contains(@id,'datagridclientAccnts_')]/span/span");
+
+}

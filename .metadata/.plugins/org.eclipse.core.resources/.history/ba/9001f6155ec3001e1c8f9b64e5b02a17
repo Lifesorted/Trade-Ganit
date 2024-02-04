@@ -1,0 +1,90 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.APPLICATION_NO;
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.BTN_EXIT;
+import static com.majesco.test.dm.page_objects.ProducerContactInfoPage.OK_BTN;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isClickable;
+
+import java.util.Map;
+import java.util.logging.Logger;
+
+import org.junit.platform.commons.util.StringUtils;
+
+import com.majesco.test.dm.page_objects.ProducerContactInfoPage;
+import com.majesco.test.dm.page_objects.SearchLicensedProducerPage;
+import com.majesco.test.dm.tasks.ui.common.NavigateTo;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.Key;
+
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class FillContactInfo extends UIInteractions implements Task {
+
+	private SearchLicensedProducerPage searchProducerPage;
+	private static Logger logger = Logger.getLogger(FillProducerBusinessOrShippingAddress.class.getName());
+	private String addressType;
+	private String line1;
+	private String city;
+	private String state;
+	private String zip;
+	private String businessPhone;
+
+	public FillContactInfo(String addressType, String line1, String city, String state, String zip,
+			String businessPhone) {
+		this.addressType = addressType;
+		this.line1 = line1;
+		this.city = city;
+		this.state = state;
+		this.zip = zip;
+		this.businessPhone = businessPhone;
+	}
+
+	public static FillContactInfo fromUnderlineDetails(DataTable address) {
+		Map<String, String> addressDetails = ConvertCucumberDataTable.toMap(address);
+		String addressType = addressDetails.get("AddressType");
+		String line1 = addressDetails.get("Line1");
+		String city = addressDetails.get("City");
+		String state = addressDetails.get("State");
+		String zip = addressDetails.get("Zip");
+		String businessPhone = addressDetails.get("BusinessPhone");
+
+		return new FillContactInfo(addressType, line1, city, state, zip, businessPhone);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		String applicationNo = APPLICATION_NO.resolveFor(actor).getText();
+		actor.remember(Key.APPLICATION_NUMBER, applicationNo);
+		
+		actor.remember(Key.STATE, state);
+		
+		String npn = actor.recall(Key.NPN_NUMBER);
+		System.out.println("NPN"+npn);
+		
+		actor.attemptsTo(WaitUntil.the(BTN_EXIT, isClickable()).then(Click.on(ProducerContactInfoPage.BTN_EXIT)));
+		waitABit(3000);
+		actor.attemptsTo(WaitUntil.the(OK_BTN, isClickable()).then(Click.on(OK_BTN)));
+		waitABit(5000);
+
+		actor.attemptsTo(WaitUntil.the(searchProducerPage.NPN, isClickable())
+					.then(Enter.keyValues(npn).into(searchProducerPage.NPN)));
+		
+		waitABit(3000);
+		actor.attemptsTo(WaitUntil.the(searchProducerPage.SEARCH_BTN, isClickable())
+				.then(Click.on(searchProducerPage.SEARCH_BTN)));
+		
+		waitABit(3000);
+		actor.attemptsTo(WaitUntil.the(ProducerContactInfoPage.PENDING_LINK, isClickable())
+				.then(Click.on(ProducerContactInfoPage.PENDING_LINK)));
+		waitABit(4000);
+		
+	}
+
+}

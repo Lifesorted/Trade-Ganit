@@ -1,0 +1,20 @@
+package com.majesco.test.dm.page_objects;
+
+import net.serenitybdd.core.pages.PageObject;
+import net.serenitybdd.screenplay.targets.Target;
+
+/**
+ * @author dhiraj662364
+ * @created 23/08/2022
+ **/
+
+public class CommonObjects extends PageObject {
+    public static Target MULTI_APP = Target.the("Multi App").locatedBy("#multiAppLink");
+    public static Target DISABLE_MULTI_APP = Target.the("Disable Multi App").locatedBy("#disableMultiApp");
+    public static Target OK_BTN = Target.the("OK Button").locatedBy("//button[@name='Ok']");
+    public static Target NPN_NO = Target.the("Npn no").locatedBy("//div[@id='dtNPN']//span[@data-section='displayvalue']");
+    public static Target DOWN_ARROW = Target.the("Down arrow").locatedBy("//div[@class='loginDetailSecDownArrow']");
+    public static Target LOGOUT = Target.the("Logout").locatedBy("//a[@id='logout']");
+    public static Target SUCCESS_MESSAGE = Target.the("Success message").locatedBy("//h2[contains(text(),'You have successfully logged out.')]");
+    public static Target GLOBAL_SEARCH = Target.the("Global search").locatedBy("//input[@name='quickSearchValue']");
+}

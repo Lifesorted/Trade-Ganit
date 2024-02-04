@@ -1,0 +1,50 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import io.cucumber.datatable.DataTable;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import java.util.Map;
+
+import static com.majesco.test.dm.page_objects.CommunicationPreferences.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 29/08/2022
+ **/
+
+public class FillCommunicationPreferences extends UIInteractions implements Task {
+
+    private String category;
+    private String event;
+
+    public FillCommunicationPreferences(String category, String event) {
+        this.category = category;
+        this.event = event;
+    }
+
+    public static FillCommunicationPreferences fromUnderlineDetails(DataTable communicationPreferences) {
+        Map<String, String> communicationPrefInfo = ConvertCucumberDataTable.toMap(communicationPreferences);
+        String category = communicationPrefInfo.get("Category");
+        String event = communicationPrefInfo.get("Event");
+
+        return new FillCommunicationPreferences(category, event);
+    }
+
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+
+        actor.attemptsTo(WaitUntil.the(COMP_PAGE_LABEL, isVisible()),
+                SelectFromOptions.byVisibleText(category).from(CATEGORY));
+        waitABit(1200);
+
+        actor.attemptsTo(SelectFromOptions.byVisibleText(event).from(EVENT));
+        waitABit(1200);
+    }
+}

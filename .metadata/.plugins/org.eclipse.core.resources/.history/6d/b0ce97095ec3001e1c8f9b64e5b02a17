@@ -1,0 +1,78 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.isVisible;
+
+import java.util.logging.Logger;
+
+import com.majesco.test.dm.page_objects.BookOfBusinessPage;
+import com.majesco.test.dm.page_objects.HierarchyDetailPage;
+import com.majesco.test.dm.page_objects.IvansDownloadPage;
+import com.majesco.test.dm.tasks.ui.common.NavigateTo;
+import com.majesco.test.dm.utils.DataHelper;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.ensure.Ensure;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+public class VerifyIvansDetails extends UIInteractions implements Task {
+
+	private static Logger logger = Logger.getLogger(DataHelper.class.getName());
+	private static String ycode;
+	private static String agencymailbox;
+	private static String primarycontact;
+	private static String primarymail;
+	
+	public VerifyIvansDetails(String ycode, String agencymailbox, String primarycontact, String primarymail) {
+		this.ycode = ycode;
+		this.agencymailbox = agencymailbox;
+		this.primarycontact = primarycontact;
+		this.primarymail = primarymail;
+	}
+
+	public static VerifyIvansDetails fromUnderlineDetails() {
+		ycode = DataHelper.getRecord("IvansData", 1, 0);
+		agencymailbox = DataHelper.getRecord("IvansData", 1, 1);
+		primarycontact = DataHelper.getRecord("IvansData", 1, 2);
+		primarymail = DataHelper.getRecord("IvansData", 1, 3);
+
+		return new VerifyIvansDetails(ycode, agencymailbox, primarycontact, primarymail);
+	}
+	
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+		
+		waitABit(2000);
+		String ycodeval = IvansDownloadPage.YCODE_VALUE.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(IvansDownloadPage.YCODE_VALUE, isVisible()));
+		Ensure.that(ycodeval).isEqualTo(ycode);
+		waitABit(999);
+
+		String agencymailboxval = IvansDownloadPage.AGENCYMAILBOX_VALUE.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(IvansDownloadPage.AGENCYMAILBOX_VALUE, isVisible()));
+		Ensure.that(agencymailboxval).isEqualTo(agencymailbox);
+		waitABit(999);
+
+		String primarycontactval = IvansDownloadPage.PRIMARYCONTACT_VALUE.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(IvansDownloadPage.PRIMARYCONTACT_VALUE, isVisible()));
+		Ensure.that(primarycontactval).isEqualTo(primarycontact);
+		waitABit(999);
+
+		String primaryemailval = IvansDownloadPage.PRIMARYEMAIL_VALUE.resolveFor(actor).getText();
+		actor.attemptsTo(WaitUntil.the(IvansDownloadPage.PRIMARYEMAIL_VALUE, isVisible()));
+		Ensure.that(primaryemailval).isEqualTo(primarymail);
+		waitABit(999);
+		
+		actor.attemptsTo(Click.on(IvansDownloadPage.SLIDE_RIGHT_ICON));
+		waitABit(1500);
+		
+		actor.attemptsTo(Click.on(BookOfBusinessPage.BOB_TAB));
+		waitABit(1500);
+		
+		//NavigateTo.bookOfBusinessTab();
+		
+	}
+
+}

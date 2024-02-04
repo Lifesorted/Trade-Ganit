@@ -1,0 +1,66 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import io.cucumber.datatable.DataTable;
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import java.util.Map;
+
+import static com.majesco.test.dm.page_objects.ProducerAppointmentsPage.*;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 25/08/2022
+ **/
+
+public class MakeAnAppointment extends UIInteractions implements Task {
+
+    private String state;
+
+    private String appointedCompany;
+
+    private String loa;
+
+    public MakeAnAppointment(String state, String appointedCompany, String loa) {
+        this.state = state;
+        this.appointedCompany = appointedCompany;
+        this.loa = loa;
+    }
+
+    public static MakeAnAppointment withUnderlineDetails(DataTable appointmentDetails) {
+        Map<String, String> appointmentInfo = ConvertCucumberDataTable.toMap(appointmentDetails);
+        String state = appointmentInfo.get("State");
+        String appointedCompany = appointmentInfo.get("AppointedCompany");
+        String loa = appointmentInfo.get("LOA");
+
+        return new MakeAnAppointment(state, appointedCompany, loa);
+    }
+ 
+    @Override
+    public <T extends Actor> void performAs(T actor) {
+    	
+        actor.attemptsTo(WaitUntil.the(PAD_PAGE_LABEL, isVisible()));
+        waitABit(1800);
+
+        actor.attemptsTo(WaitUntil.the(APPOINTER_COMPANY_TABLE, isVisible())
+                .then(Click.on(appointerCompany(appointedCompany)))
+        );        
+        waitABit(1000);
+        
+        actor.attemptsTo(WaitUntil.the(LOA_TABLE_FOR_APPOINTER_COMPANY, isVisible())
+                .then(Click.on(loaForAppointedCompany()))
+        );
+        
+		/*
+		 * waitABit(1500);
+		 * 
+		 * if(NEXT_APPOINTER_COM.isVisibleFor(actor)) {
+		 * actor.attemptsTo(Click.on(NEXT_APPOINTER_COM)); }
+		 */
+    }
+}

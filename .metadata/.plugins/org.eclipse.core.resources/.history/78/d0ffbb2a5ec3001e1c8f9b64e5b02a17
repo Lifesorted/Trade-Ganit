@@ -1,0 +1,148 @@
+package com.majesco.test.dm.tasks.ui.dm;
+
+import com.majesco.test.dm.page_objects.ProducerPersonalInfoPage;
+import com.majesco.test.dm.utils.ConvertCucumberDataTable;
+import com.majesco.test.dm.utils.DataHelper;
+import com.majesco.test.dm.utils.Key;
+
+import io.cucumber.datatable.DataTable;
+
+import net.serenitybdd.core.steps.UIInteractions;
+import net.serenitybdd.screenplay.Actor;
+import net.serenitybdd.screenplay.Task;
+import net.serenitybdd.screenplay.actions.Enter;
+import net.serenitybdd.screenplay.actions.SelectFromOptions;
+import net.serenitybdd.screenplay.waits.WaitUntil;
+
+import org.joda.time.DateTime;
+import org.junit.platform.commons.util.StringUtils;
+import org.openqa.selenium.Keys;
+
+import java.text.SimpleDateFormat;
+import java.util.Map;
+
+import static com.majesco.test.dm.page_objects.AgencyProfilePage.*;
+import static com.majesco.test.dm.page_objects.ProducerPersonalInfoPage.LICENSE_NO;
+import static com.majesco.test.dm.page_objects.ProducerPersonalInfoPage.RESIDENT_STATE;
+import static net.serenitybdd.screenplay.matchers.WebElementStateMatchers.*;
+
+/**
+ * @author dhiraj662364
+ * @created 01/09/2022
+ **/
+
+public class FillAgencyProfileInfo extends UIInteractions implements Task {
+
+	private String name;
+	private String type;
+	private String effectiveFrom;
+	private String fein;
+	private String legalType;
+	private String residentState;
+	private String licenseNo;
+	private String licenseType;
+	private static String applicationfor;
+	private static String entityType;
+	private static String contractType;
+
+	public FillAgencyProfileInfo(String name, String type, String effectiveFrom, String fein, String legalType,
+			String residentState, String licenseNo, String licenseType, String applicationfor, String entityType,
+			String contractType) {
+		this.name = name;
+		this.type = type;
+		this.effectiveFrom = effectiveFrom;
+		this.fein = fein;
+		this.legalType = legalType;
+		this.residentState = residentState;
+		this.licenseNo = licenseNo;
+		this.licenseType = licenseType;
+		this.applicationfor = applicationfor;
+		this.entityType = entityType;
+		this.contractType = contractType;
+	}
+
+	public static FillAgencyProfileInfo fromUnderlineDetails(DataTable agencyProfile) {
+		Map<String, String> agencyProfileInfo = ConvertCucumberDataTable.toMap(agencyProfile);
+		String name = agencyProfileInfo.get("Name");
+		String type = agencyProfileInfo.get("Type");
+		String effectiveFrom = agencyProfileInfo.get("EffectiveFrom");
+		String fein = agencyProfileInfo.get("FEIN");
+		String legalType = agencyProfileInfo.get("LegalType");
+		String residentState = agencyProfileInfo.get("ResidentState");
+		String licenseNo = agencyProfileInfo.get("LicenseNo");
+		String licenseType = agencyProfileInfo.get("LicenseType");
+
+		return new FillAgencyProfileInfo(name, type, effectiveFrom, fein, legalType, residentState, licenseNo,
+				licenseType, applicationfor, entityType, contractType);
+	}
+
+	@Override
+	public <T extends Actor> void performAs(T actor) {
+
+		actor.attemptsTo(WaitUntil.the(APP_PAGE_LABEL, isVisible()).then(Enter.keyValues(name).into(NAME)));
+		waitABit(999);
+
+		String exapplicationfor = ProducerPersonalInfoPage.APPLICATION_FOR.resolveFor(actor).getText();
+		String exentitytype = ProducerPersonalInfoPage.ENTITY_TYPE.resolveFor(actor).getText();
+		String excontractType = ProducerPersonalInfoPage.CONTRACT_TYPE.resolveFor(actor).getText();
+
+		actor.attemptsTo(SelectFromOptions.byVisibleText(type).from(TYPE));
+		waitABit(999);
+
+		String saveFlag = actor.recall(Key.SAVE_FLAG);
+		waitABit(1500);
+
+		if (StringUtils.isBlank(effectiveFrom)) {
+			String defaultEffectiveFrom = actor.recall(Key.APPLICATION_DATE);
+			actor.attemptsTo(Enter.keyValues(defaultEffectiveFrom).into(EFFECTIVE_FROM).thenHit(Keys.TAB));
+		} else {
+			actor.attemptsTo(Enter.keyValues(effectiveFrom).into(EFFECTIVE_FROM).thenHit(Keys.TAB));
+		}
+		
+		waitABit(999);
+		String defaultFEIN = String.valueOf(System.currentTimeMillis() / 10000);
+		if (StringUtils.isBlank(fein)) {
+			actor.attemptsTo(Enter.keyValues(defaultFEIN).into(FEIN));
+		} else {
+			actor.attemptsTo(Enter.keyValues(fein).into(FEIN));
+		}
+		
+		actor.attemptsTo(SelectFromOptions.byVisibleText(legalType).from(LEGAL_TYPE));
+		waitABit(999);
+
+		String npnNo = actor.recall(Key.NPN_NUMBER);
+		
+		if (exapplicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+				&& exentitytype.equalsIgnoreCase("Business") && excontractType.equalsIgnoreCase("Direct")
+				&& saveFlag.equalsIgnoreCase("Yes")) {		
+			DataHelper.writeProfileInfo(name, type, effectiveFrom,legalType, npnNo, exapplicationfor,
+					exentitytype, excontractType);
+			waitABit(500);
+			DataHelper.writeReportInfo(npnNo, exapplicationfor, exentitytype, excontractType, residentState);
+		} else if (exapplicationfor.equalsIgnoreCase("Licensed Producer (New Contract)")
+				&& exentitytype.equalsIgnoreCase("Business") && excontractType.equalsIgnoreCase("Intermediary")
+				&& saveFlag.equalsIgnoreCase("Yes")) {
+			DataHelper.writeProfileInfo(name, type, effectiveFrom,legalType, npnNo, exapplicationfor,
+					exentitytype, excontractType);
+			waitABit(500);
+			DataHelper.writeReportInfo(npnNo, exapplicationfor, exentitytype, excontractType, residentState);
+		}
+
+		if (StringUtils.isNotBlank(licenseNo)) {
+			String defaultLicenseNo = new SimpleDateFormat("yyMMddHHmmss").format(DateTime.now().toDate());
+			actor.attemptsTo(Enter.keyValues(defaultLicenseNo).into(LICENSE_NO));
+			waitABit(1200);
+		}
+
+		if (RESIDENT_STATE.resolveFor(actor).isEnabled()) {
+			actor.attemptsTo(SelectFromOptions.byVisibleText(residentState).from(RESIDENT_STATE));
+			waitABit(999);
+		}
+		
+		if (StringUtils.isNotBlank(licenseType)) {
+			actor.attemptsTo(SelectFromOptions.byVisibleText(licenseType).from(LICENSE_TYPE));
+			waitABit(999);
+		}
+
+	}
+}

@@ -8,7 +8,8 @@ import java.util.logging.Logger;
 import com.trade.test.gaint.page_objects.HomePage;
 import com.trade.test.gaint.tasks.ui.common.Login;
 import com.trade.test.gaint.tasks.ui.common.NavigateTo;
-import com.trade.test.gaint.tasks.ui.dm.UserOperations;
+import com.trade.test.gaint.tasks.ui.trade.Account;
+import com.trade.test.gaint.tasks.ui.trade.UserOperations;
 
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.Before;
@@ -66,8 +67,20 @@ public class TradeUserSteps extends UIInteractionSteps{
 		givenThat(appAdmin).attemptsTo(UserOperations.fromUnderlineDetails(userinfo));
 	}
 	
+	@Then("Verify Added account on list screen")
 	@Then("Verify Added user on list screen")
 	public void Verify_Added_user_on_list_screen() {
 		
+	}
+	
+	@Given("Navigate to account screen")
+	public void Navigate_to_account_screen() {
+		givenThat(appAdmin).attemptsTo(NavigateTo.accountsPage());
+	}
+	
+
+	@When("attempts to add new account with details as")
+	public void attempts_to_add_new_account_with_details_as(DataTable accountinfo) {
+		givenThat(appAdmin).attemptsTo(Account.fromUnderlineDetails(accountinfo));
 	}
 }

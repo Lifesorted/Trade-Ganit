@@ -9,12 +9,14 @@ C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\
 C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\utils\DataHelper.java
 C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\steps\Hooks.java
 C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\tasks\ui\common\Login.java
+C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\tasks\ui\trade\UserOperations.java
 C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\utils\db\DBHelper.java
 C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\tasks\ui\common\NavigateTo.java
+C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\tasks\ui\trade\Account.java
 C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\utils\ConvertCucumberDataTable.java
 C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\utils\CommonUtil.java
+C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\page_objects\AccountPage.java
 C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\page_objects\UserPage.java
-C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\tasks\ui\dm\UserOperations.java
 C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\questions\ui\ApplicationEnquiryResult.java
 C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\utils\CommonUIInteractions.java
 C:\Project_Workspace\Trade-Ganit\Trade-Ganit\src\test\java\com\trade\test\gaint\runners\TradeRunner.java

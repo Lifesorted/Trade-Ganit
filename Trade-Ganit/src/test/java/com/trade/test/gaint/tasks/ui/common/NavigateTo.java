@@ -32,4 +32,19 @@ public class NavigateTo {
                 }
         );
     }
+    
+    public static Performable accountsPage() {
+        return Task.where("{0} opens the user page",
+                (actor) -> {
+                    actor.attemptsTo(
+                            Click.on(CommonObjects.ACCOUNTS_MENU)
+                                    .then(WaitUntil.the(CommonObjects.ADD_ACCOUNT, isVisible()))
+                    );
+                    actor.attemptsTo(
+                            Click.on(CommonObjects.ADD_ACCOUNT)
+                    );
+                    CommonUtil.staticWaitFor(2000L);
+                }
+        );
+    }
 }
